@@ -17,14 +17,18 @@ import {
 } from 'lucide-react';
 
 export type Class1LabMode =
+  | 'spatial-prenumber'
   | 'number-line-tenframe'
   | 'addition-subtraction'
   | 'tens-ones-abacus'
   | 'shapes-roll-slide'
+  | 'measurement-balance'
   | 'clock-money'
+  | 'patterns-pictograph'
   | 'spatial-ordinals-data'
   | 'evs-sense-organs'
   | 'evs-plants-living'
+  | 'evs-animals-food-safety'
   | 'evs-seasons-sky';
 
 const SENSE_ORGANS = [
@@ -157,6 +161,23 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
   const [groupsCount, setGroupsCount] = useState(4);
   const [itemsPerGroup, setItemsPerGroup] = useState(3);
   const [selectedOrdinal, setSelectedOrdinal] = useState(3); // 1st to 10th
+
+  // Mode 10: Pre-Number Spatial Vocabulary (Finding the Furry Cat!)
+  const [catPosition, setCatPosition] = useState<'inside' | 'outside' | 'on' | 'under' | 'near' | 'far'>('on');
+
+  // Mode 11: Non-Standard Measurement (Handspans, Pan Balance, Capacity)
+  const [objectHandspans, setObjectHandspans] = useState(5);
+  const [leftPanBlocks, setLeftPanBlocks] = useState(6);
+  const [rightPanBlocks, setRightPanBlocks] = useState(4);
+  const [jugCups, setJugCups] = useState(4);
+
+  // Mode 12: Patterns (Utsav) & Data Pictograph (So Many Toys)
+  const [patternType, setPatternType] = useState<'ABAB' | 'AAB' | 'ABC' | 'NUM'>('ABAB');
+  const [toyCounts, setToyCounts] = useState({ cars: 5, dolls: 3, balls: 7, blocks: 4 });
+
+  // Mode 13: EVS Animals, Healthy Food & Traffic Safety Light
+  const [trafficLight, setTrafficLight] = useState<'red' | 'yellow' | 'green'>('green');
+  const [animalCategory, setAnimalCategory] = useState<'wild' | 'domestic' | 'pet' | 'water'>('wild');
 
   // Computed values
   const compSymbol = leftCount > rightCount ? '>' : leftCount < rightCount ? '<' : '=';
@@ -477,15 +498,19 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
       {/* 8-Mode Class 1 Interactive Selector Bar */}
       <div className="flex flex-wrap items-center gap-1.5 p-2.5 rounded-xl bg-[#111827] border border-[#1F2937]">
         {[
-          { id: 'number-line-tenframe', label: '1. Numbers 1–20 & < > =', icon: Sparkles },
-          { id: 'addition-subtraction', label: '2. Add & Subtract (Frog Hops)', icon: Calculator },
-          { id: 'tens-ones-abacus', label: '3. Tens & Ones Abacus (1–99)', icon: Plus },
-          { id: 'shapes-roll-slide', label: '4. 2D/3D Shapes: Roll vs Slide', icon: Shapes },
-          { id: 'clock-money', label: '5. Time Clock & ₹ Money Shop', icon: Clock },
-          { id: 'spatial-ordinals-data', label: '6. Ordinals (1st–10th), Groups & Pictograph', icon: Sparkles },
-          { id: 'evs-sense-organs', label: '7. EVS: 5 Sense Organs', icon: Eye },
-          { id: 'evs-plants-living', label: '8. EVS: Growing Plant & Living', icon: Sprout },
-          { id: 'evs-seasons-sky', label: '9. EVS: Seasons & Day/Night Sky', icon: Sun },
+          { id: 'spatial-prenumber', label: '1. Spatial Sense (Furry Cat)', icon: Sparkles },
+          { id: 'number-line-tenframe', label: '2. Numbers 1–20 & < > =', icon: Sparkles },
+          { id: 'addition-subtraction', label: '3. Add & Subtract (Frog Hops)', icon: Calculator },
+          { id: 'tens-ones-abacus', label: '4. Tens & Ones Abacus (1–99)', icon: Plus },
+          { id: 'shapes-roll-slide', label: '5. Shapes: Roll vs Slide', icon: Shapes },
+          { id: 'measurement-balance', label: '6. Measure: Handspan & Balance', icon: Calculator },
+          { id: 'clock-money', label: '7. Clock & ₹ Money Shop', icon: Clock },
+          { id: 'patterns-pictograph', label: '8. Patterns & Toy Pictograph', icon: Shapes },
+          { id: 'spatial-ordinals-data', label: '9. Ordinals (1st–10th) & Groups', icon: Sparkles },
+          { id: 'evs-sense-organs', label: '10. EVS: 5 Sense Organs', icon: Eye },
+          { id: 'evs-plants-living', label: '11. EVS: Growing Plant', icon: Sprout },
+          { id: 'evs-animals-food-safety', label: '12. EVS: Animals & Traffic Safety', icon: CheckCircle2 },
+          { id: 'evs-seasons-sky', label: '13. EVS: Seasons & Sky', icon: Sun },
         ].map((m) => {
           const Icon = m.icon;
           const active = mode === m.id;
@@ -506,6 +531,124 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
           );
         })}
       </div>
+
+      {/* MODE 0: SPATIAL PRE-NUMBER CONCEPTS (FINDING THE FURRY CAT!) */}
+      {mode === 'spatial-prenumber' && (
+        <div className="p-4 rounded-xl bg-[#111827] border border-[#1F2937] space-y-4">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <h4 className="text-xs font-bold uppercase tracking-wider text-cyan-400">
+                NCERT Ch 1: Finding the Furry Cat! — Pre-Number Spatial Vocabulary
+              </h4>
+              <p className="text-xs text-slate-400">
+                Click any spatial position word below to move the Furry Cat 🐱
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-1.5">
+              {(
+                [
+                  { id: 'on', label: 'ON the Table' },
+                  { id: 'under', label: 'UNDER the Table' },
+                  { id: 'inside', label: 'INSIDE the Box' },
+                  { id: 'outside', label: 'OUTSIDE the Box' },
+                  { id: 'near', label: 'NEAR the Tree' },
+                  { id: 'far', label: 'FAR from the Tree' },
+                ] as const
+              ).map((pos) => (
+                <button
+                  key={pos.id}
+                  type="button"
+                  onClick={() => setCatPosition(pos.id)}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-bold border transition-all ${
+                    catPosition === pos.id
+                      ? 'bg-cyan-500 text-slate-950 border-white'
+                      : 'bg-[#090D16] text-slate-300 border-slate-800'
+                  }`}
+                >
+                  {pos.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 rounded-xl bg-[#090D16] border border-slate-800">
+            {/* Scene 1: Table (ON vs UNDER) */}
+            <div className="p-4 rounded-xl bg-[#111827] border border-slate-800 flex flex-col items-center justify-between h-48">
+              <span className="text-xs font-mono text-cyan-300 font-bold">
+                ON vs. UNDER the Table
+              </span>
+              <div className="relative w-40 h-28 flex flex-col items-center justify-center">
+                {catPosition === 'on' && (
+                  <div className="text-3xl animate-bounce mb-1">🐱</div>
+                )}
+                {/* Table Top & Legs */}
+                <div className="w-36 h-3 bg-amber-600 rounded" />
+                <div className="w-28 flex justify-between">
+                  <div className="w-2.5 h-14 bg-amber-700" />
+                  <div className="w-2.5 h-14 bg-amber-700" />
+                </div>
+                {catPosition === 'under' && (
+                  <div className="absolute bottom-1 text-3xl animate-bounce">🐱</div>
+                )}
+              </div>
+              <span className="text-[11px] text-slate-400">
+                {catPosition === 'on'
+                  ? 'The cat is sitting ON the table.'
+                  : catPosition === 'under'
+                  ? 'The cat is hiding UNDER the table.'
+                  : 'Click ON or UNDER above'}
+              </span>
+            </div>
+
+            {/* Scene 2: Box (INSIDE vs OUTSIDE) */}
+            <div className="p-4 rounded-xl bg-[#111827] border border-slate-800 flex flex-col items-center justify-between h-48">
+              <span className="text-xs font-mono text-emerald-300 font-bold">
+                INSIDE vs. OUTSIDE the Box
+              </span>
+              <div className="flex items-center gap-4">
+                <div className="w-24 h-20 rounded-b-xl border-4 border-t-0 border-emerald-500 bg-emerald-950/30 flex items-center justify-center text-3xl">
+                  {catPosition === 'inside' ? '🐱' : '📦'}
+                </div>
+                {catPosition === 'outside' && (
+                  <div className="text-3xl animate-bounce">🐱</div>
+                )}
+              </div>
+              <span className="text-[11px] text-slate-400">
+                {catPosition === 'inside'
+                  ? 'The cat is INSIDE the box!'
+                  : catPosition === 'outside'
+                  ? 'The cat jumped OUTSIDE the box!'
+                  : 'Click INSIDE or OUTSIDE above'}
+              </span>
+            </div>
+
+            {/* Scene 3: Tree (NEAR vs FAR) */}
+            <div className="p-4 rounded-xl bg-[#111827] border border-slate-800 flex flex-col items-center justify-between h-48">
+              <span className="text-xs font-mono text-amber-300 font-bold">
+                NEAR vs. FAR from the Tree
+              </span>
+              <div className="w-full flex items-center justify-between px-3">
+                <div className="flex items-center gap-1">
+                  <span className="text-4xl">🌳</span>
+                  {catPosition === 'near' && (
+                    <span className="text-3xl animate-bounce">🐱</span>
+                  )}
+                </div>
+                {catPosition === 'far' && (
+                  <span className="text-3xl animate-bounce">🐱</span>
+                )}
+              </div>
+              <span className="text-[11px] text-slate-400">
+                {catPosition === 'near'
+                  ? 'The cat is NEAR the tree.'
+                  : catPosition === 'far'
+                  ? 'The cat is FAR away from the tree.'
+                  : 'Click NEAR or FAR above'}
+              </span>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* MODE 1: NUMBERS 1-20, TEN-FRAMES & CROCODILE COMPARISON */}
       {mode === 'number-line-tenframe' && (
@@ -856,6 +999,127 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
         </div>
       )}
 
+      {/* MODE 4B: NON-STANDARD MEASUREMENT (HANDSPANS, PAN BALANCE & CAPACITY) */}
+      {mode === 'measurement-balance' && (
+        <div className="space-y-4">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+            {/* 1. Length in Handspans */}
+            <div className="p-4 rounded-xl bg-[#111827] border border-[#1F2937] space-y-3">
+              <div className="flex justify-between items-center">
+                <h4 className="text-xs font-bold uppercase text-cyan-400">
+                  1. Length in Handspans ✋
+                </h4>
+                <span className="text-xs font-mono font-bold text-white bg-[#090D16] px-2 py-0.5 rounded border border-slate-800">
+                  {objectHandspans} Handspans Long
+                </span>
+              </div>
+              <div className="p-3 rounded-xl bg-[#090D16] border border-slate-800 space-y-2">
+                <div className="h-6 rounded bg-amber-600/80 border border-amber-400 flex items-center justify-center text-xs font-bold text-slate-950">
+                  Wooden Study Table ({objectHandspans} Handspans)
+                </div>
+                <div className="flex justify-start gap-1 text-xl">
+                  {Array.from({ length: objectHandspans }).map((_, i) => (
+                    <span key={i} title={`Handspan ${i + 1}`}>
+                      🖐️
+                    </span>
+                  ))}
+                </div>
+              </div>
+              <input
+                type="range"
+                min={2}
+                max={9}
+                value={objectHandspans}
+                onChange={(e) => setObjectHandspans(Number(e.target.value))}
+                className="w-full"
+              />
+            </div>
+
+            {/* 2. Weight on a 2-Pan Beam Balance */}
+            <div className="p-4 rounded-xl bg-[#111827] border border-[#1F2937] space-y-3">
+              <div className="flex justify-between items-center">
+                <h4 className="text-xs font-bold uppercase text-emerald-400">
+                  2. Heavier vs. Lighter Balance ⚖️
+                </h4>
+                <span className="text-xs font-mono font-bold text-emerald-300">
+                  {leftPanBlocks > rightPanBlocks
+                    ? 'Left is HEAVIER'
+                    : leftPanBlocks < rightPanBlocks
+                    ? 'Right is HEAVIER'
+                    : 'EQUAL WEIGHT!'}
+                </span>
+              </div>
+              <div className="p-3 rounded-xl bg-[#090D16] border border-slate-800 flex flex-col items-center justify-center h-28">
+                <div
+                  className="w-48 h-2 bg-slate-400 rounded flex justify-between items-center transition-transform duration-300"
+                  style={{
+                    transform: `rotate(${(rightPanBlocks - leftPanBlocks) * 4}deg)`,
+                  }}
+                >
+                  <div className="px-2 py-1 rounded bg-rose-500 text-white text-xs font-mono font-bold -mt-6">
+                    🍉 ({leftPanBlocks})
+                  </div>
+                  <div className="px-2 py-1 rounded bg-cyan-500 text-slate-950 text-xs font-mono font-bold -mt-6">
+                    🧱 ({rightPanBlocks})
+                  </div>
+                </div>
+                <div className="w-0 h-0 border-l-[12px] border-l-transparent border-r-[12px] border-r-transparent border-b-[20px] border-b-amber-500 mt-1" />
+              </div>
+              <div className="grid grid-cols-2 gap-2 text-xs">
+                <button
+                  type="button"
+                  onClick={() => setLeftPanBlocks((n) => (n >= 10 ? 1 : n + 1))}
+                  className="py-1 rounded bg-slate-800 text-rose-300 font-mono"
+                >
+                  Left Pan: {leftPanBlocks} blocks
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setRightPanBlocks((n) => (n >= 10 ? 1 : n + 1))}
+                  className="py-1 rounded bg-slate-800 text-cyan-300 font-mono"
+                >
+                  Right Pan: {rightPanBlocks} blocks
+                </button>
+              </div>
+            </div>
+
+            {/* 3. Capacity (Jugs & Glasses) */}
+            <div className="p-4 rounded-xl bg-[#111827] border border-[#1F2937] space-y-3">
+              <div className="flex justify-between items-center">
+                <h4 className="text-xs font-bold uppercase text-amber-400">
+                  3. Capacity (Holds More / Less) 🫗
+                </h4>
+                <span className="text-xs font-mono font-bold text-amber-300">
+                  1 Jug = {jugCups} Glasses
+                </span>
+              </div>
+              <div className="p-3 rounded-xl bg-[#090D16] border border-slate-800 flex items-center justify-around h-28">
+                <div className="text-center">
+                  <div className="text-3xl">🏺</div>
+                  <span className="text-[10px] font-mono text-slate-400">1 Big Jug</span>
+                </div>
+                <span className="text-lg font-bold text-cyan-400">=</span>
+                <div className="flex flex-wrap gap-1 justify-center max-w-[130px]">
+                  {Array.from({ length: jugCups }).map((_, i) => (
+                    <span key={i} className="text-xl">
+                      🥛
+                    </span>
+                  ))}
+                </div>
+              </div>
+              <input
+                type="range"
+                min={2}
+                max={8}
+                value={jugCups}
+                onChange={(e) => setJugCups(Number(e.target.value))}
+                className="w-full"
+              />
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* MODE 5: ANALOG CLOCK & INDIAN CURRENCY (₹) SHOP */}
       {mode === 'clock-money' && (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
@@ -1003,6 +1267,129 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
                   ))
                 )}
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* MODE 5A: PATTERNS (UTSAV) & TOY PICTOGRAPH DATA HANDLING (SO MANY TOYS) */}
+      {mode === 'patterns-pictograph' && (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          {/* Interactive Pattern Sequencer */}
+          <div className="p-4 rounded-xl bg-[#111827] border border-[#1F2937] space-y-3">
+            <div className="flex items-center justify-between">
+              <h4 className="text-xs font-bold uppercase text-cyan-400">
+                NCERT Ch 9 (Utsav): What Comes Next in the Pattern?
+              </h4>
+              <div className="flex gap-1">
+                {(['ABAB', 'AAB', 'ABC', 'NUM'] as const).map((pt) => (
+                  <button
+                    key={pt}
+                    type="button"
+                    onClick={() => setPatternType(pt)}
+                    className={`px-2 py-0.5 rounded text-[11px] font-mono font-bold ${
+                      patternType === pt
+                        ? 'bg-cyan-500 text-slate-950'
+                        : 'bg-[#090D16] text-slate-400 border border-slate-800'
+                    }`}
+                  >
+                    {pt}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="p-4 rounded-xl bg-[#090D16] border border-slate-800 space-y-3">
+              <div className="flex items-center justify-around text-2xl py-2">
+                {(patternType === 'ABAB'
+                  ? ['🔴', '🟦', '🔴', '🟦', '🔴', '🟦']
+                  : patternType === 'AAB'
+                  ? ['⭐', '⭐', '🌙', '⭐', '⭐', '🌙']
+                  : patternType === 'ABC'
+                  ? ['🍎', '🍌', '🍇', '🍎', '🍌', '🍇']
+                  : ['2', '4', '6', '8', '10', '12']
+                ).map((item, idx) => (
+                  <span
+                    key={idx}
+                    className="w-11 h-11 rounded-lg bg-[#111827] border border-cyan-500/30 flex items-center justify-center font-mono font-bold text-base"
+                  >
+                    {item}
+                  </span>
+                ))}
+              </div>
+              <p className="text-xs text-slate-300 font-mono">
+                Rule:{' '}
+                {patternType === 'ABAB'
+                  ? 'Alternating Circle and Square (A-B-A-B)'
+                  : patternType === 'AAB'
+                  ? 'Two Stars followed by One Moon (A-A-B)'
+                  : patternType === 'ABC'
+                  ? 'Three repeating fruits (A-B-C)'
+                  : 'Growing Number Pattern (+2 each step)'}
+              </p>
+            </div>
+          </div>
+
+          {/* Interactive Toy Pictograph Chart (So Many Toys) */}
+          <div className="p-4 rounded-xl bg-[#111827] border border-[#1F2937] space-y-3">
+            <div className="flex items-center justify-between">
+              <h4 className="text-xs font-bold uppercase text-emerald-400">
+                NCERT Ch 13 (So Many Toys): Interactive Pictograph
+              </h4>
+              <span className="text-xs font-mono text-emerald-300">
+                Total Toys = {toyCounts.cars + toyCounts.dolls + toyCounts.balls + toyCounts.blocks}
+              </span>
+            </div>
+
+            <div className="p-3 rounded-xl bg-[#090D16] border border-slate-800 space-y-2">
+              {(
+                [
+                  { key: 'cars', label: 'Toy Cars', icon: '🚗', count: toyCounts.cars },
+                  { key: 'dolls', label: 'Dolls', icon: '🪆', count: toyCounts.dolls },
+                  { key: 'balls', label: 'Balls', icon: '⚽', count: toyCounts.balls },
+                  { key: 'blocks', label: 'Blocks', icon: '🧱', count: toyCounts.blocks },
+                ] as const
+              ).map((row) => (
+                <div
+                  key={row.key}
+                  className="flex items-center justify-between gap-2 p-2 rounded-lg bg-[#111827] border border-slate-800"
+                >
+                  <span className="text-xs font-semibold w-24 text-slate-200">
+                    {row.label} ({row.count})
+                  </span>
+                  <div className="flex-1 flex gap-1 text-base overflow-x-auto">
+                    {Array.from({ length: row.count }).map((_, i) => (
+                      <span key={i}>{row.icon}</span>
+                    ))}
+                  </div>
+                  <div className="flex gap-1">
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setToyCounts((prev) => ({
+                          ...prev,
+                          [row.key]: Math.max(1, prev[row.key] - 1),
+                        }))
+                      }
+                      className="px-2 py-0.5 rounded bg-slate-800 text-xs font-bold"
+                    >
+                      -
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setToyCounts((prev) => ({
+                          ...prev,
+                          [row.key]: Math.min(9, prev[row.key] + 1),
+                        }))
+                      }
+                      className="px-2 py-0.5 rounded bg-slate-800 text-xs font-bold"
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </div>
@@ -1211,6 +1598,135 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
               },
             ]}
           />
+        </div>
+      )}
+
+      {/* MODE 7B: EVS ANIMALS, HEALTHY FOOD & TRAFFIC SAFETY RULES */}
+      {mode === 'evs-animals-food-safety' && (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          {/* Animal World Classification */}
+          <div className="p-4 rounded-xl bg-[#111827] border border-[#1F2937] space-y-3">
+            <h4 className="text-xs font-bold uppercase text-emerald-400">
+              Class 1 EVS — Animals Around Us (Wild, Domestic, Pet & Water)
+            </h4>
+            <div className="flex flex-wrap gap-1.5">
+              {(
+                [
+                  { id: 'wild', label: 'Wild Animals (Jungle)' },
+                  { id: 'domestic', label: 'Domestic / Farm Helpers' },
+                  { id: 'pet', label: 'Pet Animals (Home)' },
+                  { id: 'water', label: 'Aquatic (Water) Animals' },
+                ] as const
+              ).map((cat) => (
+                <button
+                  key={cat.id}
+                  type="button"
+                  onClick={() => setAnimalCategory(cat.id)}
+                  className={`px-2.5 py-1 rounded-lg text-xs font-bold ${
+                    animalCategory === cat.id
+                      ? 'bg-emerald-500 text-slate-950'
+                      : 'bg-[#090D16] text-slate-300 border border-slate-800'
+                  }`}
+                >
+                  {cat.label}
+                </button>
+              ))}
+            </div>
+
+            <div className="p-4 rounded-xl bg-[#090D16] border border-slate-800 space-y-2">
+              <div className="text-3xl flex justify-around py-2">
+                {animalCategory === 'wild' && (
+                  <>
+                    <span>🦁 Lion</span>
+                    <span>🐘 Elephant</span>
+                    <span>🐯 Tiger</span>
+                  </>
+                )}
+                {animalCategory === 'domestic' && (
+                  <>
+                    <span>🐄 Cow</span>
+                    <span>🐑 Sheep</span>
+                    <span>🐎 Horse</span>
+                  </>
+                )}
+                {animalCategory === 'pet' && (
+                  <>
+                    <span>🐶 Dog</span>
+                    <span>🐱 Cat</span>
+                    <span>🦜 Parrot</span>
+                  </>
+                )}
+                {animalCategory === 'water' && (
+                  <>
+                    <span>🐟 Fish</span>
+                    <span>🐬 Dolphin</span>
+                    <span>🐙 Octopus</span>
+                  </>
+                )}
+              </div>
+              <p className="text-xs text-slate-300">
+                {animalCategory === 'wild'
+                  ? 'Wild animals live naturally in forests and jungles. The Lion is called the King of the Jungle (lives in a Den).'
+                  : animalCategory === 'domestic'
+                  ? 'Domestic farm animals help us: Cows give milk (live in a Shed), Sheep give wool, Horses pull carts (live in a Stable).'
+                  : animalCategory === 'pet'
+                  ? 'Pet animals live with us at home as our friends. A dog guards our house and lives in a Kennel.'
+                  : 'Water (aquatic) animals live in rivers, lakes, and oceans and breathe in water using gills or blowholes.'}
+              </p>
+            </div>
+          </div>
+
+          {/* Interactive Traffic Signal & Safety Habits */}
+          <div className="p-4 rounded-xl bg-[#111827] border border-[#1F2937] space-y-3">
+            <h4 className="text-xs font-bold uppercase text-amber-400">
+              Class 1 EVS — Road Safety & Traffic Signal Rules 🚦
+            </h4>
+            <div className="flex items-center justify-around p-4 rounded-xl bg-[#090D16] border border-slate-800">
+              <div className="p-3 rounded-2xl bg-slate-900 border-2 border-slate-700 flex flex-col gap-2.5">
+                <button
+                  type="button"
+                  onClick={() => setTrafficLight('red')}
+                  className={`w-10 h-10 rounded-full transition-all ${
+                    trafficLight === 'red'
+                      ? 'bg-rose-500 shadow-lg shadow-rose-500/60 scale-110'
+                      : 'bg-rose-950/50'
+                  }`}
+                />
+                <button
+                  type="button"
+                  onClick={() => setTrafficLight('yellow')}
+                  className={`w-10 h-10 rounded-full transition-all ${
+                    trafficLight === 'yellow'
+                      ? 'bg-amber-400 shadow-lg shadow-amber-400/60 scale-110'
+                      : 'bg-amber-950/50'
+                  }`}
+                />
+                <button
+                  type="button"
+                  onClick={() => setTrafficLight('green')}
+                  className={`w-10 h-10 rounded-full transition-all ${
+                    trafficLight === 'green'
+                      ? 'bg-emerald-500 shadow-lg shadow-emerald-500/60 scale-110'
+                      : 'bg-emerald-950/50'
+                  }`}
+                />
+              </div>
+
+              <div className="max-w-xs space-y-2">
+                <div className="text-sm font-mono font-bold text-white">
+                  {trafficLight === 'red'
+                    ? '🔴 RED LIGHT SAYS: STOP!'
+                    : trafficLight === 'yellow'
+                    ? '🟡 YELLOW LIGHT SAYS: WAIT / GET READY!'
+                    : '🟢 GREEN LIGHT SAYS: GO SAFELY!'}
+                </div>
+                <p className="text-xs text-slate-300 leading-relaxed">
+                  Always cross the road at the black-and-white{' '}
+                  <strong className="text-cyan-300">Zebra Crossing</strong> with an elder, and never play on the road!
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       )}
 
