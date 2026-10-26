@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { QuizQuestion } from '../../types/curriculum.types';
 import { CheckCircle2, XCircle, HelpCircle, Award, RotateCcw, Volume2 } from 'lucide-react';
+import { playPop, playSuccessChime } from '../../utils/soundEffects';
 
 interface InteractiveQuizProps {
   questions: QuizQuestion[];
@@ -32,6 +33,11 @@ export const InteractiveQuiz: React.FC<InteractiveQuizProps> = ({
   const handleSelect = (q: QuizQuestion, optionIdx: number) => {
     setSelectedAnswers((prev) => ({ ...prev, [q.id]: optionIdx }));
     setSubmitted((prev) => ({ ...prev, [q.id]: true }));
+    if (optionIdx === q.correctIndex) {
+      playSuccessChime();
+    } else {
+      playPop();
+    }
   };
 
   const handleReset = () => {

@@ -7,6 +7,7 @@ import { FormulaCard } from '../engine/FormulaCard';
 import { InteractiveQuiz } from '../assessment/InteractiveQuiz';
 import { AnatomyCADInspector } from '../engine/AnatomyCADInspector';
 import { MagicTracingSlate } from '../engine/MagicTracingSlate';
+import { playFanfare, playPop } from '../../utils/soundEffects';
 
 // Import all Flagship Simulations
 import { Class1InteractiveLab } from '../../simulations/school/Class1InteractiveLab';
@@ -297,7 +298,11 @@ export const LabWorkspace: React.FC<LabWorkspaceProps> = ({
               {onToggleComplete && (
                 <button
                   type="button"
-                  onClick={() => onToggleComplete(chapter.id)}
+                  onClick={() => {
+                    if (!isCompleted) playFanfare();
+                    else playPop();
+                    onToggleComplete(chapter.id);
+                  }}
                   className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-[11px] font-extrabold border transition-all ${
                     isCompleted
                       ? 'bg-emerald-500/20 border-emerald-400 text-emerald-200'
@@ -611,6 +616,7 @@ export const LabWorkspace: React.FC<LabWorkspaceProps> = ({
                     label={f.label}
                     latex={f.latex}
                     description={f.description}
+                    kidFriendly={isPrimaryWing}
                     accentColor={
                       chapter.track === 'engineering'
                         ? 'amber'

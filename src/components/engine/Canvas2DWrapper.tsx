@@ -20,6 +20,7 @@ interface Canvas2DWrapperProps {
   height?: number;
   title?: string;
   subtitle?: string;
+  kidFriendly?: boolean;
   onCanvasMouseDown?: (x: number, y: number, e: React.MouseEvent<HTMLCanvasElement>) => void;
   onCanvasMouseMove?: (x: number, y: number, e: React.MouseEvent<HTMLCanvasElement>) => void;
   onCanvasMouseUp?: () => void;
@@ -33,6 +34,7 @@ export const Canvas2DWrapper: React.FC<Canvas2DWrapperProps> = ({
   height = 420,
   title,
   subtitle,
+  kidFriendly = false,
   onCanvasMouseDown,
   onCanvasMouseMove,
   onCanvasMouseUp,
@@ -41,7 +43,7 @@ export const Canvas2DWrapper: React.FC<Canvas2DWrapperProps> = ({
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [zoom, setZoom] = useState(1);
   const [pan, setPan] = useState({ x: 0, y: 0 });
-  const [showGrid, setShowGrid] = useState(true);
+  const [showGrid, setShowGrid] = useState(!kidFriendly);
   const [fps, setFps] = useState(60);
 
   const elapsedRef = useRef(0);
@@ -162,49 +164,57 @@ export const Canvas2DWrapper: React.FC<Canvas2DWrapperProps> = ({
 
         <div className="flex items-center gap-1.5">
           {overlayTopRight}
-          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-slate-900 border border-slate-800 text-[10px] font-mono text-emerald-400">
-            <Activity className="w-3 h-3" />
-            {fps} FPS
-          </span>
-          <button
-            type="button"
-            onClick={() => setShowGrid((g) => !g)}
-            title="Toggle coordinate grid"
-            className={`p-1.5 rounded-lg border text-xs transition-colors ${
-              showGrid
-                ? 'bg-cyan-500/20 border-cyan-500/40 text-cyan-300'
-                : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-white'
-            }`}
-          >
-            <Grid className="w-3.5 h-3.5" />
-          </button>
-          <button
-            type="button"
-            onClick={() => setZoom((z) => Math.min(2.0, +(z + 0.15).toFixed(2)))}
-            title="Zoom in"
-            className="p-1.5 rounded-lg bg-slate-900 border border-slate-800 text-slate-400 hover:text-white transition-colors"
-          >
-            <ZoomIn className="w-3.5 h-3.5" />
-          </button>
-          <button
-            type="button"
-            onClick={() => setZoom((z) => Math.max(0.6, +(z - 0.15).toFixed(2)))}
-            title="Zoom out"
-            className="p-1.5 rounded-lg bg-slate-900 border border-slate-800 text-slate-400 hover:text-white transition-colors"
-          >
-            <ZoomOut className="w-3.5 h-3.5" />
-          </button>
-          <button
-            type="button"
-            onClick={() => {
-              setZoom(1);
-              setPan({ x: 0, y: 0 });
-            }}
-            title="Reset camera view"
-            className="p-1.5 rounded-lg bg-slate-900 border border-slate-800 text-slate-400 hover:text-white transition-colors"
-          >
-            <Maximize2 className="w-3.5 h-3.5" />
-          </button>
+          {kidFriendly ? (
+            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-cyan-500/15 border border-cyan-500/30 text-[11px] font-bold text-cyan-300">
+              🎨 Animated Learning Stage
+            </span>
+          ) : (
+            <>
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-slate-900 border border-slate-800 text-[10px] font-mono text-emerald-400">
+                <Activity className="w-3 h-3" />
+                {fps} FPS
+              </span>
+              <button
+                type="button"
+                onClick={() => setShowGrid((g) => !g)}
+                title="Toggle coordinate grid"
+                className={`p-1.5 rounded-lg border text-xs transition-colors ${
+                  showGrid
+                    ? 'bg-cyan-500/20 border-cyan-500/40 text-cyan-300'
+                    : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-white'
+                }`}
+              >
+                <Grid className="w-3.5 h-3.5" />
+              </button>
+              <button
+                type="button"
+                onClick={() => setZoom((z) => Math.min(2.0, +(z + 0.15).toFixed(2)))}
+                title="Zoom in"
+                className="p-1.5 rounded-lg bg-slate-900 border border-slate-800 text-slate-400 hover:text-white transition-colors"
+              >
+                <ZoomIn className="w-3.5 h-3.5" />
+              </button>
+              <button
+                type="button"
+                onClick={() => setZoom((z) => Math.max(0.6, +(z - 0.15).toFixed(2)))}
+                title="Zoom out"
+                className="p-1.5 rounded-lg bg-slate-900 border border-slate-800 text-slate-400 hover:text-white transition-colors"
+              >
+                <ZoomOut className="w-3.5 h-3.5" />
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setZoom(1);
+                  setPan({ x: 0, y: 0 });
+                }}
+                title="Reset camera view"
+                className="p-1.5 rounded-lg bg-slate-900 border border-slate-800 text-slate-400 hover:text-white transition-colors"
+              >
+                <Maximize2 className="w-3.5 h-3.5" />
+              </button>
+            </>
+          )}
         </div>
       </div>
 
@@ -216,7 +226,9 @@ export const Canvas2DWrapper: React.FC<Canvas2DWrapperProps> = ({
         onMouseMove={(e) => handleMouseEvent(e, onCanvasMouseMove)}
         onMouseUp={() => onCanvasMouseUp && onCanvasMouseUp()}
         onMouseLeave={() => onCanvasMouseUp && onCanvasMouseUp()}
-        className="w-full block cursor-crosshair select-none"
+        className={`w-full block select-none ${
+          kidFriendly ? 'cursor-pointer' : 'cursor-crosshair'
+        }`}
       />
     </div>
   );

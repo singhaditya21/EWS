@@ -2,6 +2,12 @@ import React, { useState } from 'react';
 import { Canvas2DWrapper, CanvasRenderContext } from '../../components/engine/Canvas2DWrapper';
 import { ParameterPanel } from '../../components/engine/ParameterPanel';
 import {
+  playPop,
+  playSuccessChime,
+  playFanfare,
+  playMusicalNote,
+} from '../../utils/soundEffects';
+import {
   Calculator,
   Shapes,
   Clock,
@@ -21,6 +27,11 @@ import {
   Monitor,
   Flag,
   Languages,
+  Palette,
+  Music,
+  Truck,
+  Award,
+  X,
 } from 'lucide-react';
 
 export type Class1LabMode =
@@ -35,15 +46,18 @@ export type Class1LabMode =
   | 'spatial-ordinals-data'
   | 'eng-phonics-vowels'
   | 'eng-grammar-opposites'
+  | 'eng-mridang-stories'
   | 'hindi-varnamala'
   | 'computer-smart-machine'
   | 'evs-sense-organs'
   | 'evs-plants-living'
   | 'evs-animals-food-safety'
   | 'evs-seasons-sky'
-  | 'evs-india-manners';
+  | 'evs-india-manners'
+  | 'evs-helpers-transport'
+  | 'arts-colors-music';
 
-type Class1SubjectGroup = 'math' | 'english' | 'hindi' | 'evs' | 'computer';
+type Class1SubjectGroup = 'math' | 'english' | 'hindi' | 'evs' | 'computer' | 'arts';
 
 const MODE_CATALOG: {
   id: Class1LabMode;
@@ -52,23 +66,186 @@ const MODE_CATALOG: {
   icon: React.FC<{ className?: string }>;
 }[] = [
   { id: 'spatial-prenumber', subject: 'math', label: '1. Spatial (Furry Cat)', icon: Sparkles },
-  { id: 'number-line-tenframe', subject: 'math', label: '2. Numbers 1–20 & < > =', icon: Sparkles },
+  { id: 'number-line-tenframe', subject: 'math', label: '2. Numbers 1–20 & Making 10', icon: Sparkles },
   { id: 'addition-subtraction', subject: 'math', label: '3. Add & Subtract Frog', icon: Calculator },
   { id: 'tens-ones-abacus', subject: 'math', label: '4. Tens & Ones Abacus', icon: Plus },
   { id: 'shapes-roll-slide', subject: 'math', label: '5. Shapes: Roll & Slide', icon: Shapes },
   { id: 'measurement-balance', subject: 'math', label: '6. Handspan & Balance', icon: Calculator },
-  { id: 'clock-money', subject: 'math', label: '7. Clock & ₹ Toy Shop', icon: Clock },
+  { id: 'clock-money', subject: 'math', label: '7. Clock, Calendar & ₹ Shop', icon: Clock },
   { id: 'patterns-pictograph', subject: 'math', label: '8. Patterns & Pictograph', icon: Shapes },
-  { id: 'spatial-ordinals-data', subject: 'math', label: '9. Ordinals (1st–10th)', icon: Sparkles },
+  { id: 'spatial-ordinals-data', subject: 'math', label: '9. Ordinals & Equal Groups', icon: Sparkles },
   { id: 'eng-phonics-vowels', subject: 'english', label: '1. Vowels (A,E,I,O,U) & CVC', icon: BookOpen },
-  { id: 'eng-grammar-opposites', subject: 'english', label: '2. Opposites & Action Words', icon: BookOpen },
-  { id: 'hindi-varnamala', subject: 'hindi', label: '1. हिंदी वर्णमाला (Swar & Vyanjan)', icon: Languages },
+  { id: 'eng-grammar-opposites', subject: 'english', label: '2. Opposites, Plurals & Verbs', icon: BookOpen },
+  { id: 'eng-mridang-stories', subject: 'english', label: '3. Mridang Poems & Stories 🎭', icon: Sparkles },
+  { id: 'hindi-varnamala', subject: 'hindi', label: '1. सारंगी: वर्णमाला, मात्रा, गिनती व कविता', icon: Languages },
   { id: 'evs-sense-organs', subject: 'evs', label: '1. My Body & 5 Sense Organs', icon: Eye },
   { id: 'evs-plants-living', subject: 'evs', label: '2. Growing Plant & Living Things', icon: Sprout },
-  { id: 'evs-animals-food-safety', subject: 'evs', label: '3. Animals & Traffic Safety', icon: CheckCircle2 },
+  { id: 'evs-animals-food-safety', subject: 'evs', label: '3. Animals (Babies/Homes) & Safety', icon: CheckCircle2 },
   { id: 'evs-seasons-sky', subject: 'evs', label: '4. Seasons & Day/Night Sky', icon: Sun },
   { id: 'evs-india-manners', subject: 'evs', label: '5. Our India 🇮🇳 & Good Manners', icon: Flag },
-  { id: 'computer-smart-machine', subject: 'computer', label: '1. Computer: Smart Machine 🖥️', icon: Monitor },
+  { id: 'evs-helpers-transport', subject: 'evs', label: '6. Helpers, Home & Transport 🚒', icon: Truck },
+  { id: 'computer-smart-machine', subject: 'computer', label: '1. Computer, Keyboard & Mouse 🖥️', icon: Monitor },
+  { id: 'arts-colors-music', subject: 'arts', label: '1. Color Mixing & Xylophone 🎵', icon: Palette },
+];
+
+const DAYS_OF_WEEK = [
+  { day: 'Monday', order: '1st Day of School Week', activity: 'Fresh start to school! 🎒' },
+  { day: 'Tuesday', order: '2nd Day of the Week', activity: 'Story & Art day! 🎨' },
+  { day: 'Wednesday', order: '3rd Day of the Week', activity: 'Games & Playground fun! ⚽' },
+  { day: 'Thursday', order: '4th Day of the Week', activity: 'Numbers & Abacus day! 🧮' },
+  { day: 'Friday', order: '5th Day of the Week', activity: 'Music & Rhymes day! 🎵' },
+  { day: 'Saturday', order: '6th Day (Weekend)', activity: 'Family park & hobby time! 🚲' },
+  { day: 'Sunday', order: '7th Day (Holiday!)', activity: 'Fun holiday with family & grandparents! 🏡' },
+];
+
+const MONTHS_OF_YEAR = [
+  { m: 'January', days: 31, note: '1st Month • Winter & Republic Day (26 Jan) 🇮🇳' },
+  { m: 'February', days: 28, note: '2nd Month • Shortest month (28/29 days) 🌸' },
+  { m: 'March', days: 31, note: '3rd Month • Spring & Festival of Colors (Holi) 🎨' },
+  { m: 'April', days: 30, note: '4th Month • New Class 1 session begins! 📚' },
+  { m: 'May', days: 31, note: '5th Month • Sunny Summer & Mango season 🥭' },
+  { m: 'June', days: 30, note: '6th Month • Summer vacation & first monsoon clouds ⛅' },
+  { m: 'July', days: 31, note: '7th Month • Monsoon rains & paper boats 🌧️' },
+  { m: 'August', days: 31, note: '8th Month • Independence Day (15 Aug) 🇮🇳' },
+  { m: 'September', days: 30, note: '9th Month • Teachers’ Day (5 Sep) 👩‍🏫' },
+  { m: 'October', days: 31, note: '10th Month • Gandhi Jayanti & Festive season 🪔' },
+  { m: 'November', days: 30, note: '11th Month • Children’s Day (14 Nov) 🎈' },
+  { m: 'December', days: 31, note: '12th Month • Cool Winter & Christmas (25 Dec) 🎄' },
+];
+
+const MRIDANG_STORIES = [
+  {
+    id: 'two-little-hands',
+    unit: 'Mridang Unit 1 • Ch 1 (Poem)',
+    title: 'Two Little Hands to Clap, Clap, Clap! 👏',
+    icon: '🙌',
+    lines: [
+      'Two little hands go clap, clap, clap!',
+      'Two little legs go tap, tap, tap!',
+      'Two little eyes are open wide,',
+      'One little head goes side to side!',
+    ],
+    moral: 'Our body parts work together to help us play, clap, walk, and see!',
+  },
+  {
+    id: 'greetings',
+    unit: 'Mridang Unit 1 • Ch 2 (Greetings)',
+    title: 'Polite Greetings Throughout the Day 🌅',
+    icon: '🌞',
+    lines: [
+      'When the sun rises in the morning, we say: GOOD MORNING!',
+      'At 12 o’clock noon, we say: GOOD AFTERNOON!',
+      'When we play in the park at sunset, we say: GOOD EVENING!',
+      'Before going to sleep in bed with stars in the sky, we say: GOOD NIGHT!',
+    ],
+    moral: 'Greeting elders, teachers, and friends with a warm smile is a wonderful habit.',
+  },
+  {
+    id: 'cap-seller',
+    unit: 'Mridang Unit 2 • Ch 4 (Classic Story)',
+    title: 'The Cap-Seller and the Monkeys 🧢🐒',
+    icon: '🐒',
+    lines: [
+      'A cap-seller was sleeping under a shady tree with a basket of colorful caps.',
+      'Naughty monkeys on the tree came down and wore all his caps!',
+      'The clever cap-seller waved his hands—the monkeys copied him!',
+      'He threw his own cap on the ground, and all the monkeys threw the caps back into his basket!',
+    ],
+    moral: 'Clever thinking and staying calm solves every problem!',
+  },
+  {
+    id: 'anandi-rainbow',
+    unit: 'Mridang Unit 4 • Ch 9 (Story)',
+    title: 'Anandi’s Rainbow 🌈',
+    icon: '🌈',
+    lines: [
+      'Anandi woke up and saw a huge, bright Rainbow across the clear blue sky!',
+      'She took her paintbrush and painted the garden flowers with the 7 colors of the rainbow:',
+      'Violet, Indigo, Blue, Green, Yellow, Orange, and Red (VIBGYOR)!',
+      'She left the bright Yellow color for the warm, smiling Sun!',
+    ],
+    moral: 'Nature is full of vibrant colors—always keep the Sun bright and warm!',
+  },
+];
+
+const HINDI_MATRAS = [
+  { matra: 'ा (आ की मात्रा)', base: 'क', result: 'का', word: 'काला / कार 🚗', speech: 'क में आ की मात्रा का, कार' },
+  { matra: 'ि (छोटी इ की मात्रा)', base: 'क', result: 'कि', word: 'किताब 📖', speech: 'क में छोटी इ की मात्रा कि, किताब' },
+  { matra: 'ी (बड़ी ई की मात्रा)', base: 'म', result: 'मी', word: 'मीना / मछली 🐟', speech: 'म में बड़ी ई की मात्रा मी, मीना' },
+  { matra: 'ु (छोटा उ की मात्रा)', base: 'ग', result: 'गु', word: 'गुलाब 🌹', speech: 'ग में छोटा उ की मात्रा गु, गुलाब' },
+  { matra: 'ू (बड़ा ऊ की मात्रा)', base: 'च', result: 'चू', word: 'चूहा 🐭', speech: 'च में बड़ा ऊ की मात्रा चू, चूहा' },
+  { matra: 'े (ए की मात्रा)', base: 'र', result: 'रे', word: 'रेलगाड़ी 🚂', speech: 'र में ए की मात्रा रे, रेलगाड़ी' },
+  { matra: 'ो (ओ की मात्रा)', base: 'म', result: 'मो', word: 'मोर 🦚', speech: 'म में ओ की मात्रा मो, मोर' },
+];
+
+const HINDI_GINTI = [
+  { num: '१', eng: 1, word: 'एक (Ek)', icons: '🍎' },
+  { num: '२', eng: 2, word: 'दो (Do)', icons: '🍎🍎' },
+  { num: '३', eng: 3, word: 'तीन (Teen)', icons: '🍎🍎🍎' },
+  { num: '४', eng: 4, word: 'चार (Chaar)', icons: '🍎🍎🍎🍎' },
+  { num: '५', eng: 5, word: 'पाँच (Paanch)', icons: '⭐⭐⭐⭐⭐' },
+  { num: '६', eng: 6, word: 'छह (Chhah)', icons: '⭐⭐⭐⭐⭐⭐' },
+  { num: '७', eng: 7, word: 'सात (Saat)', icons: '🌈 (७ रंग)' },
+  { num: '८', eng: 8, word: 'आठ (Aath)', icons: '🐙 (८ भुजाएँ)' },
+  { num: '९', eng: 9, word: 'नौ (Nau)', icons: '🪐 (९ ग्रह/अंक)' },
+  { num: '१०', eng: 10, word: 'दस (Das)', icons: '👐 (१० उँगलियाँ)' },
+];
+
+const SARANGI_POEMS = [
+  {
+    title: 'मछली जल की रानी है 🐟 (Fish is Queen of Water)',
+    unit: 'NCERT Sarangi & Popular Balgeet',
+    lines: [
+      'मछली जल की रानी है, जीवन उसका पानी है!',
+      'हाथ लगाओ तो डर जाएगी, बाहर निकालो तो मर जाएगी!',
+      'पानी में डालो तो तैर जाएगी!',
+    ],
+  },
+  {
+    title: 'चंदा मामा दूर के 🌙 (Chanda Mama)',
+    unit: 'NCERT Sarangi Unit 5 • चाँद का बच्चा',
+    lines: [
+      'चंदा मामा दूर के, पुए पकाएँ बूर के!',
+      'आप खाएँ थाली में, मुन्ने को दें प्याली में!',
+    ],
+  },
+  {
+    title: 'मीना का परिवार 👨‍👩‍👧‍👦 (Meena’s Family)',
+    unit: 'NCERT Sarangi Unit 1 • पाठ 1',
+    lines: [
+      'मीना के परिवार में दादा, दादी, माता, पिता, चाचा और छोटा भाई दिवाकर हैं!',
+      'सब मिलजुल कर प्यार से रहते हैं और पेड़-पौधों में पानी देते हैं।',
+    ],
+  },
+];
+
+const ANIMAL_FAMILIES = [
+  { animal: 'Lion 🦁', baby: 'Cub', home: 'Den', sound: 'Roars!' },
+  { animal: 'Dog 🐶', baby: 'Puppy', home: 'Kennel', sound: 'Barks (Bow-Wow)!' },
+  { animal: 'Cat 🐱', baby: 'Kitten', home: 'Home / Basket', sound: 'Meows!' },
+  { animal: 'Cow 🐄', baby: 'Calf', home: 'Shed', sound: 'Moos!' },
+  { animal: 'Horse 🐎', baby: 'Foal / Colt', home: 'Stable', sound: 'Neighs!' },
+  { animal: 'Bird 🐦', baby: 'Chick / Nestling', home: 'Nest on Tree', sound: 'Chirps!' },
+];
+
+const COMMUNITY_HELPERS = [
+  { role: 'Doctor 👩‍⚕️', place: 'Hospital 🏥', tool: 'Stethoscope 🩺 & Medicine', job: 'Treats sick people and keeps us healthy!' },
+  { role: 'Teacher 👩‍🏫', place: 'School 🏫', tool: 'Blackboard & Books 📚', job: 'Teaches us reading, math, and good values!' },
+  { role: 'Firefighter 👨‍🚒', place: 'Fire Station 🚒', tool: 'Red Fire Engine & Water Hose', job: 'Bravely puts out fires and rescues people!' },
+  { role: 'Postman 📮', place: 'Post Office 🏤', tool: 'Letter Bag & Parcels ✉️', job: 'Delivers letters, cards, and parcels to our home!' },
+  { role: 'Farmer 👨‍🌾', place: 'Green Farm 🌾', tool: 'Tractor & Plough 🚜', job: 'Grows wheat, rice, fruits, and vegetables for everyone!' },
+  { role: 'Police Officer 👮', place: 'Police Station 🚓', tool: 'Patrol Car & Whistle', job: 'Keeps our neighborhood safe and helps lost children!' },
+];
+
+const XYLOPHONE_KEYS = [
+  { sargam: 'सा (Sa)', western: 'C4', freq: 261.63, color: 'bg-rose-500 border-rose-300' },
+  { sargam: 'रे (Re)', western: 'D4', freq: 293.66, color: 'bg-orange-500 border-orange-300' },
+  { sargam: 'ग (Ga)', western: 'E4', freq: 329.63, color: 'bg-amber-400 border-amber-200 text-slate-950' },
+  { sargam: 'म (Ma)', western: 'F4', freq: 349.23, color: 'bg-emerald-500 border-emerald-300' },
+  { sargam: 'प (Pa)', western: 'G4', freq: 392.0, color: 'bg-cyan-500 border-cyan-300 text-slate-950' },
+  { sargam: 'ध (Dha)', western: 'A4', freq: 440.0, color: 'bg-blue-500 border-blue-300' },
+  { sargam: 'नी (Ni)', western: 'B4', freq: 493.88, color: 'bg-indigo-500 border-indigo-300' },
+  { sargam: 'सां (High Sa)', western: 'C5', freq: 523.25, color: 'bg-fuchsia-500 border-fuchsia-300' },
 ];
 
 const HINDI_SWAR = [
@@ -378,18 +555,40 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
   const [isNightSky, setIsNightSky] = useState(false);
 
   // Hindi Varnamala, Computer & India/Manners states
-  const [hindiTab, setHindiTab] = useState<'swar' | 'vyanjan'>('swar');
+  const [hindiTab, setHindiTab] = useState<'swar' | 'vyanjan' | 'matra' | 'ginti' | 'poems'>('swar');
   const [selectedSwarIdx, setSelectedSwarIdx] = useState(0);
   const [selectedVyanjanIdx, setSelectedVyanjanIdx] = useState(0);
+  const [selectedMatraIdx, setSelectedMatraIdx] = useState(0);
+  const [selectedGintiIdx, setSelectedGintiIdx] = useState(0);
+  const [selectedPoemIdx, setSelectedPoemIdx] = useState(0);
   const [selectedComputerPartIdx, setSelectedComputerPartIdx] = useState(0);
   const [machineSortChoice, setMachineSortChoice] = useState<'natural' | 'manmade'>('manmade');
+  const [keyboardKeyInfo, setKeyboardKeyInfo] = useState<string>(
+    'SPACEBAR (Longest Key): Adds a blank space between two words!'
+  );
   const [selectedSymbolIdx, setSelectedSymbolIdx] = useState(0);
   const [selectedMannerIdx, setSelectedMannerIdx] = useState(0);
+
+  // Research-Backed Additions: Making 10 Bonds, Calendar (Days/Months), Mridang Stories, Animal Families, Helpers/Transport, Color Mixing & Sticker Book
+  const [bondLeft, setBondLeft] = useState(6);
+  const [selectedDayIdx, setSelectedDayIdx] = useState(0);
+  const [selectedMonthIdx, setSelectedMonthIdx] = useState(0);
+  const [selectedStoryIdx, setSelectedStoryIdx] = useState(0);
+  const [activeStoryLine, setActiveStoryLine] = useState(0);
+  const [selectedAnimalFamilyIdx, setSelectedAnimalFamilyIdx] = useState(0);
+  const [selectedHelperIdx, setSelectedHelperIdx] = useState(0);
+  const [transportType, setTransportType] = useState<'land' | 'water' | 'air'>('land');
+  const [colorA, setColorA] = useState<'red' | 'blue' | 'yellow'>('red');
+  const [colorB, setColorB] = useState<'red' | 'blue' | 'yellow'>('yellow');
+  const [activeXylophoneKey, setActiveXylophoneKey] = useState<number | null>(null);
+  const [stickerModalOpen, setStickerModalOpen] = useState(false);
+  const [childName, setChildName] = useState('Little Scientist');
 
   const currentSubjectGroup: Class1SubjectGroup =
     MODE_CATALOG.find((m) => m.id === mode)?.subject || 'math';
 
   const speak = (text: string, force = false, lang = 'en-IN') => {
+    playPop();
     if ((!voiceEnabled && !force) || typeof window === 'undefined' || !('speechSynthesis' in window)) {
       return;
     }
@@ -402,9 +601,17 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
   };
 
   const awardStar = (msg: string, lang = 'en-IN') => {
+    playSuccessChime();
     setStars((s) => s + 1);
     setMissionBanner(`🎉 ${msg} (+1 ⭐ Star!)`);
-    speak(msg, true, lang);
+    if ((voiceEnabled || true) && typeof window !== 'undefined' && 'speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(msg);
+      u.lang = lang;
+      u.rate = 0.92;
+      u.pitch = 1.1;
+      window.speechSynthesis.speak(u);
+    }
   };
 
   const compSymbol = leftCount > rightCount ? '>' : leftCount < rightCount ? '<' : '=';
@@ -717,7 +924,19 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
           )}
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
+          <button
+            type="button"
+            onClick={() => {
+              playFanfare();
+              setStickerModalOpen(true);
+            }}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-400 text-slate-950 text-xs font-extrabold hover:bg-amber-300 transition-colors shadow-sm"
+          >
+            <Award className="w-3.5 h-3.5" />
+            🏅 Sticker Book & Certificate
+          </button>
+
           <button
             type="button"
             onClick={() =>
@@ -747,6 +966,104 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
         </div>
       </div>
 
+      {/* Jadui Pitara Sticker Book & Superstar Certificate Modal */}
+      {stickerModalOpen && (
+        <div className="p-5 rounded-2xl bg-gradient-to-br from-amber-950/60 via-[#111827] to-cyan-950/60 border-2 border-amber-400/70 shadow-xl space-y-4">
+          <div className="flex items-center justify-between border-b border-amber-500/30 pb-3">
+            <div className="flex items-center gap-2">
+              <Trophy className="w-6 h-6 text-amber-400" />
+              <div>
+                <h3 className="text-base font-black text-white">
+                  🏅 Class 1 Jadui Pitara Sticker Book & Superstar Certificate
+                </h3>
+                <p className="text-xs text-amber-200">
+                  Collect stars across Math, English, Hindi, EVS, Computer & Arts!
+                </p>
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={() => setStickerModalOpen(false)}
+              className="p-1.5 rounded-lg bg-slate-800 text-slate-300 hover:text-white"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
+            <div className="md:col-span-5 p-4 rounded-xl bg-[#090D16] border border-amber-400/50 space-y-3 text-center">
+              <div className="text-xs font-mono uppercase text-amber-300 font-bold">
+                🌟 Official Class 1 Superstar Certificate 🌟
+              </div>
+              <div className="text-xs text-slate-400">Proudly presented to:</div>
+              <input
+                type="text"
+                value={childName}
+                onChange={(e) => setChildName(e.target.value)}
+                placeholder="Type Child's Name..."
+                className="w-full text-center px-3 py-1.5 rounded-lg bg-slate-900 border border-amber-400/60 text-base font-extrabold text-amber-200 focus:outline-none"
+              />
+              <div className="text-xs text-slate-200">
+                For earning <strong className="text-amber-300 text-sm">⭐ {stars} Stars</strong> in CBSE & ICSE Class 1 Interactive Labs!
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  playFanfare();
+                  speak(
+                    `Congratulations ${childName}! You have earned ${stars} shining stars in Class 1 OmniLearn Labs!`,
+                    true
+                  );
+                }}
+                className="w-full py-2 rounded-xl bg-amber-400 text-slate-950 text-xs font-black hover:bg-amber-300"
+              >
+                🎉 Play Fanfare & Read Certificate Aloud!
+              </button>
+            </div>
+
+            <div className="md:col-span-7 grid grid-cols-2 sm:grid-cols-4 gap-2">
+              {[
+                { name: 'Furry Cat Finder', icon: '🐱', req: 1 },
+                { name: 'Number Bond 10', icon: '🌈', req: 3 },
+                { name: 'Frog Hop Master', icon: '🐸', req: 5 },
+                { name: 'Abacus Whiz', icon: '🧮', req: 7 },
+                { name: 'Mridang Story Star', icon: '📖', req: 9 },
+                { name: 'Sarangi Hindi Star', icon: '🇮🇳', req: 11 },
+                { name: 'Nature & Helpers', icon: '🚒', req: 13 },
+                { name: 'Music & Rainbow', icon: '🎵', req: 15 },
+              ].map((badge) => {
+                const unlocked = stars >= badge.req;
+                return (
+                  <button
+                    key={badge.name}
+                    type="button"
+                    onClick={() =>
+                      speak(
+                        unlocked
+                          ? `Sticker unlocked: ${badge.name}!`
+                          : `Earn ${badge.req} stars to unlock ${badge.name}!`,
+                        true
+                      )
+                    }
+                    className={`p-2.5 rounded-xl border text-center transition-all ${
+                      unlocked
+                        ? 'bg-emerald-950/40 border-emerald-400 text-white'
+                        : 'bg-[#090D16]/60 border-slate-800 text-slate-500'
+                    }`}
+                  >
+                    <div className="text-2xl">{unlocked ? badge.icon : '🔒'}</div>
+                    <div className="text-[11px] font-bold mt-1">{badge.name}</div>
+                    <div className="text-[9px] font-mono text-amber-300">
+                      {unlocked ? '✓ Unlocked' : `Needs ⭐${badge.req}`}
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Categorized Subject & Activity Selector Bar (Decluttered for 6-Year-Olds!) */}
       <div className="p-3 rounded-2xl bg-[#111827] border border-[#1F2937] space-y-2.5">
         <div className="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-slate-800/80">
@@ -754,10 +1071,11 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
             {(
               [
                 { id: 'math', label: '📐 Math (9)', color: 'bg-cyan-500 text-slate-950' },
-                { id: 'english', label: '📖 English (2)', color: 'bg-amber-500 text-slate-950' },
-                { id: 'hindi', label: '🇮🇳 Hindi / हिंदी (1)', color: 'bg-rose-500 text-white' },
-                { id: 'evs', label: '🌱 EVS & GK (5)', color: 'bg-emerald-500 text-slate-950' },
+                { id: 'english', label: '📖 English / Mridang (3)', color: 'bg-amber-500 text-slate-950' },
+                { id: 'hindi', label: '🇮🇳 Hindi / सारंगी (1)', color: 'bg-rose-500 text-white' },
+                { id: 'evs', label: '🌱 EVS & GK (6)', color: 'bg-emerald-500 text-slate-950' },
                 { id: 'computer', label: '💻 Computer (1)', color: 'bg-violet-500 text-white' },
+                { id: 'arts', label: '🎨 Arts & Music (1)', color: 'bg-pink-500 text-white' },
               ] as const
             ).map((subj) => {
               const activeSubj = currentSubjectGroup === subj.id;
@@ -1037,6 +1355,67 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
               </div>
             </div>
           </div>
+
+          {/* NCERT Ch 4: Making 10 — Interactive Number Bond Rainbow Builder */}
+          <div className="p-4 rounded-xl bg-[#111827] border border-amber-500/40 space-y-3">
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <div>
+                <h4 className="text-xs font-bold uppercase tracking-wider text-amber-300">
+                  🌈 NCERT Ch 4 (Making 10) & ICSE Number Bonds to 10
+                </h4>
+                <p className="text-xs text-slate-300">
+                  Tap any number (0–10) to see its Rainbow Partner that makes 10!
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() =>
+                  awardStar(`${bondLeft} plus ${10 - bondLeft} makes 10!`)
+                }
+                className="px-3 py-1 rounded-lg bg-amber-400 text-slate-950 text-xs font-extrabold"
+              >
+                🔊 {bondLeft} + {10 - bondLeft} = 10
+              </button>
+            </div>
+
+            <div className="flex flex-wrap gap-1.5">
+              {Array.from({ length: 11 }, (_, i) => i).map((n) => (
+                <button
+                  key={n}
+                  type="button"
+                  onClick={() => {
+                    setBondLeft(n);
+                    speak(`${n} and ${10 - n} make 10!`);
+                  }}
+                  className={`px-3 py-1.5 rounded-xl font-mono text-xs font-extrabold border transition-all ${
+                    bondLeft === n
+                      ? 'bg-amber-400 text-slate-950 border-white scale-105'
+                      : 'bg-[#090D16] text-slate-300 border-slate-800'
+                  }`}
+                >
+                  {n} + {10 - n}
+                </button>
+              ))}
+            </div>
+
+            <div className="grid grid-cols-10 gap-1.5 p-3 rounded-xl bg-[#090D16] border border-slate-800">
+              {Array.from({ length: 10 }, (_, idx) => {
+                const isFirstPart = idx < bondLeft;
+                return (
+                  <div
+                    key={idx}
+                    className={`h-9 rounded-lg border flex items-center justify-center text-base font-bold ${
+                      isFirstPart
+                        ? 'bg-cyan-500/30 border-cyan-400 text-cyan-200'
+                        : 'bg-rose-500/30 border-rose-400 text-rose-200'
+                    }`}
+                  >
+                    {isFirstPart ? '🔵' : '🔴'}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
         </div>
       )}
 
@@ -1092,6 +1471,7 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
             title="Class 1 Number Line Frog Hops (0 to 20)"
             subtitle="Watch the green frog hop forward for Addition (+) and hop backward for Subtraction (-)"
             height={290}
+            kidFriendly
             onRender={renderFrogNumberLine}
           />
 
@@ -1340,6 +1720,7 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
             title="What is Long? What is Round? — Rolling vs. Sliding Inclined Plane"
             subtitle="Curved surfaces ROLL down the ramp; flat faces SLIDE down the ramp"
             height={290}
+            kidFriendly
             onRender={renderShapeRamp}
           />
 
@@ -1701,6 +2082,75 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
                     🎉 Buy Toy (+1 ⭐)
                   </button>
                 )}
+              </div>
+            </div>
+          </div>
+
+          {/* NCERT Ch 10 & ICSE Calendar: 7 Days of the Week & 12 Months of the Year */}
+          <div className="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="p-4 rounded-xl bg-[#111827] border border-[#1F2937] space-y-3">
+              <h4 className="text-xs font-bold uppercase tracking-wider text-emerald-400">
+                🗓️ 7 Days of the Week (Yesterday, Today & Tomorrow)
+              </h4>
+              <div className="flex flex-wrap gap-1.5">
+                {DAYS_OF_WEEK.map((d, idx) => (
+                  <button
+                    key={d.day}
+                    type="button"
+                    onClick={() => {
+                      setSelectedDayIdx(idx);
+                      speak(`${d.day} is the ${d.order}. ${d.activity}`);
+                    }}
+                    className={`px-2.5 py-1.5 rounded-lg text-xs font-extrabold border ${
+                      selectedDayIdx === idx
+                        ? 'bg-emerald-500 text-slate-950 border-white'
+                        : 'bg-[#090D16] text-slate-300 border-slate-800'
+                    }`}
+                  >
+                    {idx + 1}. {d.day}
+                  </button>
+                ))}
+              </div>
+              <div className="p-3 rounded-xl bg-[#090D16] border border-emerald-500/30 space-y-1 text-xs">
+                <div className="font-extrabold text-white">
+                  Today is <span className="text-emerald-300">{DAYS_OF_WEEK[selectedDayIdx].day}</span> ({DAYS_OF_WEEK[selectedDayIdx].order})
+                </div>
+                <p className="text-slate-300">{DAYS_OF_WEEK[selectedDayIdx].activity}</p>
+                <div className="text-[11px] font-mono text-slate-400 pt-1">
+                  Yesterday was <strong className="text-amber-300">{DAYS_OF_WEEK[(selectedDayIdx + 6) % 7].day}</strong> • Tomorrow will be{' '}
+                  <strong className="text-cyan-300">{DAYS_OF_WEEK[(selectedDayIdx + 1) % 7].day}</strong>
+                </div>
+              </div>
+            </div>
+
+            <div className="p-4 rounded-xl bg-[#111827] border border-[#1F2937] space-y-3">
+              <h4 className="text-xs font-bold uppercase tracking-wider text-cyan-400">
+                📅 12 Months of the Year (1 Year = 12 Months)
+              </h4>
+              <div className="grid grid-cols-3 sm:grid-cols-4 gap-1.5">
+                {MONTHS_OF_YEAR.map((item, idx) => (
+                  <button
+                    key={item.m}
+                    type="button"
+                    onClick={() => {
+                      setSelectedMonthIdx(idx);
+                      speak(`${item.m}, ${item.days} days. ${item.note}`);
+                    }}
+                    className={`p-1.5 rounded-lg text-[11px] font-bold border text-center ${
+                      selectedMonthIdx === idx
+                        ? 'bg-cyan-500 text-slate-950 border-white'
+                        : 'bg-[#090D16] text-slate-300 border-slate-800'
+                    }`}
+                  >
+                    {idx + 1}. {item.m.slice(0, 3)}
+                  </button>
+                ))}
+              </div>
+              <div className="p-3 rounded-xl bg-[#090D16] border border-cyan-500/30 text-xs space-y-1">
+                <div className="font-extrabold text-cyan-300">
+                  {MONTHS_OF_YEAR[selectedMonthIdx].m} ({MONTHS_OF_YEAR[selectedMonthIdx].days} Days)
+                </div>
+                <p className="text-slate-200">{MONTHS_OF_YEAR[selectedMonthIdx].note}</p>
               </div>
             </div>
           </div>
@@ -2122,11 +2572,125 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
               </div>
 
               <div className="p-2.5 rounded-lg bg-[#111827] border border-slate-800 text-xs text-slate-300 space-y-1">
-                <div className="font-bold text-amber-300">One and Many (Add -s or -es):</div>
+                <div className="font-bold text-amber-300">One and Many (Singular & Plural):</div>
                 <div>• One Cat 🐱 → Many <strong>Cats</strong> 🐱🐱🐱</div>
                 <div>• One Star ⭐ → Many <strong>Stars</strong> ⭐⭐⭐</div>
                 <div>• One Mango 🥭 → Many <strong>Mangoes</strong> 🥭🥭🥭</div>
               </div>
+
+              <div className="p-2.5 rounded-lg bg-[#111827] border border-cyan-500/30 text-xs text-slate-300 space-y-1">
+                <div className="font-bold text-cyan-300">ICSE Pronouns (Words Used Instead of Naming Words):</div>
+                <div className="flex flex-wrap gap-1.5 pt-1">
+                  {[
+                    { p: 'HE 👦', use: 'Used for a boy or man (He is my brother).' },
+                    { p: 'SHE 👧', use: 'Used for a girl or woman (She is my sister).' },
+                    { p: 'IT 🐶', use: 'Used for an animal, bird, or thing (It is a red ball).' },
+                    { p: 'THEY 👫', use: 'Used when talking about more than one person or thing!' },
+                  ].map((pr) => (
+                    <button
+                      key={pr.p}
+                      type="button"
+                      onClick={() => speak(`${pr.p}. ${pr.use}`, true)}
+                      className="px-2 py-1 rounded bg-[#090D16] border border-slate-700 hover:border-cyan-400 text-[11px] font-bold text-cyan-200"
+                    >
+                      {pr.p} 🔊
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* MODE 11B: NCERT MRIDANG POEMS, STORIES & GREETINGS THEATRE */}
+      {mode === 'eng-mridang-stories' && (
+        <div className="p-4 rounded-2xl bg-[#111827] border border-[#1F2937] space-y-4">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <h4 className="text-xs font-bold uppercase tracking-wider text-amber-400">
+                🎭 NCERT Class 1 Mridang — Interactive Poems, Stories & Greetings Theatre
+              </h4>
+              <p className="text-xs text-slate-300">
+                Choose a story or poem from your Mridang textbook and tap any line for Read-Along voice!
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-1.5">
+              {MRIDANG_STORIES.map((st, idx) => (
+                <button
+                  key={st.id}
+                  type="button"
+                  onClick={() => {
+                    setSelectedStoryIdx(idx);
+                    setActiveStoryLine(0);
+                    speak(`${st.title}. ${st.lines[0]}`);
+                  }}
+                  className={`px-3 py-1.5 rounded-xl text-xs font-extrabold border transition-all ${
+                    selectedStoryIdx === idx
+                      ? 'bg-amber-500 text-slate-950 border-white'
+                      : 'bg-[#090D16] text-slate-300 border-slate-800'
+                  }`}
+                >
+                  {st.icon} {st.title.split(' ')[0]} {st.title.split(' ')[1]}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="p-4 rounded-xl bg-[#090D16] border border-amber-500/30 space-y-3">
+            <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-2.5">
+              <div className="flex items-center gap-2.5">
+                <span className="text-3xl">{MRIDANG_STORIES[selectedStoryIdx].icon}</span>
+                <div>
+                  <span className="text-[10px] font-mono text-amber-300 uppercase">
+                    {MRIDANG_STORIES[selectedStoryIdx].unit}
+                  </span>
+                  <h5 className="text-sm font-black text-white">
+                    {MRIDANG_STORIES[selectedStoryIdx].title}
+                  </h5>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() =>
+                  awardStar(
+                    `${MRIDANG_STORIES[selectedStoryIdx].title}. ${MRIDANG_STORIES[
+                      selectedStoryIdx
+                    ].lines.join(' ')}`
+                  )
+                }
+                className="px-3 py-1.5 rounded-xl bg-amber-400 text-slate-950 text-xs font-extrabold"
+              >
+                🔊 Read Whole Story Aloud (+1 ⭐)
+              </button>
+            </div>
+
+            <div className="space-y-2">
+              {MRIDANG_STORIES[selectedStoryIdx].lines.map((line, lIdx) => (
+                <button
+                  key={lIdx}
+                  type="button"
+                  onClick={() => {
+                    setActiveStoryLine(lIdx);
+                    speak(line, true);
+                  }}
+                  className={`w-full text-left p-3 rounded-xl border text-xs sm:text-sm font-semibold flex items-center justify-between gap-2 transition-all ${
+                    activeStoryLine === lIdx
+                      ? 'bg-amber-500/20 border-amber-400 text-amber-100 scale-[1.01]'
+                      : 'bg-[#111827] border-slate-800 text-slate-300 hover:text-white'
+                  }`}
+                >
+                  <span>
+                    <strong className="text-amber-400 font-mono mr-2">{lIdx + 1}.</strong>
+                    {line}
+                  </span>
+                  <span className="text-xs text-amber-300 shrink-0">🔊 Listen</span>
+                </button>
+              ))}
+            </div>
+
+            <div className="p-2.5 rounded-lg bg-emerald-950/30 border border-emerald-500/30 text-xs text-emerald-200">
+              🌟 <strong>Story Takeaway:</strong> {MRIDANG_STORIES[selectedStoryIdx].moral}
             </div>
           </div>
         </div>
@@ -2197,6 +2761,7 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
             title="Class 1 EVS — Parts of a Plant & What Plants Need to Grow"
             subtitle="Adjust Sunlight and Water to help the seed grow Roots, Stem, Leaves, and Flowers"
             height={320}
+            kidFriendly
             onRender={renderPlantGrowth}
           />
           <ParameterPanel
@@ -2360,6 +2925,44 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
               </div>
             </div>
           </div>
+
+          {/* ICSE & CBSE Class 1: Animal Babies (Young Ones), Homes & Sounds */}
+          <div className="lg:col-span-2 p-4 rounded-xl bg-[#111827] border border-[#1F2937] space-y-3">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-cyan-400">
+              🐾 Animal Babies (Young Ones), Animal Homes & Sounds (ICSE & CBSE Class 1)
+            </h4>
+            <div className="grid grid-cols-2 sm:grid-cols-6 gap-2">
+              {ANIMAL_FAMILIES.map((af, idx) => (
+                <button
+                  key={af.animal}
+                  type="button"
+                  onClick={() => {
+                    setSelectedAnimalFamilyIdx(idx);
+                    awardStar(
+                      `A ${af.animal}'s baby is a ${af.baby}. It lives in a ${af.home} and ${af.sound}`
+                    );
+                  }}
+                  className={`p-2.5 rounded-xl border text-center transition-all ${
+                    selectedAnimalFamilyIdx === idx
+                      ? 'bg-cyan-500/25 border-2 border-cyan-400 text-white'
+                      : 'bg-[#090D16] border-slate-800 text-slate-300'
+                  }`}
+                >
+                  <div className="text-xs font-extrabold">{af.animal}</div>
+                  <div className="text-[10px] text-amber-300 mt-0.5">Baby: {af.baby}</div>
+                  <div className="text-[10px] text-emerald-300">Home: {af.home}</div>
+                </button>
+              ))}
+            </div>
+            <div className="p-3 rounded-xl bg-[#090D16] border border-cyan-500/30 flex flex-wrap items-center justify-between gap-2 text-xs">
+              <span>
+                <strong>{ANIMAL_FAMILIES[selectedAnimalFamilyIdx].animal}</strong> → Baby is called{' '}
+                <strong className="text-amber-300">{ANIMAL_FAMILIES[selectedAnimalFamilyIdx].baby}</strong> • Lives in a{' '}
+                <strong className="text-emerald-300">{ANIMAL_FAMILIES[selectedAnimalFamilyIdx].home}</strong> • Sound:{' '}
+                <strong className="text-cyan-300">{ANIMAL_FAMILIES[selectedAnimalFamilyIdx].sound}</strong>
+              </span>
+            </div>
+          </div>
         </div>
       )}
 
@@ -2399,6 +3002,7 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
             title="Class 1 EVS — Seasons, Clothes We Wear & The Sky Above Us"
             subtitle="Observe Summer, Monsoon Rain, Winter Snow, Spring Flowers, and Day vs. Night Sky"
             height={320}
+            kidFriendly
             onRender={renderSeasonsAndSky}
           />
         </div>
@@ -2416,33 +3020,33 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
                 Tap any Hindi letter to see its picture, English sound, and hear Hindi pronunciation!
               </p>
             </div>
-            <div className="flex gap-1.5">
-              <button
-                type="button"
-                onClick={() => setHindiTab('swar')}
-                className={`px-3 py-1.5 rounded-xl text-xs font-extrabold ${
-                  hindiTab === 'swar'
-                    ? 'bg-rose-500 text-white'
-                    : 'bg-[#090D16] text-slate-300 border border-slate-800'
-                }`}
-              >
-                स्वर (Swar: अ – अः)
-              </button>
-              <button
-                type="button"
-                onClick={() => setHindiTab('vyanjan')}
-                className={`px-3 py-1.5 rounded-xl text-xs font-extrabold ${
-                  hindiTab === 'vyanjan'
-                    ? 'bg-amber-500 text-slate-950'
-                    : 'bg-[#090D16] text-slate-300 border border-slate-800'
-                }`}
-              >
-                व्यंजन व शब्द (क – कमल)
-              </button>
+            <div className="flex flex-wrap gap-1.5">
+              {(
+                [
+                  { id: 'swar', label: 'स्वर (अ – अः)', color: 'bg-rose-500 text-white' },
+                  { id: 'vyanjan', label: 'व्यंजन (क – कमल)', color: 'bg-amber-500 text-slate-950' },
+                  { id: 'matra', label: '✨ मात्रा जादू (का, कि, की)', color: 'bg-cyan-500 text-slate-950' },
+                  { id: 'ginti', label: '🔢 गिनती १–१० (1–10)', color: 'bg-emerald-500 text-slate-950' },
+                  { id: 'poems', label: '🎶 सारंगी कविताएँ', color: 'bg-violet-500 text-white' },
+                ] as const
+              ).map((t) => (
+                <button
+                  key={t.id}
+                  type="button"
+                  onClick={() => setHindiTab(t.id)}
+                  className={`px-3 py-1.5 rounded-xl text-xs font-extrabold ${
+                    hindiTab === t.id
+                      ? t.color
+                      : 'bg-[#090D16] text-slate-300 border border-slate-800'
+                  }`}
+                >
+                  {t.label}
+                </button>
+              ))}
             </div>
           </div>
 
-          {hindiTab === 'swar' ? (
+          {hindiTab === 'swar' && (
             <div className="space-y-4">
               <div className="grid grid-cols-4 sm:grid-cols-7 gap-2">
                 {HINDI_SWAR.map((item, idx) => (
@@ -2493,7 +3097,9 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
                 </button>
               </div>
             </div>
-          ) : (
+          )}
+
+          {hindiTab === 'vyanjan' && (
             <div className="space-y-4">
               <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
                 {HINDI_VYANJAN.map((item, idx) => (
@@ -2545,10 +3151,109 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
               </div>
             </div>
           )}
+
+          {hindiTab === 'matra' && (
+            <div className="space-y-3">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                {HINDI_MATRAS.map((m, idx) => (
+                  <button
+                    key={m.matra}
+                    type="button"
+                    onClick={() => {
+                      setSelectedMatraIdx(idx);
+                      awardStar(m.speech, 'hi-IN');
+                    }}
+                    className={`p-3 rounded-xl border text-center transition-all ${
+                      selectedMatraIdx === idx
+                        ? 'bg-cyan-500/25 border-2 border-cyan-400 text-white'
+                        : 'bg-[#090D16] border-slate-800 text-slate-300'
+                    }`}
+                  >
+                    <div className="text-xl font-black text-cyan-300">
+                      {m.base} + {m.matra.split(' ')[0]} = {m.result}
+                    </div>
+                    <div className="text-xs font-bold mt-1">{m.word}</div>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {hindiTab === 'ginti' && (
+            <div className="grid grid-cols-2 sm:grid-cols-5 gap-2.5">
+              {HINDI_GINTI.map((g, idx) => (
+                <button
+                  key={g.num}
+                  type="button"
+                  onClick={() => {
+                    setSelectedGintiIdx(idx);
+                    awardStar(`${g.num}, ${g.word}`, 'hi-IN');
+                  }}
+                  className={`p-3 rounded-xl border text-center transition-all ${
+                    selectedGintiIdx === idx
+                      ? 'bg-emerald-500/25 border-2 border-emerald-400 text-white scale-105'
+                      : 'bg-[#090D16] border-slate-800 text-slate-300'
+                  }`}
+                >
+                  <div className="text-2xl font-black text-emerald-300">
+                    {g.num} ({g.eng})
+                  </div>
+                  <div className="text-xs font-bold mt-1">{g.word}</div>
+                  <div className="text-xs mt-1">{g.icons}</div>
+                </button>
+              ))}
+            </div>
+          )}
+
+          {hindiTab === 'poems' && (
+            <div className="space-y-3">
+              <div className="flex flex-wrap gap-2">
+                {SARANGI_POEMS.map((p, idx) => (
+                  <button
+                    key={p.title}
+                    type="button"
+                    onClick={() => {
+                      setSelectedPoemIdx(idx);
+                      speak(p.lines.join(' '), true, 'hi-IN');
+                    }}
+                    className={`px-3 py-1.5 rounded-xl text-xs font-extrabold border ${
+                      selectedPoemIdx === idx
+                        ? 'bg-violet-500 text-white border-white'
+                        : 'bg-[#090D16] text-slate-300 border-slate-800'
+                    }`}
+                  >
+                    {p.title}
+                  </button>
+                ))}
+              </div>
+
+              <div className="p-4 rounded-xl bg-[#090D16] border border-violet-500/40 space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-mono text-violet-300">
+                    {SARANGI_POEMS[selectedPoemIdx].unit}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      awardStar(SARANGI_POEMS[selectedPoemIdx].lines.join(' '), 'hi-IN')
+                    }
+                    className="px-3 py-1 rounded-lg bg-violet-500 text-white text-xs font-extrabold"
+                  >
+                    🔊 कविता सुनो (+1 ⭐)
+                  </button>
+                </div>
+                {SARANGI_POEMS[selectedPoemIdx].lines.map((line, i) => (
+                  <p key={i} className="text-sm font-bold text-white leading-relaxed">
+                    • {line}
+                  </p>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       )}
 
-      {/* MODE 17: COMPUTER STUDIES — A SMART MACHINE (ICSE & CBSE CLASS 1) */}
+      {/* MODE 17: COMPUTER STUDIES — A SMART MACHINE, KEYBOARD & MOUSE (ICSE & CBSE CLASS 1) */}
       {mode === 'computer-smart-machine' && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
           <div className="lg:col-span-7 p-4 rounded-2xl bg-[#111827] border border-[#1F2937] space-y-3">
@@ -2657,6 +3362,56 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
               )}
             </div>
           </div>
+
+          {/* ICSE Class 1 Ch 4 & 5: Interactive Keyboard Special Keys & Mouse Trainer */}
+          <div className="lg:col-span-12 p-4 rounded-2xl bg-[#111827] border border-[#1F2937] space-y-3">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-amber-400">
+              ⌨️ ICSE Class 1 Keyboard Special Keys & Mouse Actions Trainer
+            </h4>
+            <div className="flex flex-wrap gap-2">
+              {[
+                {
+                  key: '🔤 Alphabet Keys (A–Z)',
+                  desc: '26 Alphabet Keys (A to Z) are used to type words, names, and sentences!',
+                },
+                {
+                  key: '🔢 Number Keys (0–9)',
+                  desc: '10 Number Keys (0 to 9) are used to type numbers, age, and roll numbers!',
+                },
+                {
+                  key: '━━━ SPACEBAR (Longest Key) ━━━',
+                  desc: 'The Spacebar is the longest key on the keyboard! It adds a blank space between words.',
+                },
+                {
+                  key: '↵ ENTER Key',
+                  desc: 'The Enter Key moves the cursor down to the next new line!',
+                },
+                {
+                  key: '⌫ BACKSPACE Key',
+                  desc: 'The Backspace Key works like an eraser to delete a mistyped letter to the left!',
+                },
+                {
+                  key: '🖱️ Mouse Click & Drag',
+                  desc: 'A Computer Mouse has Left Button (Click/Select), Right Button, and a Scroll Wheel to move up and down!',
+                },
+              ].map((item) => (
+                <button
+                  key={item.key}
+                  type="button"
+                  onClick={() => {
+                    setKeyboardKeyInfo(item.desc);
+                    awardStar(item.desc);
+                  }}
+                  className="px-3 py-2 rounded-xl bg-[#090D16] hover:bg-amber-500/20 border border-slate-700 hover:border-amber-400 text-xs font-mono font-bold text-amber-200"
+                >
+                  {item.key}
+                </button>
+              ))}
+            </div>
+            <div className="p-3 rounded-xl bg-[#090D16] border border-amber-500/30 text-xs text-slate-200 font-semibold">
+              💡 {keyboardKeyInfo}
+            </div>
+          </div>
         </div>
       )}
 
@@ -2734,6 +3489,286 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
               <p className="text-xs text-cyan-200 font-semibold italic">
                 &ldquo;{GOLDEN_MANNER_WORDS[selectedMannerIdx].sentence}&rdquo;
               </p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* MODE 19: EVS — COMMUNITY HELPERS, MY HOME & MEANS OF TRANSPORT */}
+      {mode === 'evs-helpers-transport' && (
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
+          <div className="lg:col-span-7 p-4 rounded-2xl bg-[#111827] border border-[#1F2937] space-y-3">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-emerald-400">
+              👩‍⚕️ People Who Help Us (Community Helpers & Neighbourhood)
+            </h4>
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+              {COMMUNITY_HELPERS.map((h, idx) => (
+                <button
+                  key={h.role}
+                  type="button"
+                  onClick={() => {
+                    setSelectedHelperIdx(idx);
+                    awardStar(`${h.role} works at the ${h.place}. ${h.job}`);
+                  }}
+                  className={`p-2.5 rounded-xl border text-left transition-all ${
+                    selectedHelperIdx === idx
+                      ? 'bg-emerald-500/25 border-2 border-emerald-400 text-white'
+                      : 'bg-[#090D16] border-slate-800 text-slate-300'
+                  }`}
+                >
+                  <div className="text-xs font-extrabold">{h.role}</div>
+                  <div className="text-[10px] text-emerald-300 mt-0.5">{h.place}</div>
+                </button>
+              ))}
+            </div>
+            <div className="p-3.5 rounded-xl bg-[#090D16] border border-emerald-500/30 space-y-1 text-xs">
+              <div className="font-extrabold text-white text-sm">
+                {COMMUNITY_HELPERS[selectedHelperIdx].role} • {COMMUNITY_HELPERS[selectedHelperIdx].place}
+              </div>
+              <p className="text-amber-300">
+                <strong>Tools Used:</strong> {COMMUNITY_HELPERS[selectedHelperIdx].tool}
+              </p>
+              <p className="text-slate-200">{COMMUNITY_HELPERS[selectedHelperIdx].job}</p>
+            </div>
+          </div>
+
+          <div className="lg:col-span-5 p-4 rounded-2xl bg-[#111827] border border-[#1F2937] space-y-3">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-cyan-400">
+              🚂 Means of Transport (Land, Water & Air)
+            </h4>
+            <div className="flex gap-1.5">
+              {(
+                [
+                  { id: 'land', label: '🚗 Land' },
+                  { id: 'water', label: '🚢 Water' },
+                  { id: 'air', label: '✈️ Air' },
+                ] as const
+              ).map((tr) => (
+                <button
+                  key={tr.id}
+                  type="button"
+                  onClick={() => {
+                    setTransportType(tr.id);
+                    speak(`${tr.id} transport`);
+                  }}
+                  className={`flex-1 py-2 rounded-xl text-xs font-extrabold ${
+                    transportType === tr.id
+                      ? 'bg-cyan-500 text-slate-950'
+                      : 'bg-[#090D16] text-slate-300 border border-slate-800'
+                  }`}
+                >
+                  {tr.label}
+                </button>
+              ))}
+            </div>
+
+            <div className="p-4 rounded-xl bg-[#090D16] border border-slate-800 space-y-2 text-xs">
+              <div className="text-2xl flex justify-around py-1">
+                {transportType === 'land' && (
+                  <>
+                    <span>🚲 Bicycle</span>
+                    <span>🚌 Bus</span>
+                    <span>🚂 Train</span>
+                  </>
+                )}
+                {transportType === 'water' && (
+                  <>
+                    <span>⛵ Boat</span>
+                    <span>🚢 Ship</span>
+                    <span>🛥️ Yacht</span>
+                  </>
+                )}
+                {transportType === 'air' && (
+                  <>
+                    <span>✈️ Aeroplane</span>
+                    <span>🚁 Helicopter</span>
+                    <span>🚀 Rocket</span>
+                  </>
+                )}
+              </div>
+              <p className="text-slate-300 leading-relaxed">
+                {transportType === 'land'
+                  ? 'Land transport moves on roads or railway tracks using wheels!'
+                  : transportType === 'water'
+                  ? 'Water transport sails across rivers, lakes, and oceans!'
+                  : 'Air transport flies high in the sky and is the fastest way to travel far!'}
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* MODE 20: JOYFUL ARTS & MUSIC — COLOR MIXING CAULDRON & 8-NOTE XYLOPHONE */}
+      {mode === 'arts-colors-music' && (
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
+          {/* Primary & Secondary Color Mixing Lab */}
+          <div className="lg:col-span-5 p-4 rounded-2xl bg-[#111827] border border-[#1F2937] space-y-3">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-pink-400">
+              🎨 Primary & Secondary Color Mixing Magic
+            </h4>
+            <p className="text-xs text-slate-300">
+              Mix any two Primary Colors (Red, Blue, Yellow) to make a new Secondary Color!
+            </p>
+
+            <div className="grid grid-cols-2 gap-2">
+              <div className="p-2.5 rounded-xl bg-[#090D16] border border-slate-800 space-y-1.5">
+                <span className="text-[10px] font-mono text-slate-400">First Color</span>
+                <div className="flex gap-1.5">
+                  {(['red', 'blue', 'yellow'] as const).map((c) => (
+                    <button
+                      key={c}
+                      type="button"
+                      onClick={() => {
+                        setColorA(c);
+                        playPop();
+                      }}
+                      className={`flex-1 py-1.5 rounded-lg text-[11px] font-bold uppercase border ${
+                        colorA === c ? 'border-white scale-105' : 'border-transparent opacity-60'
+                      } ${
+                        c === 'red'
+                          ? 'bg-rose-500 text-white'
+                          : c === 'blue'
+                          ? 'bg-blue-500 text-white'
+                          : 'bg-amber-400 text-slate-950'
+                      }`}
+                    >
+                      {c}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="p-2.5 rounded-xl bg-[#090D16] border border-slate-800 space-y-1.5">
+                <span className="text-[10px] font-mono text-slate-400">Second Color</span>
+                <div className="flex gap-1.5">
+                  {(['red', 'blue', 'yellow'] as const).map((c) => (
+                    <button
+                      key={c}
+                      type="button"
+                      onClick={() => {
+                        setColorB(c);
+                        playPop();
+                      }}
+                      className={`flex-1 py-1.5 rounded-lg text-[11px] font-bold uppercase border ${
+                        colorB === c ? 'border-white scale-105' : 'border-transparent opacity-60'
+                      } ${
+                        c === 'red'
+                          ? 'bg-rose-500 text-white'
+                          : c === 'blue'
+                          ? 'bg-blue-500 text-white'
+                          : 'bg-amber-400 text-slate-950'
+                      }`}
+                    >
+                      {c}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {(() => {
+              const pair = [colorA, colorB].sort().join('+');
+              const mix =
+                colorA === colorB
+                  ? {
+                      name: `${colorA.toUpperCase()} (Same Primary Color)`,
+                      bg:
+                        colorA === 'red'
+                          ? 'bg-rose-500'
+                          : colorA === 'blue'
+                          ? 'bg-blue-500'
+                          : 'bg-amber-400 text-slate-950',
+                      fact: 'Pick two different primary colors to create a new secondary color!',
+                    }
+                  : pair === 'red+yellow'
+                  ? {
+                      name: 'ORANGE 🟠 (Secondary Color!)',
+                      bg: 'bg-orange-500 text-white',
+                      fact: 'Red + Yellow makes bright ORANGE like a juicy orange or marigold flower!',
+                    }
+                  : pair === 'blue+yellow'
+                  ? {
+                      name: 'GREEN 🟢 (Secondary Color!)',
+                      bg: 'bg-emerald-500 text-slate-950',
+                      fact: 'Blue + Yellow makes fresh GREEN like tree leaves and grass!',
+                    }
+                  : {
+                      name: 'PURPLE / VIOLET 🟣 (Secondary Color!)',
+                      bg: 'bg-purple-600 text-white',
+                      fact: 'Red + Blue makes royal PURPLE like grapes and brinjal!',
+                    };
+
+              return (
+                <div className="p-4 rounded-xl bg-[#090D16] border border-pink-500/30 space-y-2 text-center">
+                  <div
+                    className={`py-3 px-4 rounded-xl font-black text-sm shadow-inner ${mix.bg}`}
+                  >
+                    {colorA.toUpperCase()} + {colorB.toUpperCase()} = {mix.name}
+                  </div>
+                  <p className="text-xs text-slate-300">{mix.fact}</p>
+                  <button
+                    type="button"
+                    onClick={() => awardStar(mix.fact)}
+                    className="px-3 py-1 rounded-lg bg-pink-500 text-white text-xs font-extrabold"
+                  >
+                    🔊 Speak Color Rule (+1 ⭐)
+                  </button>
+                </div>
+              );
+            })()}
+          </div>
+
+          {/* 8-Key Rainbow Musical Xylophone (Sargam + Western Scale) */}
+          <div className="lg:col-span-7 p-4 rounded-2xl bg-[#111827] border border-[#1F2937] space-y-3">
+            <div className="flex items-center justify-between">
+              <div>
+                <h4 className="text-xs font-bold uppercase tracking-wider text-amber-300 flex items-center gap-1.5">
+                  <Music className="w-4 h-4 text-amber-400" />
+                  🎵 8-Key Rainbow Xylophone (सा रे ग म प ध नी सां)
+                </h4>
+                <p className="text-xs text-slate-300">
+                  Tap the colorful bars to play real musical notes!
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  XYLOPHONE_KEYS.forEach((k, i) => {
+                    setTimeout(() => {
+                      setActiveXylophoneKey(i);
+                      playMusicalNote(k.freq);
+                    }, i * 180);
+                  });
+                }}
+                className="px-3 py-1.5 rounded-xl bg-amber-400 text-slate-950 text-xs font-extrabold"
+              >
+                🎶 Play Full Sargam Scale
+              </button>
+            </div>
+
+            <div className="grid grid-cols-8 gap-1.5 items-end h-44 p-3 rounded-xl bg-[#090D16] border border-slate-800">
+              {XYLOPHONE_KEYS.map((k, idx) => {
+                const barHeight = 100 - idx * 5;
+                const isActive = activeXylophoneKey === idx;
+                return (
+                  <button
+                    key={k.sargam}
+                    type="button"
+                    style={{ height: `${barHeight}%` }}
+                    onClick={() => {
+                      setActiveXylophoneKey(idx);
+                      playMusicalNote(k.freq);
+                    }}
+                    className={`rounded-xl border-2 flex flex-col items-center justify-between p-2 font-extrabold transition-transform ${
+                      k.color
+                    } ${isActive ? 'scale-105 ring-2 ring-white' : 'hover:scale-102'}`}
+                  >
+                    <span className="text-[10px] font-mono opacity-90">{k.western}</span>
+                    <span className="text-xs sm:text-sm">{k.sargam.split(' ')[0]}</span>
+                    <span className="w-2 h-2 rounded-full bg-white/70" />
+                  </button>
+                );
+              })}
             </div>
           </div>
         </div>

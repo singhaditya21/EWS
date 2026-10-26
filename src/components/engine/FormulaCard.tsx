@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import katex from 'katex';
-import { Calculator } from 'lucide-react';
+import { Calculator, Sparkles, Volume2 } from 'lucide-react';
+import { playPop } from '../../utils/soundEffects';
 
 interface FormulaCardProps {
   label: string;
@@ -8,6 +9,7 @@ interface FormulaCardProps {
   description?: string;
   liveSubstitution?: string;
   accentColor?: 'cyan' | 'amber' | 'emerald';
+  kidFriendly?: boolean;
 }
 
 export const FormulaCard: React.FC<FormulaCardProps> = ({
@@ -16,7 +18,19 @@ export const FormulaCard: React.FC<FormulaCardProps> = ({
   description,
   liveSubstitution,
   accentColor = 'cyan',
+  kidFriendly = false,
 }) => {
+  const speakRule = () => {
+    playPop();
+    if (typeof window === 'undefined' || !('speechSynthesis' in window)) return;
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(
+      `${label}. ${description || ''}`
+    );
+    u.rate = 0.92;
+    u.pitch = 1.1;
+    window.speechSynthesis.speak(u);
+  };
   const renderedHtml = useMemo(() => {
     try {
       return katex.renderToString(latex, {
@@ -58,15 +72,30 @@ export const FormulaCard: React.FC<FormulaCardProps> = ({
     >
       <div className="flex items-center justify-between gap-2 mb-2">
         <span className="text-xs font-semibold uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
-          <Calculator className="w-3.5 h-3.5 text-cyan-400" />
-          {label}
+          {kidFriendly ? (
+            <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+          ) : (
+            <Calculator className="w-3.5 h-3.5 text-cyan-400" />
+          )}
+          {kidFriendly ? `🌟 Golden Rule: ${label}` : label}
         </span>
-        {liveSubstitution && (
-          <span
-            className={`text-[10px] font-mono px-2 py-0.5 rounded-full font-medium ${badgeMap[accentColor]}`}
+        {kidFriendly ? (
+          <button
+            type="button"
+            onClick={speakRule}
+            className="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg bg-amber-500/20 border border-amber-400/50 text-[10px] font-bold text-amber-200 hover:bg-amber-500/30"
           >
-            LIVE TELEMETRY
-          </span>
+            <Volume2 className="w-3 h-3" />
+            🔊 Speak
+          </button>
+        ) : (
+          liveSubstitution && (
+            <span
+              className={`text-[10px] font-mono px-2 py-0.5 rounded-full font-medium ${badgeMap[accentColor]}`}
+            >
+              LIVE TELEMETRY
+            </span>
+          )
         )}
       </div>
 
