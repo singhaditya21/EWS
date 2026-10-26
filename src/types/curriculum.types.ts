@@ -3,6 +3,7 @@ export type EducationTrack = 'school' | 'engineering' | 'medical';
 export type SchoolBoard = 'CBSE' | 'ICSE';
 
 export type SimulationId =
+  | 'Class1InteractiveLab'
   | 'PrimaryMathSolarLab'
   | 'MiddleMachinesMatter'
   | 'OpticsRayBench'

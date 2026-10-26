@@ -7,7 +7,8 @@ import { FormulaCard } from '../engine/FormulaCard';
 import { InteractiveQuiz } from '../assessment/InteractiveQuiz';
 import { AnatomyCADInspector } from '../engine/AnatomyCADInspector';
 
-// Import all 13 Flagship Simulations
+// Import all Flagship Simulations
+import { Class1InteractiveLab } from '../../simulations/school/Class1InteractiveLab';
 import { PrimaryMathSolarLab } from '../../simulations/school/PrimaryMathSolarLab';
 import { MiddleMachinesMatter } from '../../simulations/school/MiddleMachinesMatter';
 import { OpticsRayBench } from '../../simulations/school/OpticsRayBench';
@@ -58,6 +59,13 @@ export const LabWorkspace: React.FC<LabWorkspaceProps> = ({
 
   const renderActiveSimulation = () => {
     switch (chapter.simulationId) {
+      case 'Class1InteractiveLab':
+        return (
+          <Class1InteractiveLab
+            key={chapter.id}
+            initialMode={chapter.defaultSimulationMode}
+          />
+        );
       case 'PrimaryMathSolarLab':
         return (
           <PrimaryMathSolarLab

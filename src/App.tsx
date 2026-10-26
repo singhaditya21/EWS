@@ -12,9 +12,9 @@ import { LabWorkspace } from './components/layout/LabWorkspace';
 export const App: React.FC = () => {
   const [activeTrack, setActiveTrack] = useState<EducationTrack>('school');
   const [activeBoard, setActiveBoard] = useState<SchoolBoard>('CBSE');
-  const [activeClassLevel, setActiveClassLevel] = useState<number | 'ALL'>('ALL');
+  const [activeClassLevel, setActiveClassLevel] = useState<number | 'ALL'>(1);
   const [selectedChapter, setSelectedChapter] = useState<CurriculumChapter>(
-    CURRICULUM_DATA.find((c) => c.id === 'cls10-phy-optics-bench') ||
+    CURRICULUM_DATA.find((c) => c.id === 'cls1-math-numbers-comparison') ||
       CURRICULUM_DATA[0]
   );
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
