@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { QuizQuestion } from '../../types/curriculum.types';
-import { CheckCircle2, XCircle, HelpCircle, Award, RotateCcw } from 'lucide-react';
+import { CheckCircle2, XCircle, HelpCircle, Award, RotateCcw, Volume2 } from 'lucide-react';
 
 interface InteractiveQuizProps {
   questions: QuizQuestion[];
@@ -19,9 +19,19 @@ export const InteractiveQuiz: React.FC<InteractiveQuizProps> = ({
     setSubmitted({});
   }, [chapterTitle, questions]);
 
-  const handleSelect = (qId: string, optionIdx: number) => {
-    setSelectedAnswers((prev) => ({ ...prev, [qId]: optionIdx }));
-    setSubmitted((prev) => ({ ...prev, [qId]: true }));
+  const speakText = (text: string) => {
+    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.rate = 0.92;
+      utterance.pitch = 1.05;
+      window.speechSynthesis.speak(utterance);
+    }
+  };
+
+  const handleSelect = (q: QuizQuestion, optionIdx: number) => {
+    setSelectedAnswers((prev) => ({ ...prev, [q.id]: optionIdx }));
+    setSubmitted((prev) => ({ ...prev, [q.id]: true }));
   };
 
   const handleReset = () => {
@@ -46,13 +56,13 @@ export const InteractiveQuiz: React.FC<InteractiveQuizProps> = ({
               Board & Concept Mastery Check
             </h4>
             <p className="text-[11px] text-slate-400">
-              Instant evaluation aligned with CBSE NCERT, ICSE/ISC & Entrance Standards
+              Tap 🔊 to hear any question read aloud
             </p>
           </div>
         </div>
         <div className="flex items-center gap-2">
           <span className="px-2.5 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-xs font-mono font-bold text-cyan-300">
-            {correctCount} / {questions.length} Score
+            ⭐ {correctCount} / {questions.length}
           </span>
           <button
             type="button"
@@ -84,11 +94,25 @@ export const InteractiveQuiz: React.FC<InteractiveQuizProps> = ({
                   {q.question}
                 </p>
               </div>
-              {q.boardTag && (
-                <span className="shrink-0 px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-slate-800 text-cyan-300 border border-slate-700">
-                  {q.boardTag}
-                </span>
-              )}
+              <div className="flex items-center gap-1 shrink-0">
+                <button
+                  type="button"
+                  onClick={() =>
+                    speakText(
+                      `${q.question}. Option A: ${q.options[0]}. Option B: ${q.options[1]}. Option C: ${q.options[2]}. Option D: ${q.options[3]}.`
+                    )
+                  }
+                  title="Read question aloud"
+                  className="p-1.5 rounded-lg bg-cyan-500/15 border border-cyan-500/40 text-cyan-300 hover:bg-cyan-500/25 transition-colors"
+                >
+                  <Volume2 className="w-3.5 h-3.5" />
+                </button>
+                {q.boardTag && (
+                  <span className="px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-slate-800 text-cyan-300 border border-slate-700">
+                    {q.boardTag}
+                  </span>
+                )}
+              </div>
             </div>
 
             <div className="space-y-1.5 pl-7">
@@ -114,7 +138,7 @@ export const InteractiveQuiz: React.FC<InteractiveQuizProps> = ({
                   <button
                     key={optIdx}
                     type="button"
-                    onClick={() => handleSelect(q.id, optIdx)}
+                    onClick={() => handleSelect(q, optIdx)}
                     className={`w-full text-left px-3 py-2 rounded-lg border text-xs transition-all flex items-center justify-between gap-2 ${btnStyle}`}
                   >
                     <span>
@@ -136,19 +160,31 @@ export const InteractiveQuiz: React.FC<InteractiveQuizProps> = ({
 
             {isAnswered && (
               <div
-                className={`ml-7 p-2.5 rounded-lg border text-xs leading-relaxed flex items-start gap-2 ${
+                className={`ml-7 p-2.5 rounded-lg border text-xs leading-relaxed flex items-start justify-between gap-2 ${
                   isCorrect
                     ? 'bg-emerald-950/20 border-emerald-500/30 text-emerald-200'
                     : 'bg-amber-950/20 border-amber-500/30 text-amber-200'
                 }`}
               >
-                <HelpCircle className="w-4 h-4 shrink-0 mt-0.5" />
-                <div>
-                  <span className="font-bold mr-1">
-                    {isCorrect ? 'Correct!' : 'Concept Insight:'}
-                  </span>
-                  {q.explanation}
+                <div className="flex items-start gap-2">
+                  <HelpCircle className="w-4 h-4 shrink-0 mt-0.5" />
+                  <div>
+                    <span className="font-bold mr-1">
+                      {isCorrect ? '🎉 Correct!' : '💡 Concept Insight:'}
+                    </span>
+                    {q.explanation}
+                  </div>
                 </div>
+                <button
+                  type="button"
+                  onClick={() =>
+                    speakText(`${isCorrect ? 'Correct!' : 'Let us learn:'} ${q.explanation}`)
+                  }
+                  className="p-1 rounded bg-slate-800/80 text-cyan-300 hover:text-white shrink-0"
+                  title="Listen to explanation"
+                >
+                  <Volume2 className="w-3.5 h-3.5" />
+                </button>
               </div>
             )}
           </div>

@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Canvas2DWrapper, CanvasRenderContext } from '../../components/engine/Canvas2DWrapper';
 import { ParameterPanel } from '../../components/engine/ParameterPanel';
-import { FormulaCard } from '../../components/engine/FormulaCard';
 import {
   Calculator,
   Shapes,
@@ -14,6 +13,11 @@ import {
   Plus,
   Minus,
   CheckCircle2,
+  Volume2,
+  VolumeX,
+  Trophy,
+  Target,
+  BookOpen,
 } from 'lucide-react';
 
 export type Class1LabMode =
@@ -26,50 +30,81 @@ export type Class1LabMode =
   | 'clock-money'
   | 'patterns-pictograph'
   | 'spatial-ordinals-data'
+  | 'eng-phonics-vowels'
+  | 'eng-grammar-opposites'
   | 'evs-sense-organs'
   | 'evs-plants-living'
   | 'evs-animals-food-safety'
   | 'evs-seasons-sky';
 
+const ONES_WORDS = [
+  'Zero', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine',
+  'Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen',
+  'Seventeen', 'Eighteen', 'Nineteen',
+];
+const TENS_WORDS = [
+  '', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety',
+];
+
+export function numberToWords(n: number): string {
+  if (n < 0) return 'Zero';
+  if (n < 20) return ONES_WORDS[n];
+  if (n === 100) return 'One Hundred';
+  const t = Math.floor(n / 10);
+  const o = n % 10;
+  return o === 0 ? TENS_WORDS[t] : `${TENS_WORDS[t]}-${ONES_WORDS[o]}`;
+}
+
+const CVC_WORDS = [
+  { word: 'CAT', c1: 'C', vowel: 'A', c2: 'T', icon: '🐱', hint: 'A furry pet that says Meow!' },
+  { word: 'HEN', c1: 'H', vowel: 'E', c2: 'N', icon: '🐔', hint: 'A farm bird that gives us eggs!' },
+  { word: 'PIG', c1: 'P', vowel: 'I', c2: 'G', icon: '🐷', hint: 'A pink farm animal that says Oink!' },
+  { word: 'DOG', c1: 'D', vowel: 'O', c2: 'G', icon: '🐶', hint: 'A loyal pet that barks and guards our home!' },
+  { word: 'SUN', c1: 'S', vowel: 'U', c2: 'N', icon: '☀️', hint: 'Shines brightly in the day sky!' },
+  { word: 'BUS', c1: 'B', vowel: 'U', c2: 'S', icon: '🚌', hint: 'Takes children to school!' },
+];
+
+const TOY_SHOP_ITEMS = [
+  { id: 'ball', name: 'Colorful Ball', icon: '⚽', price: 12 },
+  { id: 'car', name: 'Red Toy Car', icon: '🚗', price: 18 },
+  { id: 'teddy', name: 'Teddy Bear', icon: '🧸', price: 27 },
+  { id: 'crayons', name: 'Crayon Box', icon: '🖍️', price: 35 },
+];
+
 const SENSE_ORGANS = [
   {
     id: 'eyes',
-    organ: 'Eyes (Sense of Sight)',
+    organ: 'Eyes (Sense of Sight) 👀',
     action: 'We SEE shapes, colors, big/small, and light with our eyes.',
-    stimulus: 'Rainbow & Storybook',
-    color: '#38bdf8',
+    stimulus: '🌈 Rainbow & Storybook',
     careTip: 'Read in good light and wash your eyes with clean cold water.',
   },
   {
     id: 'ears',
-    organ: 'Ears (Sense of Hearing)',
+    organ: 'Ears (Sense of Hearing) 👂',
     action: 'We HEAR loud, soft, pleasant music, and bird sounds with our ears.',
-    stimulus: 'Ringing School Bell & Birds Chirping',
-    color: '#f59e0b',
+    stimulus: '🔔 Ringing School Bell & Birds Chirping',
     careTip: 'Never put sharp objects inside your ears; avoid very loud noises.',
   },
   {
     id: 'nose',
-    organ: 'Nose (Sense of Smell)',
+    organ: 'Nose (Sense of Smell) 👃',
     action: 'We SMELL pleasant fragrances and foul odors, and breathe through our nose.',
-    stimulus: 'Fresh Rose & Hot Soup',
-    color: '#10b981',
+    stimulus: '🌹 Fresh Rose & Hot Soup',
     careTip: 'Always use a clean handkerchief when sneezing or blowing your nose.',
   },
   {
     id: 'tongue',
-    organ: 'Tongue (Sense of Taste)',
+    organ: 'Tongue (Sense of Taste) 👅',
     action: 'Taste buds help us TASTE Sweet, Salty, Sour, and Bitter foods; helps us speak!',
-    stimulus: 'Sweet Mango vs. Sour Lemon',
-    color: '#f43f5e',
+    stimulus: '🥭 Sweet Mango vs. 🍋 Sour Lemon',
     careTip: 'Clean your tongue gently every morning while brushing your teeth.',
   },
   {
     id: 'skin',
-    organ: 'Skin (Sense of Touch & Feel)',
+    organ: 'Skin (Sense of Touch & Feel) 🖐️',
     action: 'Skin covers our whole body and helps us FEEL Hot, Cold, Soft, Hard, Rough, and Smooth.',
-    stimulus: 'Cold Ice Cube vs. Soft Cotton',
-    color: '#a855f7',
+    stimulus: '🧊 Cold Ice Cube vs. ☁️ Soft Cotton',
     careTip: 'Take a bath daily with soap and clean water to keep skin healthy.',
   },
 ];
@@ -79,10 +114,9 @@ const SHAPES_3D = [
     id: 'sphere',
     name: 'Sphere (Ball / Orange)',
     faces: '1 Curved Surface, 0 Flat Faces',
-    edgesCorners: '0 Edges, 0 Corners (Vertices)',
+    edgesCorners: '0 Edges, 0 Corners',
     behavior: 'ROLLS ONLY',
     canRoll: true,
-    canSlide: false,
     color: '#f43f5e',
   },
   {
@@ -92,7 +126,6 @@ const SHAPES_3D = [
     edgesCorners: '12 Straight Edges, 8 Corners',
     behavior: 'SLIDES & STACKS',
     canRoll: false,
-    canSlide: true,
     color: '#38bdf8',
   },
   {
@@ -102,17 +135,15 @@ const SHAPES_3D = [
     edgesCorners: '2 Circular Edges, 0 Corners',
     behavior: 'BOTH ROLLS & SLIDES',
     canRoll: true,
-    canSlide: true,
     color: '#10b981',
   },
   {
     id: 'cone',
-    name: 'Cone (Birthday Cap / Ice-Cream Cone)',
+    name: 'Cone (Birthday Cap / Ice-Cream)',
     faces: '1 Flat Circular Base + 1 Curved Surface',
-    edgesCorners: '1 Circular Edge, 1 Pointed Vertex',
+    edgesCorners: '1 Circular Edge, 1 Pointed Corner',
     behavior: 'BOTH ROLLS & SLIDES',
     canRoll: true,
-    canSlide: true,
     color: '#f59e0b',
   },
 ];
@@ -121,65 +152,77 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
   initialMode,
 }) => {
   const [mode, setMode] = useState<Class1LabMode>(
-    (initialMode as Class1LabMode) || 'number-line-tenframe'
+    (initialMode as Class1LabMode) || 'spatial-prenumber'
   );
+  const [voiceEnabled, setVoiceEnabled] = useState(true);
+  const [stars, setStars] = useState(3);
+  const [missionBanner, setMissionBanner] = useState<string | null>(null);
 
-  // Mode 1: Numbers 1-20, Ten-Frames & Crocodile Comparison (<, >, =)
+  // Mode states
+  const [catPosition, setCatPosition] = useState<'inside' | 'outside' | 'on' | 'under' | 'near' | 'far'>('on');
   const [leftCount, setLeftCount] = useState(14);
   const [rightCount, setRightCount] = useState(9);
 
-  // Mode 2: Addition & Subtraction (Number Line Frog Hops)
   const [startNum, setStartNum] = useState(8);
   const [changeNum, setChangeNum] = useState(5);
   const [operation, setOperation] = useState<'add' | 'sub'>('add');
 
-  // Mode 3: Tens & Ones Abacus (1 to 99) + Skip Counting
   const [twoDigitNum, setTwoDigitNum] = useState(46);
+  const [targetAbacusMission, setTargetAbacusMission] = useState(37);
   const [skipStep, setSkipStep] = useState<2 | 5 | 10>(2);
 
-  // Mode 4: Shapes Roll vs Slide Ramp
   const [selectedShapeIdx, setSelectedShapeIdx] = useState(0);
   const [rampAngle, setRampAngle] = useState(22);
 
-  // Mode 5: Time (Analog Clock) & Indian Money (₹)
-  const [clockHour, setClockHour] = useState(4);
-  const [clockHalfHour, setClockHalfHour] = useState(false); // false = :00, true = :30
-  const [walletCoins, setWalletCoins] = useState<number[]>([10, 5, 2, 1]);
-
-  // Mode 6: EVS 5 Sense Organs
-  const [selectedSenseIdx, setSelectedSenseIdx] = useState(0);
-
-  // Mode 7: EVS Growing Plant & Living vs Non-Living
-  const [waterLevel, setWaterLevel] = useState(80);
-  const [sunlightLevel, setSunlightLevel] = useState(85);
-
-  // Mode 8: EVS Seasons & Day/Night Sky
-  const [season, setSeason] = useState<'summer' | 'monsoon' | 'winter' | 'spring'>('summer');
-  const [isNightSky, setIsNightSky] = useState(false);
-
-  // Mode 9: Spatial Sense, Ordinals (1st-10th), Repeated Addition & Data Pictograph
-  const [groupsCount, setGroupsCount] = useState(4);
-  const [itemsPerGroup, setItemsPerGroup] = useState(3);
-  const [selectedOrdinal, setSelectedOrdinal] = useState(3); // 1st to 10th
-
-  // Mode 10: Pre-Number Spatial Vocabulary (Finding the Furry Cat!)
-  const [catPosition, setCatPosition] = useState<'inside' | 'outside' | 'on' | 'under' | 'near' | 'far'>('on');
-
-  // Mode 11: Non-Standard Measurement (Handspans, Pan Balance, Capacity)
   const [objectHandspans, setObjectHandspans] = useState(5);
   const [leftPanBlocks, setLeftPanBlocks] = useState(6);
   const [rightPanBlocks, setRightPanBlocks] = useState(4);
   const [jugCups, setJugCups] = useState(4);
 
-  // Mode 12: Patterns (Utsav) & Data Pictograph (So Many Toys)
+  const [clockHour, setClockHour] = useState(4);
+  const [clockHalfHour, setClockHalfHour] = useState(false);
+  const [selectedToyIdx, setSelectedToyIdx] = useState(1); // ₹18 Car
+  const [walletCoins, setWalletCoins] = useState<number[]>([10, 5, 2, 1]);
+
   const [patternType, setPatternType] = useState<'ABAB' | 'AAB' | 'ABC' | 'NUM'>('ABAB');
   const [toyCounts, setToyCounts] = useState({ cars: 5, dolls: 3, balls: 7, blocks: 4 });
 
-  // Mode 13: EVS Animals, Healthy Food & Traffic Safety Light
+  const [groupsCount, setGroupsCount] = useState(4);
+  const [itemsPerGroup, setItemsPerGroup] = useState(3);
+  const [selectedOrdinal, setSelectedOrdinal] = useState(3);
+
+  // English Phonics & Grammar states
+  const [cvcIdx, setCvcIdx] = useState(0);
+  const [chosenVowel, setChosenVowel] = useState<string>('A');
+  const [articleWordIdx, setArticleWordIdx] = useState(0);
+  const [oppositeIdx, setOppositeIdx] = useState(0);
+
+  // EVS states
+  const [selectedSenseIdx, setSelectedSenseIdx] = useState(0);
+  const [waterLevel, setWaterLevel] = useState(80);
+  const [sunlightLevel, setSunlightLevel] = useState(85);
   const [trafficLight, setTrafficLight] = useState<'red' | 'yellow' | 'green'>('green');
   const [animalCategory, setAnimalCategory] = useState<'wild' | 'domestic' | 'pet' | 'water'>('wild');
+  const [season, setSeason] = useState<'summer' | 'monsoon' | 'winter' | 'spring'>('summer');
+  const [isNightSky, setIsNightSky] = useState(false);
 
-  // Computed values
+  const speak = (text: string, force = false) => {
+    if ((!voiceEnabled && !force) || typeof window === 'undefined' || !('speechSynthesis' in window)) {
+      return;
+    }
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.rate = 0.92;
+    u.pitch = 1.1;
+    window.speechSynthesis.speak(u);
+  };
+
+  const awardStar = (msg: string) => {
+    setStars((s) => s + 1);
+    setMissionBanner(`🎉 ${msg} (+1 ⭐ Star!)`);
+    speak(msg, true);
+  };
+
   const compSymbol = leftCount > rightCount ? '>' : leftCount < rightCount ? '<' : '=';
   const compWord =
     leftCount > rightCount
@@ -193,10 +236,9 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
 
   const tensDigit = Math.floor(twoDigitNum / 10);
   const onesDigit = twoDigitNum % 10;
-
   const totalMoney = walletCoins.reduce((a, b) => a + b, 0);
+  const activeToy = TOY_SHOP_ITEMS[selectedToyIdx];
 
-  // Canvas Renderers
   const renderFrogNumberLine = ({ ctx, width, height, elapsedTime }: CanvasRenderContext) => {
     const lineY = height * 0.68;
     const startX = 40;
@@ -204,7 +246,6 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
     const maxN = 20;
     const stepPx = (endX - startX) / maxN;
 
-    // Draw Number Line 0 to 20
     ctx.strokeStyle = '#38bdf8';
     ctx.lineWidth = 3;
     ctx.beginPath();
@@ -228,7 +269,6 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
       ctx.fillText(`${i}`, x, lineY + 26);
     }
 
-    // Draw Frog Hops from startNum to resultNum
     const steps = Math.abs(resultNum - startNum);
     const dir = operation === 'add' ? 1 : -1;
     ctx.strokeStyle = operation === 'add' ? '#10b981' : '#f43f5e';
@@ -246,7 +286,6 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
       ctx.stroke();
     }
 
-    // Animated Frog at resultNum
     const frogX = startX + Math.min(maxN, resultNum) * stepPx;
     const bounce = Math.abs(Math.sin(elapsedTime * 4)) * 12;
     const frogY = lineY - 22 - bounce;
@@ -260,20 +299,12 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
     ctx.arc(frogX - 5, frogY - 6, 4, 0, Math.PI * 2);
     ctx.arc(frogX + 5, frogY - 6, 4, 0, Math.PI * 2);
     ctx.fill();
-    ctx.fillStyle = '#090d16';
-    ctx.beginPath();
-    ctx.arc(frogX - 5, frogY - 6, 2, 0, Math.PI * 2);
-    ctx.arc(frogX + 5, frogY - 6, 2, 0, Math.PI * 2);
-    ctx.fill();
 
-    // Top Equation Banner
     ctx.fillStyle = '#f8fafc';
     ctx.font = 'bold 16px JetBrains Mono, monospace';
     ctx.textAlign = 'left';
     ctx.fillText(
-      `Frog Jumps: ${startNum} ${operation === 'add' ? '+' : '-'} ${changeNum} = ${resultNum} (${steps} ${
-        operation === 'add' ? 'Forward' : 'Backward'
-      } Hops)`,
+      `Frog Jumps: ${startNum} ${operation === 'add' ? '+' : '-'} ${changeNum} = ${resultNum} (${numberToWords(resultNum)})`,
       35,
       42
     );
@@ -290,11 +321,9 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
     ctx.translate(rampStartX, rampStartY);
     ctx.rotate(rad);
 
-    // Draw Inclined Ramp Plank
     ctx.fillStyle = '#334155';
     ctx.fillRect(0, 0, rampLen, 14);
 
-    // Shape position along the ramp
     const dist = ((elapsedTime * (45 + rampAngle * 2.5)) % (rampLen - 40)) + 20;
     const spin = activeShape.canRoll ? elapsedTime * 6 : 0;
 
@@ -310,7 +339,6 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
       ctx.arc(0, 0, 20, 0, Math.PI * 2);
       ctx.fill();
       ctx.stroke();
-      // Spokes to visualize rolling vs sliding
       ctx.beginPath();
       ctx.moveTo(-18, 0);
       ctx.lineTo(18, 0);
@@ -321,7 +349,6 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
       ctx.fillRect(-20, -20, 40, 40);
       ctx.strokeRect(-20, -20, 40, 40);
     } else {
-      // Cone triangle profile
       ctx.beginPath();
       ctx.moveTo(0, -22);
       ctx.lineTo(-20, 18);
@@ -343,24 +370,21 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
   };
 
   const renderPlantGrowth = ({ ctx, width, height, elapsedTime }: CanvasRenderContext) => {
-    const health = (waterLevel + sunlightLevel) / 200; // 0.1 to 1.0
+    const health = (waterLevel + sunlightLevel) / 200;
     const groundY = height * 0.72;
     const cx = width * 0.5;
 
-    // Sky & Soil
     ctx.fillStyle = '#0c192c';
     ctx.fillRect(0, 0, width, groundY);
     ctx.fillStyle = '#422006';
     ctx.fillRect(0, groundY, width, height - groundY);
 
-    // Sun
     const sunR = 20 + (sunlightLevel / 100) * 22;
     ctx.fillStyle = '#fde047';
     ctx.beginPath();
     ctx.arc(85, 65, sunR, 0, Math.PI * 2);
     ctx.fill();
 
-    // Roots underground
     ctx.strokeStyle = '#d97706';
     ctx.lineWidth = 3;
     for (let i = -2; i <= 2; i++) {
@@ -370,7 +394,6 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
       ctx.stroke();
     }
 
-    // Stem height proportional to water & sunlight
     const stemH = 35 + health * 145;
     const sway = Math.sin(elapsedTime * 2) * 5;
     ctx.strokeStyle = '#22c55e';
@@ -380,7 +403,6 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
     ctx.quadraticCurveTo(cx + sway, groundY - stemH * 0.5, cx + sway, groundY - stemH);
     ctx.stroke();
 
-    // Leaves
     if (health > 0.3) {
       ctx.fillStyle = '#10b981';
       ctx.beginPath();
@@ -389,7 +411,6 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
       ctx.fill();
     }
 
-    // Flower & Fruit at high health
     if (health > 0.65) {
       const fx = cx + sway;
       const fy = groundY - stemH;
@@ -406,7 +427,6 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
       ctx.fill();
     }
 
-    // Labels of Plant Parts
     ctx.fillStyle = '#f8fafc';
     ctx.font = 'bold 11px JetBrains Mono, monospace';
     ctx.fillText('1. ROOTS (Absorb Water & Minerals)', cx + 65, groundY + 35);
@@ -435,7 +455,6 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
     ctx.fillRect(0, groundY, width, height - groundY);
 
     if (isNightSky) {
-      // Moon & Twinkling Stars
       ctx.fillStyle = '#fef08a';
       ctx.beginPath();
       ctx.arc(width - 95, 75, 28, 0, Math.PI * 2);
@@ -450,14 +469,12 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
         ctx.fill();
       }
     } else {
-      // Sun
       ctx.fillStyle = '#fde047';
       ctx.beginPath();
       ctx.arc(95, 75, season === 'summer' ? 36 : 24, 0, Math.PI * 2);
       ctx.fill();
     }
 
-    // Monsoon Rain or Winter Snowflakes
     if (season === 'monsoon' || season === 'winter') {
       ctx.strokeStyle = '#bae6fd';
       ctx.fillStyle = '#f8fafc';
@@ -495,22 +512,75 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
 
   return (
     <div className="space-y-4">
-      {/* 8-Mode Class 1 Interactive Selector Bar */}
+      {/* Top Kid-Friendly Voice Narration & Star Reward Header */}
+      <div className="flex flex-wrap items-center justify-between gap-2 p-3 rounded-2xl bg-gradient-to-r from-cyan-950/60 via-slate-900 to-emerald-950/60 border border-cyan-500/30 shadow-md">
+        <div className="flex items-center gap-3">
+          <div className="px-3 py-1.5 rounded-xl bg-amber-500/20 border border-amber-400 flex items-center gap-1.5">
+            <Trophy className="w-4 h-4 text-amber-400" />
+            <span className="text-xs font-extrabold text-amber-200">
+              ⭐ {stars} Stars Earned!
+            </span>
+          </div>
+
+          {missionBanner ? (
+            <span className="text-xs font-bold text-emerald-300 bg-emerald-500/15 border border-emerald-500/40 px-3 py-1 rounded-xl animate-pulse">
+              {missionBanner}
+            </span>
+          ) : (
+            <span className="text-xs text-slate-300 hidden sm:inline">
+              Tap objects directly or click 🔊 to hear voice narration!
+            </span>
+          )}
+        </div>
+
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() =>
+              speak(
+                'Welcome to Class 1 Interactive Learning Lab! Click any activity to play and earn stars!',
+                true
+              )
+            }
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-cyan-500 text-slate-950 text-xs font-extrabold hover:bg-cyan-400 transition-colors"
+          >
+            <Volume2 className="w-3.5 h-3.5" />
+            🔊 Speak Aloud
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setVoiceEnabled((v) => !v)}
+            className={`flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-xs font-bold border ${
+              voiceEnabled
+                ? 'bg-emerald-500/20 border-emerald-400 text-emerald-200'
+                : 'bg-slate-800 border-slate-700 text-slate-400'
+            }`}
+          >
+            {voiceEnabled ? <Volume2 className="w-3.5 h-3.5" /> : <VolumeX className="w-3.5 h-3.5" />}
+            Voice: {voiceEnabled ? 'ON' : 'OFF'}
+          </button>
+        </div>
+      </div>
+
+      {/* 15-Mode Class 1 Interactive Selector Bar (Math + English + EVS) */}
       <div className="flex flex-wrap items-center gap-1.5 p-2.5 rounded-xl bg-[#111827] border border-[#1F2937]">
         {[
-          { id: 'spatial-prenumber', label: '1. Spatial Sense (Furry Cat)', icon: Sparkles },
+          { id: 'spatial-prenumber', label: '1. Spatial (Furry Cat)', icon: Sparkles },
           { id: 'number-line-tenframe', label: '2. Numbers 1–20 & < > =', icon: Sparkles },
-          { id: 'addition-subtraction', label: '3. Add & Subtract (Frog Hops)', icon: Calculator },
-          { id: 'tens-ones-abacus', label: '4. Tens & Ones Abacus (1–99)', icon: Plus },
-          { id: 'shapes-roll-slide', label: '5. Shapes: Roll vs Slide', icon: Shapes },
-          { id: 'measurement-balance', label: '6. Measure: Handspan & Balance', icon: Calculator },
-          { id: 'clock-money', label: '7. Clock & ₹ Money Shop', icon: Clock },
-          { id: 'patterns-pictograph', label: '8. Patterns & Toy Pictograph', icon: Shapes },
-          { id: 'spatial-ordinals-data', label: '9. Ordinals (1st–10th) & Groups', icon: Sparkles },
-          { id: 'evs-sense-organs', label: '10. EVS: 5 Sense Organs', icon: Eye },
-          { id: 'evs-plants-living', label: '11. EVS: Growing Plant', icon: Sprout },
-          { id: 'evs-animals-food-safety', label: '12. EVS: Animals & Traffic Safety', icon: CheckCircle2 },
-          { id: 'evs-seasons-sky', label: '13. EVS: Seasons & Sky', icon: Sun },
+          { id: 'addition-subtraction', label: '3. Add & Subtract Frog', icon: Calculator },
+          { id: 'tens-ones-abacus', label: '4. Tens & Ones Abacus', icon: Plus },
+          { id: 'shapes-roll-slide', label: '5. Shapes: Roll/Slide', icon: Shapes },
+          { id: 'measurement-balance', label: '6. Handspan & Balance', icon: Calculator },
+          { id: 'clock-money', label: '7. Clock & ₹ Toy Shop', icon: Clock },
+          { id: 'patterns-pictograph', label: '8. Patterns & Pictograph', icon: Shapes },
+          { id: 'spatial-ordinals-data', label: '9. Ordinals (1st–10th)', icon: Sparkles },
+          { id: 'eng-phonics-vowels', label: '10. English: Vowels & CVC', icon: BookOpen },
+          { id: 'eng-grammar-opposites', label: '11. English: Opposites/Verbs', icon: BookOpen },
+          { id: 'evs-sense-organs', label: '12. EVS: 5 Sense Organs', icon: Eye },
+          { id: 'evs-plants-living', label: '13. EVS: Growing Plant', icon: Sprout },
+          { id: 'evs-animals-food-safety', label: '14. EVS: Animals & Safety', icon: CheckCircle2 },
+          { id: 'evs-seasons-sky', label: '15. EVS: Seasons & Sky', icon: Sun },
         ].map((m) => {
           const Icon = m.icon;
           const active = mode === m.id;
@@ -518,7 +588,10 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
             <button
               key={m.id}
               type="button"
-              onClick={() => setMode(m.id as Class1LabMode)}
+              onClick={() => {
+                setMode(m.id as Class1LabMode);
+                setMissionBanner(null);
+              }}
               className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${
                 active
                   ? 'bg-cyan-500 text-slate-950 shadow-sm'
@@ -532,7 +605,7 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
         })}
       </div>
 
-      {/* MODE 0: SPATIAL PRE-NUMBER CONCEPTS (FINDING THE FURRY CAT!) */}
+      {/* MODE 1: SPATIAL PRE-NUMBER CONCEPTS (FINDING THE FURRY CAT!) */}
       {mode === 'spatial-prenumber' && (
         <div className="p-4 rounded-xl bg-[#111827] border border-[#1F2937] space-y-4">
           <div className="flex flex-wrap items-center justify-between gap-2">
@@ -541,24 +614,27 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
                 NCERT Ch 1: Finding the Furry Cat! — Pre-Number Spatial Vocabulary
               </h4>
               <p className="text-xs text-slate-400">
-                Click any spatial position word below to move the Furry Cat 🐱
+                Tap any position button below to move the Furry Cat 🐱 and hear the sentence!
               </p>
             </div>
             <div className="flex flex-wrap gap-1.5">
               {(
                 [
-                  { id: 'on', label: 'ON the Table' },
-                  { id: 'under', label: 'UNDER the Table' },
-                  { id: 'inside', label: 'INSIDE the Box' },
-                  { id: 'outside', label: 'OUTSIDE the Box' },
-                  { id: 'near', label: 'NEAR the Tree' },
-                  { id: 'far', label: 'FAR from the Tree' },
+                  { id: 'on', label: 'ON the Table', speech: 'The furry cat is sitting ON the table!' },
+                  { id: 'under', label: 'UNDER the Table', speech: 'The furry cat is hiding UNDER the table!' },
+                  { id: 'inside', label: 'INSIDE the Box', speech: 'The furry cat is INSIDE the box!' },
+                  { id: 'outside', label: 'OUTSIDE the Box', speech: 'The furry cat jumped OUTSIDE the box!' },
+                  { id: 'near', label: 'NEAR the Tree', speech: 'The furry cat is standing NEAR the tree!' },
+                  { id: 'far', label: 'FAR from the Tree', speech: 'The furry cat is FAR away from the tree!' },
                 ] as const
               ).map((pos) => (
                 <button
                   key={pos.id}
                   type="button"
-                  onClick={() => setCatPosition(pos.id)}
+                  onClick={() => {
+                    setCatPosition(pos.id);
+                    awardStar(pos.speech);
+                  }}
                   className={`px-3 py-1.5 rounded-lg text-xs font-bold border transition-all ${
                     catPosition === pos.id
                       ? 'bg-cyan-500 text-slate-950 border-white'
@@ -572,7 +648,6 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 rounded-xl bg-[#090D16] border border-slate-800">
-            {/* Scene 1: Table (ON vs UNDER) */}
             <div className="p-4 rounded-xl bg-[#111827] border border-slate-800 flex flex-col items-center justify-between h-48">
               <span className="text-xs font-mono text-cyan-300 font-bold">
                 ON vs. UNDER the Table
@@ -581,7 +656,6 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
                 {catPosition === 'on' && (
                   <div className="text-3xl animate-bounce mb-1">🐱</div>
                 )}
-                {/* Table Top & Legs */}
                 <div className="w-36 h-3 bg-amber-600 rounded" />
                 <div className="w-28 flex justify-between">
                   <div className="w-2.5 h-14 bg-amber-700" />
@@ -593,14 +667,13 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
               </div>
               <span className="text-[11px] text-slate-400">
                 {catPosition === 'on'
-                  ? 'The cat is sitting ON the table.'
+                  ? 'The cat is ON the table.'
                   : catPosition === 'under'
-                  ? 'The cat is hiding UNDER the table.'
-                  : 'Click ON or UNDER above'}
+                  ? 'The cat is UNDER the table.'
+                  : 'Tap ON or UNDER'}
               </span>
             </div>
 
-            {/* Scene 2: Box (INSIDE vs OUTSIDE) */}
             <div className="p-4 rounded-xl bg-[#111827] border border-slate-800 flex flex-col items-center justify-between h-48">
               <span className="text-xs font-mono text-emerald-300 font-bold">
                 INSIDE vs. OUTSIDE the Box
@@ -617,12 +690,11 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
                 {catPosition === 'inside'
                   ? 'The cat is INSIDE the box!'
                   : catPosition === 'outside'
-                  ? 'The cat jumped OUTSIDE the box!'
-                  : 'Click INSIDE or OUTSIDE above'}
+                  ? 'The cat is OUTSIDE the box!'
+                  : 'Tap INSIDE or OUTSIDE'}
               </span>
             </div>
 
-            {/* Scene 3: Tree (NEAR vs FAR) */}
             <div className="p-4 rounded-xl bg-[#111827] border border-slate-800 flex flex-col items-center justify-between h-48">
               <span className="text-xs font-mono text-amber-300 font-bold">
                 NEAR vs. FAR from the Tree
@@ -642,40 +714,50 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
                 {catPosition === 'near'
                   ? 'The cat is NEAR the tree.'
                   : catPosition === 'far'
-                  ? 'The cat is FAR away from the tree.'
-                  : 'Click NEAR or FAR above'}
+                  ? 'The cat is FAR from the tree.'
+                  : 'Tap NEAR or FAR'}
               </span>
             </div>
           </div>
         </div>
       )}
 
-      {/* MODE 1: NUMBERS 1-20, TEN-FRAMES & CROCODILE COMPARISON */}
+      {/* MODE 2: NUMBERS 1-20, TEN-FRAMES & CROCODILE COMPARISON */}
       {mode === 'number-line-tenframe' && (
         <div className="space-y-4">
           <div className="grid grid-cols-1 lg:grid-cols-11 gap-4 items-center p-4 rounded-xl bg-[#111827] border border-[#1F2937]">
-            {/* Left Ten-Frames (Up to 20) */}
+            {/* Left Ten-Frames (Tap any cell!) */}
             <div className="lg:col-span-4 p-3.5 rounded-xl bg-[#090D16] border border-slate-800 space-y-2">
               <div className="flex justify-between items-center">
                 <span className="text-xs font-bold text-cyan-400 uppercase">
-                  Left Group (Ten-Frames)
+                  Tap Apples ({numberToWords(leftCount)})
                 </span>
-                <span className="text-lg font-mono font-extrabold text-white">
-                  {leftCount}
-                </span>
+                <button
+                  type="button"
+                  onClick={() => speak(`${leftCount}, ${numberToWords(leftCount)} apples!`, true)}
+                  className="text-base font-mono font-extrabold text-white bg-cyan-500/20 px-2.5 py-0.5 rounded border border-cyan-400"
+                >
+                  {leftCount} ({numberToWords(leftCount)}) 🔊
+                </button>
               </div>
               <div className="grid grid-cols-5 gap-1.5">
                 {Array.from({ length: 20 }).map((_, i) => (
-                  <div
+                  <button
                     key={i}
-                    className={`h-8 rounded-lg border flex items-center justify-center text-sm ${
+                    type="button"
+                    onClick={() => {
+                      const next = i + 1;
+                      setLeftCount(next);
+                      speak(`${next}, ${numberToWords(next)} apples`);
+                    }}
+                    className={`h-8 rounded-lg border flex items-center justify-center text-sm transition-transform hover:scale-105 ${
                       i < leftCount
                         ? 'bg-cyan-500/25 border-cyan-400 text-cyan-200'
                         : 'bg-slate-900/60 border-slate-800 text-slate-700'
                     }`}
                   >
-                    {i < leftCount ? '🍎' : ''}
-                  </div>
+                    {i < leftCount ? '🍎' : i + 1}
+                  </button>
                 ))}
               </div>
               <div className="text-[11px] font-mono text-slate-400">
@@ -684,44 +766,60 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
               </div>
             </div>
 
-            {/* Center Crocodile Mouth (<, >, =) */}
+            {/* Center Crocodile Mouth */}
             <div className="lg:col-span-3 flex flex-col items-center justify-center p-4 rounded-xl bg-[#090D16] border border-emerald-500/30 space-y-2">
               <span className="text-[11px] font-mono uppercase text-emerald-400">
-                Hungry Crocodile Rule
+                Hungry Crocodile Mouth 🐊
               </span>
-              <div className="text-5xl font-mono font-black text-emerald-400">
+              <div className="text-4xl font-mono font-black text-emerald-400">
                 {leftCount} {compSymbol} {rightCount}
               </div>
-              <p className="text-xs text-center text-slate-300">
-                <strong>{leftCount}</strong> {compWord} <strong>{rightCount}</strong>
+              <p className="text-xs text-center text-slate-200 font-semibold">
+                {numberToWords(leftCount)} {compWord} {numberToWords(rightCount)}
               </p>
-              <p className="text-[10px] text-slate-400 text-center">
-                The crocodile mouth always opens toward the BIGGER number!
-              </p>
+              <button
+                type="button"
+                onClick={() =>
+                  awardStar(`${leftCount} ${compWord} ${rightCount}!`)
+                }
+                className="px-3 py-1 rounded-lg bg-emerald-500 text-slate-950 text-xs font-extrabold"
+              >
+                🔊 Speak Comparison
+              </button>
             </div>
 
-            {/* Right Ten-Frames (Up to 20) */}
+            {/* Right Ten-Frames */}
             <div className="lg:col-span-4 p-3.5 rounded-xl bg-[#090D16] border border-slate-800 space-y-2">
               <div className="flex justify-between items-center">
                 <span className="text-xs font-bold text-amber-400 uppercase">
-                  Right Group (Ten-Frames)
+                  Tap Mangoes ({numberToWords(rightCount)})
                 </span>
-                <span className="text-lg font-mono font-extrabold text-white">
-                  {rightCount}
-                </span>
+                <button
+                  type="button"
+                  onClick={() => speak(`${rightCount}, ${numberToWords(rightCount)} mangoes!`, true)}
+                  className="text-base font-mono font-extrabold text-white bg-amber-500/20 px-2.5 py-0.5 rounded border border-amber-400"
+                >
+                  {rightCount} ({numberToWords(rightCount)}) 🔊
+                </button>
               </div>
               <div className="grid grid-cols-5 gap-1.5">
                 {Array.from({ length: 20 }).map((_, i) => (
-                  <div
+                  <button
                     key={i}
-                    className={`h-8 rounded-lg border flex items-center justify-center text-sm ${
+                    type="button"
+                    onClick={() => {
+                      const next = i + 1;
+                      setRightCount(next);
+                      speak(`${next}, ${numberToWords(next)} mangoes`);
+                    }}
+                    className={`h-8 rounded-lg border flex items-center justify-center text-sm transition-transform hover:scale-105 ${
                       i < rightCount
                         ? 'bg-amber-500/25 border-amber-400 text-amber-200'
                         : 'bg-slate-900/60 border-slate-800 text-slate-700'
                     }`}
                   >
-                    {i < rightCount ? '🥭' : ''}
-                  </div>
+                    {i < rightCount ? '🥭' : i + 1}
+                  </button>
                 ))}
               </div>
               <div className="text-[11px] font-mono text-slate-400">
@@ -729,76 +827,62 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
               </div>
             </div>
           </div>
-
-          <ParameterPanel
-            title="Class 1 Number Comparison & Ten-Frame Controls"
-            sliders={[
-              {
-                id: 'left',
-                label: 'Left Basket Apples (1 to 20)',
-                value: leftCount,
-                min: 1,
-                max: 20,
-                step: 1,
-                onChange: setLeftCount,
-              },
-              {
-                id: 'right',
-                label: 'Right Basket Mangoes (1 to 20)',
-                value: rightCount,
-                min: 1,
-                max: 20,
-                step: 1,
-                onChange: setRightCount,
-              },
-            ]}
-          />
         </div>
       )}
 
-      {/* MODE 2: ADDITION & SUBTRACTION FROG NUMBER LINE */}
+      {/* MODE 3: ADDITION & SUBTRACTION FROG NUMBER LINE */}
       {mode === 'addition-subtraction' && (
         <div className="space-y-4">
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => {
+                  setOperation('add');
+                  speak(`${startNum} plus ${changeNum} equals ${startNum + changeNum}`);
+                }}
+                className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold ${
+                  operation === 'add'
+                    ? 'bg-emerald-500 text-slate-950'
+                    : 'bg-[#111827] text-slate-300 border border-slate-800'
+                }`}
+              >
+                <Plus className="w-3.5 h-3.5" /> Addition (+ Forward Jumps)
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setOperation('sub');
+                  speak(`${startNum} minus ${changeNum} equals ${Math.max(0, startNum - changeNum)}`);
+                }}
+                className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold ${
+                  operation === 'sub'
+                    ? 'bg-rose-500 text-white'
+                    : 'bg-[#111827] text-slate-300 border border-slate-800'
+                }`}
+              >
+                <Minus className="w-3.5 h-3.5" /> Subtraction (- Backward Jumps)
+              </button>
+            </div>
+
             <button
               type="button"
-              onClick={() => setOperation('add')}
-              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold ${
-                operation === 'add'
-                  ? 'bg-emerald-500 text-slate-950'
-                  : 'bg-[#111827] text-slate-300 border border-slate-800'
-              }`}
+              onClick={() =>
+                awardStar(
+                  `${startNum} ${operation === 'add' ? 'plus' : 'minus'} ${changeNum} equals ${resultNum}!`
+                )
+              }
+              className="px-3 py-1.5 rounded-lg bg-cyan-500/20 border border-cyan-400 text-xs font-bold text-cyan-200"
             >
-              <Plus className="w-3.5 h-3.5" /> Addition (+ Putting Together / Forward Jumps)
-            </button>
-            <button
-              type="button"
-              onClick={() => setOperation('sub')}
-              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold ${
-                operation === 'sub'
-                  ? 'bg-rose-500 text-white'
-                  : 'bg-[#111827] text-slate-300 border border-slate-800'
-              }`}
-            >
-              <Minus className="w-3.5 h-3.5" /> Subtraction (- Taking Away / Backward Jumps)
+              🔊 Speak Number Sentence ({startNum} {operation === 'add' ? '+' : '-'} {changeNum} = {resultNum})
             </button>
           </div>
 
           <Canvas2DWrapper
             title="Class 1 Number Line Frog Hops (0 to 20)"
-            subtitle="Watch the frog hop forward for Addition (+) and hop backward for Subtraction (-)"
-            height={300}
+            subtitle="Watch the green frog hop forward for Addition (+) and hop backward for Subtraction (-)"
+            height={290}
             onRender={renderFrogNumberLine}
-          />
-
-          <FormulaCard
-            label={operation === 'add' ? 'Class 1 Addition Sentence' : 'Class 1 Subtraction Sentence'}
-            latex={`${startNum} ${operation === 'add' ? '+' : '-'} ${changeNum} = ${resultNum}`}
-            description={
-              operation === 'add'
-                ? `Start at ${startNum} and jump ${changeNum} steps forward to land on ${resultNum}.`
-                : `Start at ${startNum} and jump ${changeNum} steps backward to land on ${resultNum}.`
-            }
           />
 
           <ParameterPanel
@@ -827,19 +911,74 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
         </div>
       )}
 
-      {/* MODE 3: TENS & ONES BUNDLES + ABACUS + 1-100 SKIP COUNTING */}
+      {/* MODE 4: TENS & ONES ABACUS + MISSION CHALLENGE + SKIP COUNTING */}
       {mode === 'tens-ones-abacus' && (
         <div className="space-y-4">
+          {/* Interactive Abacus Challenge Bar */}
+          <div className="flex flex-wrap items-center justify-between gap-2 p-3 rounded-xl bg-[#111827] border border-amber-500/40">
+            <div className="flex items-center gap-2">
+              <Target className="w-4 h-4 text-amber-400" />
+              <span className="text-xs font-bold text-white">
+                🎯 Abacus Mission: Can you make{' '}
+                <strong className="text-amber-300 text-sm">
+                  {targetAbacusMission} ({numberToWords(targetAbacusMission)})
+                </strong>{' '}
+                using the + / - rod buttons?
+              </span>
+            </div>
+            <div className="flex items-center gap-2">
+              {twoDigitNum === targetAbacusMission ? (
+                <button
+                  type="button"
+                  onClick={() => {
+                    const nextTarget = Math.floor(Math.random() * 88) + 11;
+                    awardStar(`You made ${targetAbacusMission}, ${numberToWords(targetAbacusMission)}!`);
+                    setTargetAbacusMission(nextTarget);
+                  }}
+                  className="px-3 py-1 rounded-lg bg-emerald-500 text-slate-950 text-xs font-extrabold animate-bounce"
+                >
+                  🎉 Matched {targetAbacusMission}! Claim +1 ⭐ & Next Mission
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => {
+                    const nextTarget = Math.floor(Math.random() * 88) + 11;
+                    setTargetAbacusMission(nextTarget);
+                    speak(`New mission! Can you make ${nextTarget}, ${numberToWords(nextTarget)}?`, true);
+                  }}
+                  className="px-2.5 py-1 rounded-lg bg-slate-800 text-xs text-amber-300 border border-slate-700"
+                >
+                  New Target Number
+                </button>
+              )}
+            </div>
+          </div>
+
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            {/* Tens Bundles & Loose Ones + 2-Rod Abacus */}
+            {/* Direct-Tap 2-Rod Spike Abacus with Number Word Spelling */}
             <div className="p-4 rounded-xl bg-[#111827] border border-[#1F2937] space-y-3">
               <div className="flex items-center justify-between">
-                <h4 className="text-xs font-bold uppercase tracking-wider text-cyan-400">
-                  Tens Bundles & 2-Rod Spike Abacus
-                </h4>
-                <span className="px-2.5 py-1 rounded bg-cyan-500/20 border border-cyan-400 text-sm font-mono font-bold text-cyan-200">
-                  {twoDigitNum} = {tensDigit} Tens + {onesDigit} Ones
-                </span>
+                <div>
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-cyan-400">
+                    Tens & Ones Spike Abacus
+                  </h4>
+                  <p className="text-sm font-extrabold text-white mt-0.5">
+                    {twoDigitNum} = &ldquo;{numberToWords(twoDigitNum)}&rdquo;
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() =>
+                    speak(
+                      `${twoDigitNum}, ${numberToWords(twoDigitNum)}, has ${tensDigit} Tens and ${onesDigit} Ones`,
+                      true
+                    )
+                  }
+                  className="px-3 py-1.5 rounded-lg bg-cyan-500/20 border border-cyan-400 text-xs font-mono font-bold text-cyan-200"
+                >
+                  🔊 {tensDigit} Tens + {onesDigit} Ones
+                </button>
               </div>
 
               <div className="grid grid-cols-2 gap-4 p-4 rounded-xl bg-[#090D16] border border-slate-800">
@@ -848,18 +987,32 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
                   <span className="text-xs font-bold text-amber-400 mb-1">
                     TENS ROD (10s)
                   </span>
-                  <div className="relative h-40 w-full flex flex-col justify-end items-center py-2">
+                  <div className="relative h-36 w-full flex flex-col justify-end items-center py-2">
                     <div className="absolute inset-y-0 w-1.5 bg-slate-700 rounded-full" />
                     {Array.from({ length: tensDigit }).map((_, i) => (
                       <div
                         key={i}
-                        className="relative z-10 w-12 h-3.5 rounded-full bg-amber-500 my-0.5 border border-white/30"
+                        className="relative z-10 w-12 h-3 rounded-full bg-amber-500 my-0.5 border border-white/30"
                       />
                     ))}
                   </div>
-                  <span className="text-sm font-mono font-bold text-amber-300 mt-1">
-                    {tensDigit} Tens = {tensDigit * 10}
-                  </span>
+                  <div className="flex items-center gap-2 mt-2">
+                    <button
+                      type="button"
+                      onClick={() => setTwoDigitNum((n) => Math.max(0, n - 10))}
+                      className="px-3 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-bold text-amber-300 border border-slate-700"
+                    >
+                      -1 Ten
+                    </button>
+                    <span className="font-mono text-sm font-bold text-white">{tensDigit}</span>
+                    <button
+                      type="button"
+                      onClick={() => setTwoDigitNum((n) => Math.min(99, n + 10))}
+                      className="px-3 py-1 rounded-lg bg-amber-500 text-slate-950 text-xs font-extrabold"
+                    >
+                      +1 Ten
+                    </button>
+                  </div>
                 </div>
 
                 {/* Ones Rod */}
@@ -867,27 +1020,41 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
                   <span className="text-xs font-bold text-cyan-400 mb-1">
                     ONES ROD (1s)
                   </span>
-                  <div className="relative h-40 w-full flex flex-col justify-end items-center py-2">
+                  <div className="relative h-36 w-full flex flex-col justify-end items-center py-2">
                     <div className="absolute inset-y-0 w-1.5 bg-slate-700 rounded-full" />
                     {Array.from({ length: onesDigit }).map((_, i) => (
                       <div
                         key={i}
-                        className="relative z-10 w-12 h-3.5 rounded-full bg-cyan-500 my-0.5 border border-white/30"
+                        className="relative z-10 w-12 h-3 rounded-full bg-cyan-500 my-0.5 border border-white/30"
                       />
                     ))}
                   </div>
-                  <span className="text-sm font-mono font-bold text-cyan-300 mt-1">
-                    {onesDigit} Ones = {onesDigit}
-                  </span>
+                  <div className="flex items-center gap-2 mt-2">
+                    <button
+                      type="button"
+                      onClick={() => setTwoDigitNum((n) => Math.max(0, n - 1))}
+                      className="px-3 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-bold text-cyan-300 border border-slate-700"
+                    >
+                      -1 One
+                    </button>
+                    <span className="font-mono text-sm font-bold text-white">{onesDigit}</span>
+                    <button
+                      type="button"
+                      onClick={() => setTwoDigitNum((n) => Math.min(99, n + 1))}
+                      className="px-3 py-1 rounded-lg bg-cyan-500 text-slate-950 text-xs font-extrabold"
+                    >
+                      +1 One
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
 
-            {/* Skip Counting by 2s, 5s, 10s Board (1 to 50) */}
+            {/* Skip Counting by 2s, 5s, 10s Board */}
             <div className="p-4 rounded-xl bg-[#111827] border border-[#1F2937] space-y-3">
               <div className="flex items-center justify-between">
                 <h4 className="text-xs font-bold uppercase tracking-wider text-emerald-400">
-                  Skip Counting Grid (Count by {skipStep}s)
+                  Tap Any Number (Skip Counting by {skipStep}s)
                 </h4>
                 <div className="flex gap-1">
                   {([2, 5, 10] as const).map((st) => (
@@ -914,7 +1081,10 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
                     <button
                       key={n}
                       type="button"
-                      onClick={() => setTwoDigitNum(n)}
+                      onClick={() => {
+                        setTwoDigitNum(n);
+                        speak(`${n}, ${numberToWords(n)}`);
+                      }}
                       className={`h-7 rounded text-[11px] font-mono font-bold transition-all ${
                         n === twoDigitNum
                           ? 'bg-cyan-400 text-slate-950 ring-2 ring-white'
@@ -930,25 +1100,10 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
               </div>
             </div>
           </div>
-
-          <ParameterPanel
-            title="Two-Digit Number Slider (1 to 99)"
-            sliders={[
-              {
-                id: 'num2',
-                label: 'Select Number (1 to 99)',
-                value: twoDigitNum,
-                min: 1,
-                max: 99,
-                step: 1,
-                onChange: setTwoDigitNum,
-              },
-            ]}
-          />
         </div>
       )}
 
-      {/* MODE 4: 2D & 3D SHAPES — ROLLING VS SLIDING RAMP */}
+      {/* MODE 5: 2D & 3D SHAPES — ROLLING VS SLIDING RAMP */}
       {mode === 'shapes-roll-slide' && (
         <div className="space-y-4">
           <div className="flex flex-wrap gap-2">
@@ -956,7 +1111,10 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
               <button
                 key={sh.id}
                 type="button"
-                onClick={() => setSelectedShapeIdx(idx)}
+                onClick={() => {
+                  setSelectedShapeIdx(idx);
+                  speak(`${sh.name}, ${sh.behavior}`);
+                }}
                 className={`px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all ${
                   selectedShapeIdx === idx
                     ? 'bg-cyan-500/20 border-cyan-400 text-cyan-200'
@@ -971,7 +1129,7 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
           <Canvas2DWrapper
             title="What is Long? What is Round? — Rolling vs. Sliding Inclined Plane"
             subtitle="Curved surfaces ROLL down the ramp; flat faces SLIDE down the ramp"
-            height={300}
+            height={290}
             onRender={renderShapeRamp}
           />
 
@@ -989,172 +1147,201 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
                 onChange: setRampAngle,
               },
             ]}
-            telemetry={[
-              { label: 'Selected Shape', value: SHAPES_3D[selectedShapeIdx].name.split(' ')[0], color: 'cyan' },
-              { label: 'Motion Type', value: SHAPES_3D[selectedShapeIdx].behavior, color: 'emerald' },
-              { label: 'Faces', value: SHAPES_3D[selectedShapeIdx].faces.split(',')[0], color: 'amber' },
-              { label: 'Corners', value: SHAPES_3D[selectedShapeIdx].edgesCorners.split(',')[1] || '0', color: 'rose' },
-            ]}
           />
         </div>
       )}
 
-      {/* MODE 4B: NON-STANDARD MEASUREMENT (HANDSPANS, PAN BALANCE & CAPACITY) */}
+      {/* MODE 6: NON-STANDARD MEASUREMENT (HANDSPANS, PAN BALANCE & CAPACITY) */}
       {mode === 'measurement-balance' && (
-        <div className="space-y-4">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-            {/* 1. Length in Handspans */}
-            <div className="p-4 rounded-xl bg-[#111827] border border-[#1F2937] space-y-3">
-              <div className="flex justify-between items-center">
-                <h4 className="text-xs font-bold uppercase text-cyan-400">
-                  1. Length in Handspans ✋
-                </h4>
-                <span className="text-xs font-mono font-bold text-white bg-[#090D16] px-2 py-0.5 rounded border border-slate-800">
-                  {objectHandspans} Handspans Long
-                </span>
-              </div>
-              <div className="p-3 rounded-xl bg-[#090D16] border border-slate-800 space-y-2">
-                <div className="h-6 rounded bg-amber-600/80 border border-amber-400 flex items-center justify-center text-xs font-bold text-slate-950">
-                  Wooden Study Table ({objectHandspans} Handspans)
-                </div>
-                <div className="flex justify-start gap-1 text-xl">
-                  {Array.from({ length: objectHandspans }).map((_, i) => (
-                    <span key={i} title={`Handspan ${i + 1}`}>
-                      🖐️
-                    </span>
-                  ))}
-                </div>
-              </div>
-              <input
-                type="range"
-                min={2}
-                max={9}
-                value={objectHandspans}
-                onChange={(e) => setObjectHandspans(Number(e.target.value))}
-                className="w-full"
-              />
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+          <div className="p-4 rounded-xl bg-[#111827] border border-[#1F2937] space-y-3">
+            <div className="flex justify-between items-center">
+              <h4 className="text-xs font-bold uppercase text-cyan-400">
+                1. Length in Handspans ✋
+              </h4>
+              <span className="text-xs font-mono font-bold text-white bg-[#090D16] px-2 py-0.5 rounded border border-slate-800">
+                {objectHandspans} Handspans
+              </span>
             </div>
-
-            {/* 2. Weight on a 2-Pan Beam Balance */}
-            <div className="p-4 rounded-xl bg-[#111827] border border-[#1F2937] space-y-3">
-              <div className="flex justify-between items-center">
-                <h4 className="text-xs font-bold uppercase text-emerald-400">
-                  2. Heavier vs. Lighter Balance ⚖️
-                </h4>
-                <span className="text-xs font-mono font-bold text-emerald-300">
-                  {leftPanBlocks > rightPanBlocks
-                    ? 'Left is HEAVIER'
-                    : leftPanBlocks < rightPanBlocks
-                    ? 'Right is HEAVIER'
-                    : 'EQUAL WEIGHT!'}
-                </span>
+            <div className="p-3 rounded-xl bg-[#090D16] border border-slate-800 space-y-2">
+              <div className="h-6 rounded bg-amber-600/80 border border-amber-400 flex items-center justify-center text-xs font-bold text-slate-950">
+                Study Table ({objectHandspans} Handspans)
               </div>
-              <div className="p-3 rounded-xl bg-[#090D16] border border-slate-800 flex flex-col items-center justify-center h-28">
-                <div
-                  className="w-48 h-2 bg-slate-400 rounded flex justify-between items-center transition-transform duration-300"
-                  style={{
-                    transform: `rotate(${(rightPanBlocks - leftPanBlocks) * 4}deg)`,
-                  }}
-                >
-                  <div className="px-2 py-1 rounded bg-rose-500 text-white text-xs font-mono font-bold -mt-6">
-                    🍉 ({leftPanBlocks})
-                  </div>
-                  <div className="px-2 py-1 rounded bg-cyan-500 text-slate-950 text-xs font-mono font-bold -mt-6">
-                    🧱 ({rightPanBlocks})
-                  </div>
-                </div>
-                <div className="w-0 h-0 border-l-[12px] border-l-transparent border-r-[12px] border-r-transparent border-b-[20px] border-b-amber-500 mt-1" />
-              </div>
-              <div className="grid grid-cols-2 gap-2 text-xs">
-                <button
-                  type="button"
-                  onClick={() => setLeftPanBlocks((n) => (n >= 10 ? 1 : n + 1))}
-                  className="py-1 rounded bg-slate-800 text-rose-300 font-mono"
-                >
-                  Left Pan: {leftPanBlocks} blocks
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setRightPanBlocks((n) => (n >= 10 ? 1 : n + 1))}
-                  className="py-1 rounded bg-slate-800 text-cyan-300 font-mono"
-                >
-                  Right Pan: {rightPanBlocks} blocks
-                </button>
+              <div className="flex justify-start gap-1 text-xl">
+                {Array.from({ length: objectHandspans }).map((_, i) => (
+                  <span key={i}>🖐️</span>
+                ))}
               </div>
             </div>
+            <div className="flex gap-2">
+              <button
+                type="button"
+                onClick={() => setObjectHandspans((h) => Math.max(2, h - 1))}
+                className="flex-1 py-1 rounded bg-slate-800 text-xs font-bold"
+              >
+                -1 Handspan
+              </button>
+              <button
+                type="button"
+                onClick={() => setObjectHandspans((h) => Math.min(9, h + 1))}
+                className="flex-1 py-1 rounded bg-cyan-500 text-slate-950 text-xs font-bold"
+              >
+                +1 Handspan
+              </button>
+            </div>
+          </div>
 
-            {/* 3. Capacity (Jugs & Glasses) */}
-            <div className="p-4 rounded-xl bg-[#111827] border border-[#1F2937] space-y-3">
-              <div className="flex justify-between items-center">
-                <h4 className="text-xs font-bold uppercase text-amber-400">
-                  3. Capacity (Holds More / Less) 🫗
-                </h4>
-                <span className="text-xs font-mono font-bold text-amber-300">
-                  1 Jug = {jugCups} Glasses
-                </span>
-              </div>
-              <div className="p-3 rounded-xl bg-[#090D16] border border-slate-800 flex items-center justify-around h-28">
-                <div className="text-center">
-                  <div className="text-3xl">🏺</div>
-                  <span className="text-[10px] font-mono text-slate-400">1 Big Jug</span>
+          <div className="p-4 rounded-xl bg-[#111827] border border-[#1F2937] space-y-3">
+            <div className="flex justify-between items-center">
+              <h4 className="text-xs font-bold uppercase text-emerald-400">
+                2. Heavier vs. Lighter Balance ⚖️
+              </h4>
+              <span className="text-xs font-mono font-bold text-emerald-300">
+                {leftPanBlocks > rightPanBlocks
+                  ? 'Left is HEAVIER'
+                  : leftPanBlocks < rightPanBlocks
+                  ? 'Right is HEAVIER'
+                  : 'BALANCED!'}
+              </span>
+            </div>
+            <div className="p-3 rounded-xl bg-[#090D16] border border-slate-800 flex flex-col items-center justify-center h-28">
+              <div
+                className="w-48 h-2 bg-slate-400 rounded flex justify-between items-center transition-transform duration-300"
+                style={{
+                  transform: `rotate(${(rightPanBlocks - leftPanBlocks) * 4}deg)`,
+                }}
+              >
+                <div className="px-2 py-1 rounded bg-rose-500 text-white text-xs font-mono font-bold -mt-6">
+                  🍉 ({leftPanBlocks})
                 </div>
-                <span className="text-lg font-bold text-cyan-400">=</span>
-                <div className="flex flex-wrap gap-1 justify-center max-w-[130px]">
-                  {Array.from({ length: jugCups }).map((_, i) => (
-                    <span key={i} className="text-xl">
-                      🥛
-                    </span>
-                  ))}
+                <div className="px-2 py-1 rounded bg-cyan-500 text-slate-950 text-xs font-mono font-bold -mt-6">
+                  🧱 ({rightPanBlocks})
                 </div>
               </div>
-              <input
-                type="range"
-                min={2}
-                max={8}
-                value={jugCups}
-                onChange={(e) => setJugCups(Number(e.target.value))}
-                className="w-full"
-              />
+              <div className="w-0 h-0 border-l-[12px] border-l-transparent border-r-[12px] border-r-transparent border-b-[20px] border-b-amber-500 mt-1" />
+            </div>
+            <div className="grid grid-cols-2 gap-2 text-xs">
+              <button
+                type="button"
+                onClick={() => setLeftPanBlocks((n) => (n >= 10 ? 1 : n + 1))}
+                className="py-1 rounded bg-slate-800 text-rose-300 font-mono font-bold"
+              >
+                Left: {leftPanBlocks} (Tap +)
+              </button>
+              <button
+                type="button"
+                onClick={() => setRightPanBlocks((n) => (n >= 10 ? 1 : n + 1))}
+                className="py-1 rounded bg-slate-800 text-cyan-300 font-mono font-bold"
+              >
+                Right: {rightPanBlocks} (Tap +)
+              </button>
+            </div>
+          </div>
+
+          <div className="p-4 rounded-xl bg-[#111827] border border-[#1F2937] space-y-3">
+            <div className="flex justify-between items-center">
+              <h4 className="text-xs font-bold uppercase text-amber-400">
+                3. Jug & Glasses Capacity 🫗
+              </h4>
+              <span className="text-xs font-mono font-bold text-amber-300">
+                1 Jug = {jugCups} Glasses
+              </span>
+            </div>
+            <div className="p-3 rounded-xl bg-[#090D16] border border-slate-800 flex items-center justify-around h-28">
+              <div className="text-center">
+                <div className="text-3xl">🏺</div>
+                <span className="text-[10px] font-mono text-slate-400">1 Big Jug</span>
+              </div>
+              <span className="text-lg font-bold text-cyan-400">=</span>
+              <div className="flex flex-wrap gap-1 justify-center max-w-[130px]">
+                {Array.from({ length: jugCups }).map((_, i) => (
+                  <span key={i} className="text-xl">
+                    🥛
+                  </span>
+                ))}
+              </div>
+            </div>
+            <div className="flex gap-2">
+              <button
+                type="button"
+                onClick={() => setJugCups((c) => Math.max(2, c - 1))}
+                className="flex-1 py-1 rounded bg-slate-800 text-xs font-bold"
+              >
+                -1 Glass
+              </button>
+              <button
+                type="button"
+                onClick={() => setJugCups((c) => Math.min(8, c + 1))}
+                className="flex-1 py-1 rounded bg-amber-500 text-slate-950 text-xs font-bold"
+              >
+                +1 Glass
+              </button>
             </div>
           </div>
         </div>
       )}
 
-      {/* MODE 5: ANALOG CLOCK & INDIAN CURRENCY (₹) SHOP */}
+      {/* MODE 7: INTERACTIVE TAP-ON-DIAL CLOCK & TOY SHOP CASHIER GAME */}
       {mode === 'clock-money' && (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-          {/* Interactive Analog Clock */}
+          {/* Tap-on-Numbers Analog Clock */}
           <div className="p-4 rounded-xl bg-[#111827] border border-[#1F2937] space-y-3">
             <div className="flex items-center justify-between">
               <h4 className="text-xs font-bold uppercase tracking-wider text-cyan-400 flex items-center gap-1.5">
                 <Clock className="w-4 h-4" />
-                Tick-Tock Analog & Digital Clock
+                Tap Any Number (1–12) on the Clock Face!
               </h4>
-              <span className="px-2.5 py-1 rounded bg-cyan-500/20 border border-cyan-400 font-mono text-sm font-bold text-cyan-200">
-                {clockHour}:{clockHalfHour ? '30' : '00'} ({clockHalfHour ? `Half past ${clockHour}` : `${clockHour} o'clock`})
-              </span>
+              <button
+                type="button"
+                onClick={() =>
+                  speak(
+                    clockHalfHour
+                      ? `It is half past ${clockHour}`
+                      : `It is ${clockHour} o'clock`,
+                    true
+                  )
+                }
+                className="px-2.5 py-1 rounded bg-cyan-500/20 border border-cyan-400 font-mono text-xs font-bold text-cyan-200"
+              >
+                🔊 {clockHour}:{clockHalfHour ? '30' : '00'} ({clockHalfHour ? `Half past ${clockHour}` : `${clockHour} o'clock`})
+              </button>
             </div>
 
             <div className="flex flex-col sm:flex-row items-center justify-around gap-4 p-4 rounded-xl bg-[#090D16] border border-slate-800">
-              <svg width="170" height="170" viewBox="-85 -85 170 170">
-                <circle r="78" fill="#111827" stroke="#38bdf8" strokeWidth="4" />
+              <svg width="185" height="185" viewBox="-92 -92 184 184">
+                <circle r="84" fill="#111827" stroke="#38bdf8" strokeWidth="4" />
                 {Array.from({ length: 12 }, (_, i) => i + 1).map((hr) => {
                   const angle = ((hr * 30 - 90) * Math.PI) / 180;
-                  const x = Math.cos(angle) * 62;
-                  const y = Math.sin(angle) * 62 + 4;
+                  const x = Math.cos(angle) * 66;
+                  const y = Math.sin(angle) * 66;
+                  const isSelected = clockHour === hr;
                   return (
-                    <text
+                    <g
                       key={hr}
-                      x={x}
-                      y={y}
-                      textAnchor="middle"
-                      fill="#f8fafc"
-                      fontSize="12"
-                      fontWeight="bold"
-                      fontFamily="monospace"
+                      onClick={() => {
+                        setClockHour(hr);
+                        speak(`${hr} o'clock`);
+                      }}
+                      className="cursor-pointer"
                     >
-                      {hr}
-                    </text>
+                      <circle
+                        cx={x}
+                        cy={y}
+                        r="13"
+                        fill={isSelected ? '#06b6d4' : '#1e293b'}
+                      />
+                      <text
+                        x={x}
+                        y={y + 4}
+                        textAnchor="middle"
+                        fill={isSelected ? '#090d16' : '#f8fafc'}
+                        fontSize="12"
+                        fontWeight="bold"
+                        fontFamily="monospace"
+                      >
+                        {hr}
+                      </text>
+                    </g>
                   );
                 })}
                 {/* Short Hour Hand */}
@@ -1181,8 +1368,8 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
                     <line
                       x1="0"
                       y1="0"
-                      x2={Math.cos(minRad) * 56}
-                      y2={Math.sin(minRad) * 56}
+                      x2={Math.cos(minRad) * 54}
+                      y2={Math.sin(minRad) * 54}
                       stroke="#10b981"
                       strokeWidth="3.5"
                       strokeLinecap="round"
@@ -1192,54 +1379,76 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
                 <circle r="5" fill="#fde047" />
               </svg>
 
-              <div className="space-y-3 w-full sm:w-48">
-                <div>
-                  <label className="text-xs text-slate-300 font-semibold block mb-1">
-                    Short Red Hand (Hour: {clockHour})
-                  </label>
-                  <input
-                    type="range"
-                    min={1}
-                    max={12}
-                    value={clockHour}
-                    onChange={(e) => setClockHour(Number(e.target.value))}
-                    className="w-full"
-                  />
-                </div>
+              <div className="space-y-2.5 w-full sm:w-44">
+                <p className="text-xs text-slate-300">
+                  🔴 <strong>Short Red Hand</strong> = Hour ({clockHour})
+                  <br />
+                  🟢 <strong>Long Green Hand</strong> = Minutes
+                </p>
                 <button
                   type="button"
                   onClick={() => setClockHalfHour((h) => !h)}
-                  className="w-full py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-emerald-300 border border-slate-700"
+                  className="w-full py-2 rounded-lg bg-emerald-500/20 border border-emerald-400 text-xs font-bold text-emerald-200"
                 >
-                  Toggle Minute Hand (:00 vs :30)
+                  Switch to {clockHalfHour ? "O'Clock (:00)" : 'Half-Past (:30)'}
                 </button>
               </div>
             </div>
           </div>
 
-          {/* Interactive Indian Coins & Notes Piggy Bank */}
+          {/* Interactive Toy Shop Cashier Game */}
           <div className="p-4 rounded-xl bg-[#111827] border border-[#1F2937] space-y-3">
             <div className="flex items-center justify-between">
               <h4 className="text-xs font-bold uppercase tracking-wider text-amber-400 flex items-center gap-1.5">
                 <IndianRupee className="w-4 h-4" />
-                Indian Coins & Notes Piggy Bank
+                Class 1 Toy Shop Cashier Game
               </h4>
-              <span className="px-2.5 py-1 rounded bg-amber-500/20 border border-amber-400 font-mono text-sm font-bold text-amber-200">
-                Total = ₹{totalMoney}
+              <span
+                className={`px-2.5 py-1 rounded font-mono text-xs font-bold border ${
+                  totalMoney === activeToy.price
+                    ? 'bg-emerald-500 text-slate-950 border-white'
+                    : 'bg-amber-500/20 border-amber-400 text-amber-200'
+                }`}
+              >
+                Your Coins: ₹{totalMoney} / Price: ₹{activeToy.price}
               </span>
             </div>
 
-            <div className="p-4 rounded-xl bg-[#090D16] border border-slate-800 space-y-3">
-              <div className="text-xs text-slate-400">
-                Click any Indian Coin or Note below to add it to your Piggy Bank:
+            <div className="p-3.5 rounded-xl bg-[#090D16] border border-slate-800 space-y-3">
+              {/* Pick a Toy to Buy */}
+              <div className="grid grid-cols-4 gap-1.5">
+                {TOY_SHOP_ITEMS.map((toy, idx) => (
+                  <button
+                    key={toy.id}
+                    type="button"
+                    onClick={() => {
+                      setSelectedToyIdx(idx);
+                      setWalletCoins([]);
+                      speak(`Can you pay ${toy.price} rupees for the ${toy.name}?`);
+                    }}
+                    className={`p-2 rounded-lg border text-center transition-all ${
+                      selectedToyIdx === idx
+                        ? 'bg-amber-500/25 border-amber-400 text-white'
+                        : 'bg-[#111827] border-slate-800 text-slate-400'
+                    }`}
+                  >
+                    <div className="text-xl">{toy.icon}</div>
+                    <div className="text-[10px] truncate">{toy.name}</div>
+                    <div className="text-xs font-mono font-bold text-amber-300">
+                      ₹{toy.price}
+                    </div>
+                  </button>
+                ))}
               </div>
-              <div className="flex flex-wrap gap-2">
-                {[1, 2, 5, 10, 20, 50].map((denom) => (
+
+              {/* Add Coins & Notes */}
+              <div className="flex flex-wrap items-center gap-1.5">
+                {[1, 2, 5, 10, 20].map((denom) => (
                   <button
                     key={denom}
                     type="button"
                     onClick={() => setWalletCoins((prev) => [...prev, denom])}
-                    className="px-3 py-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 border border-amber-400 text-xs font-mono font-bold text-amber-200"
+                    className="px-2.5 py-1 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 border border-amber-400 text-xs font-mono font-bold text-amber-200"
                   >
                     + ₹{denom}
                   </button>
@@ -1247,24 +1456,40 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
                 <button
                   type="button"
                   onClick={() => setWalletCoins([])}
-                  className="px-3 py-1.5 rounded-lg bg-rose-500/20 border border-rose-500/40 text-xs font-mono text-rose-300"
+                  className="px-2.5 py-1 rounded-lg bg-rose-500/20 border border-rose-500/40 text-xs font-mono text-rose-300"
                 >
-                  Clear Bank
+                  Reset ₹0
                 </button>
               </div>
 
-              <div className="min-h-[68px] p-2.5 rounded-lg bg-[#111827] border border-slate-800 flex flex-wrap gap-1.5 items-center">
-                {walletCoins.length === 0 ? (
-                  <span className="text-xs text-slate-500">Piggy bank is empty (₹0)</span>
-                ) : (
-                  walletCoins.map((c, i) => (
-                    <span
-                      key={i}
-                      className="px-2 py-1 rounded-full bg-amber-400 text-slate-950 font-mono text-xs font-bold"
-                    >
-                      ₹{c}
+              <div className="flex items-center justify-between p-2.5 rounded-lg bg-[#111827] border border-slate-800">
+                <div className="flex flex-wrap gap-1">
+                  {walletCoins.length === 0 ? (
+                    <span className="text-xs text-slate-500">
+                      Tap coins above to make ₹{activeToy.price}
                     </span>
-                  ))
+                  ) : (
+                    walletCoins.map((c, i) => (
+                      <span
+                        key={i}
+                        className="px-2 py-0.5 rounded-full bg-amber-400 text-slate-950 font-mono text-xs font-bold"
+                      >
+                        ₹{c}
+                      </span>
+                    ))
+                  )}
+                </div>
+
+                {totalMoney === activeToy.price && (
+                  <button
+                    type="button"
+                    onClick={() =>
+                      awardStar(`Exact change! You bought the ${activeToy.name} for ${activeToy.price} rupees!`)
+                    }
+                    className="px-3 py-1 rounded-lg bg-emerald-500 text-slate-950 text-xs font-extrabold shrink-0"
+                  >
+                    🎉 Buy Toy (+1 ⭐)
+                  </button>
                 )}
               </div>
             </div>
@@ -1272,10 +1497,9 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
         </div>
       )}
 
-      {/* MODE 5A: PATTERNS (UTSAV) & TOY PICTOGRAPH DATA HANDLING (SO MANY TOYS) */}
+      {/* MODE 8: PATTERNS (UTSAV) & TOY PICTOGRAPH DATA HANDLING */}
       {mode === 'patterns-pictograph' && (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-          {/* Interactive Pattern Sequencer */}
           <div className="p-4 rounded-xl bg-[#111827] border border-[#1F2937] space-y-3">
             <div className="flex items-center justify-between">
               <h4 className="text-xs font-bold uppercase text-cyan-400">
@@ -1330,7 +1554,6 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
             </div>
           </div>
 
-          {/* Interactive Toy Pictograph Chart (So Many Toys) */}
           <div className="p-4 rounded-xl bg-[#111827] border border-[#1F2937] space-y-3">
             <div className="flex items-center justify-between">
               <h4 className="text-xs font-bold uppercase text-emerald-400">
@@ -1395,121 +1618,311 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
         </div>
       )}
 
-      {/* MODE 5B: ORDINALS (1st-10th), REPEATED ADDITION GROUPS & DATA PICTOGRAPH */}
+      {/* MODE 9: ORDINALS (1st-10th) & REPEATED ADDITION GROUPS */}
       {mode === 'spatial-ordinals-data' && (
-        <div className="space-y-4">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            {/* Ordinal Numbers 1st to 10th Race Track */}
-            <div className="p-4 rounded-xl bg-[#111827] border border-[#1F2937] space-y-3">
-              <div className="flex items-center justify-between">
-                <h4 className="text-xs font-bold uppercase tracking-wider text-cyan-400">
-                  Ordinal Numbers (1st to 10th Position in a Line)
-                </h4>
-                <span className="px-2.5 py-1 rounded bg-cyan-500/20 border border-cyan-400 text-xs font-mono font-bold text-cyan-200">
-                  Selected: Position #{selectedOrdinal}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <div className="p-4 rounded-xl bg-[#111827] border border-[#1F2937] space-y-3">
+            <div className="flex items-center justify-between">
+              <h4 className="text-xs font-bold uppercase tracking-wider text-cyan-400">
+                Ordinal Numbers (1st First to 10th Tenth)
+              </h4>
+              <span className="px-2.5 py-1 rounded bg-cyan-500/20 border border-cyan-400 text-xs font-mono font-bold text-cyan-200">
+                Position #{selectedOrdinal}
+              </span>
+            </div>
+
+            <div className="grid grid-cols-5 gap-2 p-3 rounded-xl bg-[#090D16] border border-slate-800">
+              {[
+                { pos: 1, ord: '1st', word: 'First', icon: '🥇' },
+                { pos: 2, ord: '2nd', word: 'Second', icon: '🥈' },
+                { pos: 3, ord: '3rd', word: 'Third', icon: '🥉' },
+                { pos: 4, ord: '4th', word: 'Fourth', icon: '🏃' },
+                { pos: 5, ord: '5th', word: 'Fifth', icon: '🏃' },
+                { pos: 6, ord: '6th', word: 'Sixth', icon: '🏃' },
+                { pos: 7, ord: '7th', word: 'Seventh', icon: '🏃' },
+                { pos: 8, ord: '8th', word: 'Eighth', icon: '🏃' },
+                { pos: 9, ord: '9th', word: 'Ninth', icon: '🏃' },
+                { pos: 10, ord: '10th', word: 'Tenth', icon: '🏁' },
+              ].map((item) => (
+                <button
+                  key={item.pos}
+                  type="button"
+                  onClick={() => {
+                    setSelectedOrdinal(item.pos);
+                    speak(`${item.ord}, ${item.word} position!`);
+                  }}
+                  className={`p-2 rounded-lg border text-center transition-all ${
+                    selectedOrdinal === item.pos
+                      ? 'bg-cyan-500/25 border-cyan-400 text-white scale-105'
+                      : 'bg-slate-900 border-slate-800 text-slate-400'
+                  }`}
+                >
+                  <div className="text-base">{item.icon}</div>
+                  <div className="text-xs font-mono font-bold text-cyan-300">{item.ord}</div>
+                  <div className="text-[10px]">{item.word}</div>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="p-4 rounded-xl bg-[#111827] border border-[#1F2937] space-y-3">
+            <div className="flex items-center justify-between">
+              <h4 className="text-xs font-bold uppercase tracking-wider text-amber-400">
+                Equal Groups ({groupsCount} groups of {itemsPerGroup})
+              </h4>
+              <div className="flex gap-1.5">
+                <button
+                  type="button"
+                  onClick={() => setGroupsCount((g) => (g >= 6 ? 2 : g + 1))}
+                  className="px-2 py-0.5 rounded bg-slate-800 text-xs font-mono text-amber-300"
+                >
+                  Groups: {groupsCount}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setItemsPerGroup((i) => (i >= 5 ? 2 : i + 1))}
+                  className="px-2 py-0.5 rounded bg-slate-800 text-xs font-mono text-cyan-300"
+                >
+                  Each: {itemsPerGroup}
+                </button>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 p-3 rounded-xl bg-[#090D16] border border-slate-800">
+              {Array.from({ length: groupsCount }).map((_, gIdx) => (
+                <div
+                  key={gIdx}
+                  className="p-2.5 rounded-lg bg-[#111827] border border-amber-500/30 flex flex-col items-center gap-1"
+                >
+                  <span className="text-[10px] font-mono text-slate-400">Group {gIdx + 1}</span>
+                  <div className="flex flex-wrap justify-center gap-1 text-base">
+                    {Array.from({ length: itemsPerGroup }).map((__, sIdx) => (
+                      <span key={sIdx}>⭐</span>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+            <p className="text-xs font-mono text-slate-300 bg-[#090D16] p-2.5 rounded-lg border border-slate-800">
+              {Array.from({ length: groupsCount })
+                .map(() => itemsPerGroup)
+                .join(' + ')}{' '}
+              = <strong className="text-amber-300">{groupsCount * itemsPerGroup}</strong> (
+              {numberToWords(groupsCount * itemsPerGroup)} Stars)
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* MODE 10: CLASS 1 ENGLISH — VOWELS (A, E, I, O, U), PHONICS CVC BUILDER & A/AN */}
+      {mode === 'eng-phonics-vowels' && (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          {/* CVC 3-Letter Vowel Word Builder */}
+          <div className="p-4 rounded-xl bg-[#111827] border border-[#1F2937] space-y-3">
+            <div className="flex items-center justify-between">
+              <h4 className="text-xs font-bold uppercase text-cyan-400">
+                NCERT Mridang & ICSE English: 5 Vowels (A, E, I, O, U) Word Builder
+              </h4>
+              <span className="text-xs font-mono text-emerald-300">
+                Tap a Vowel to Complete the Word!
+              </span>
+            </div>
+
+            <div className="p-4 rounded-xl bg-[#090D16] border border-slate-800 flex flex-col items-center space-y-3">
+              <div className="flex gap-1.5">
+                {CVC_WORDS.map((item, idx) => (
+                  <button
+                    key={item.word}
+                    type="button"
+                    onClick={() => {
+                      setCvcIdx(idx);
+                      setChosenVowel(item.vowel);
+                      speak(`${item.word}! ${item.hint}`);
+                    }}
+                    className={`px-2.5 py-1 rounded-lg text-sm border ${
+                      cvcIdx === idx
+                        ? 'bg-cyan-500/25 border-cyan-400 text-white'
+                        : 'bg-[#111827] border-slate-800'
+                    }`}
+                  >
+                    {item.icon}
+                  </button>
+                ))}
+              </div>
+
+              <div className="text-5xl">{CVC_WORDS[cvcIdx].icon}</div>
+              <p className="text-xs text-slate-300">{CVC_WORDS[cvcIdx].hint}</p>
+
+              {/* 3 Letter Tiles */}
+              <div className="flex items-center gap-2 text-2xl font-mono font-black">
+                <span className="w-12 h-12 rounded-xl bg-[#111827] border border-slate-700 flex items-center justify-center text-white">
+                  {CVC_WORDS[cvcIdx].c1}
+                </span>
+                <span
+                  className={`w-12 h-12 rounded-xl border-2 flex items-center justify-center ${
+                    chosenVowel === CVC_WORDS[cvcIdx].vowel
+                      ? 'bg-emerald-500/30 border-emerald-400 text-emerald-200'
+                      : 'bg-rose-500/30 border-rose-400 text-rose-200'
+                  }`}
+                >
+                  {chosenVowel}
+                </span>
+                <span className="w-12 h-12 rounded-xl bg-[#111827] border border-slate-700 flex items-center justify-center text-white">
+                  {CVC_WORDS[cvcIdx].c2}
                 </span>
               </div>
 
-              <div className="grid grid-cols-5 gap-2 p-3 rounded-xl bg-[#090D16] border border-slate-800">
-                {[
-                  { pos: 1, ord: '1st', word: 'First', icon: '🥇' },
-                  { pos: 2, ord: '2nd', word: 'Second', icon: '🥈' },
-                  { pos: 3, ord: '3rd', word: 'Third', icon: '🥉' },
-                  { pos: 4, ord: '4th', word: 'Fourth', icon: '🏃' },
-                  { pos: 5, ord: '5th', word: 'Fifth', icon: '🏃' },
-                  { pos: 6, ord: '6th', word: 'Sixth', icon: '🏃' },
-                  { pos: 7, ord: '7th', word: 'Seventh', icon: '🏃' },
-                  { pos: 8, ord: '8th', word: 'Eighth', icon: '🏃' },
-                  { pos: 9, ord: '9th', word: 'Ninth', icon: '🏃' },
-                  { pos: 10, ord: '10th', word: 'Tenth', icon: '🏁' },
-                ].map((item) => (
+              {/* 5 Vowel Buttons */}
+              <div className="flex gap-2">
+                {['A', 'E', 'I', 'O', 'U'].map((v) => (
                   <button
-                    key={item.pos}
+                    key={v}
                     type="button"
-                    onClick={() => setSelectedOrdinal(item.pos)}
-                    className={`p-2 rounded-lg border text-center transition-all ${
-                      selectedOrdinal === item.pos
-                        ? 'bg-cyan-500/25 border-cyan-400 text-white scale-105'
-                        : 'bg-slate-900 border-slate-800 text-slate-400'
+                    onClick={() => {
+                      setChosenVowel(v);
+                      if (v === CVC_WORDS[cvcIdx].vowel) {
+                        awardStar(
+                          `Correct! ${CVC_WORDS[cvcIdx].c1}, ${v}, ${CVC_WORDS[cvcIdx].c2} spells ${CVC_WORDS[cvcIdx].word}!`
+                        );
+                      } else {
+                        speak(`Try another vowel for ${CVC_WORDS[cvcIdx].word}`);
+                      }
+                    }}
+                    className={`w-10 h-10 rounded-xl font-mono font-extrabold text-sm border transition-all ${
+                      chosenVowel === v
+                        ? 'bg-cyan-500 text-slate-950 border-white scale-110'
+                        : 'bg-[#111827] text-cyan-300 border-cyan-500/40 hover:bg-cyan-500/20'
                     }`}
                   >
-                    <div className="text-base">{item.icon}</div>
-                    <div className="text-xs font-mono font-bold text-cyan-300">
-                      {item.ord}
-                    </div>
-                    <div className="text-[10px]">{item.word}</div>
+                    {v}
                   </button>
                 ))}
               </div>
             </div>
+          </div>
 
-            {/* Equal Groups & Repeated Addition (How Many Times?) */}
-            <div className="p-4 rounded-xl bg-[#111827] border border-[#1F2937] space-y-3">
-              <div className="flex items-center justify-between">
-                <h4 className="text-xs font-bold uppercase tracking-wider text-amber-400">
-                  Equal Groups (Repeated Addition: {groupsCount} groups of {itemsPerGroup})
-                </h4>
-                <span className="px-2.5 py-1 rounded bg-amber-500/20 border border-amber-400 text-xs font-mono font-bold text-amber-200">
-                  Total = {groupsCount * itemsPerGroup} Stars
-                </span>
-              </div>
+          {/* Use of 'A' vs 'An' Article Explorer */}
+          <div className="p-4 rounded-xl bg-[#111827] border border-[#1F2937] space-y-3">
+            <h4 className="text-xs font-bold uppercase text-amber-400">
+              Use of &ldquo;An&rdquo; (Before Vowel Sounds A, E, I, O, U) vs. &ldquo;A&rdquo;
+            </h4>
 
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 p-3 rounded-xl bg-[#090D16] border border-slate-800">
-                {Array.from({ length: groupsCount }).map((_, gIdx) => (
-                  <div
-                    key={gIdx}
-                    className="p-2.5 rounded-lg bg-[#111827] border border-amber-500/30 flex flex-col items-center gap-1"
+            <div className="p-4 rounded-xl bg-[#090D16] border border-slate-800 space-y-3">
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                {[
+                  { word: 'Apple', article: 'An', icon: '🍎', isVowel: true },
+                  { word: 'Elephant', article: 'An', icon: '🐘', isVowel: true },
+                  { word: 'Ice-Cream', article: 'An', icon: '🍦', isVowel: true },
+                  { word: 'Orange', article: 'An', icon: '🍊', isVowel: true },
+                  { word: 'Umbrella', article: 'An', icon: '☂️', isVowel: true },
+                  { word: 'Ball', article: 'A', icon: '⚽', isVowel: false },
+                ].map((item, idx) => (
+                  <button
+                    key={item.word}
+                    type="button"
+                    onClick={() => {
+                      setArticleWordIdx(idx);
+                      speak(`${item.article} ${item.word}!`);
+                    }}
+                    className={`p-2.5 rounded-xl border text-left transition-all ${
+                      articleWordIdx === idx
+                        ? 'bg-amber-500/20 border-amber-400 text-white'
+                        : 'bg-[#111827] border-slate-800 text-slate-300'
+                    }`}
                   >
-                    <span className="text-[10px] font-mono text-slate-400">
-                      Group {gIdx + 1}
-                    </span>
-                    <div className="flex flex-wrap justify-center gap-1 text-base">
-                      {Array.from({ length: itemsPerGroup }).map((__, sIdx) => (
-                        <span key={sIdx}>⭐</span>
-                      ))}
+                    <div className="text-2xl">{item.icon}</div>
+                    <div className="text-xs font-bold mt-1">
+                      <span className="text-amber-300 underline mr-1">{item.article}</span>
+                      {item.word}
                     </div>
-                  </div>
+                    <div className="text-[10px] text-slate-400">
+                      {item.isVowel ? 'Starts with Vowel' : 'Starts with Consonant'}
+                    </div>
+                  </button>
                 ))}
               </div>
-
-              <p className="text-xs font-mono text-slate-300 bg-[#090D16] p-2.5 rounded-lg border border-slate-800">
-                Repeated Addition:{' '}
-                {Array.from({ length: groupsCount })
-                  .map(() => itemsPerGroup)
-                  .join(' + ')}{' '}
-                = <strong className="text-amber-300">{groupsCount * itemsPerGroup}</strong>{' '}
-                ({groupsCount} × {itemsPerGroup} = {groupsCount * itemsPerGroup})
+              <p className="text-xs text-slate-300">
+                Rule: Use <strong className="text-amber-300">An</strong> before words starting with a vowel sound (<strong>A, E, I, O, U</strong>) and <strong className="text-cyan-300">A</strong> before consonant sounds!
               </p>
             </div>
           </div>
-
-          <ParameterPanel
-            title="Equal Groups & Ordinal Controls"
-            sliders={[
-              {
-                id: 'grp',
-                label: 'Number of Equal Baskets / Groups',
-                value: groupsCount,
-                min: 1,
-                max: 6,
-                step: 1,
-                onChange: setGroupsCount,
-              },
-              {
-                id: 'itm',
-                label: 'Stars Inside Each Group',
-                value: itemsPerGroup,
-                min: 1,
-                max: 5,
-                step: 1,
-                onChange: setItemsPerGroup,
-              },
-            ]}
-          />
         </div>
       )}
 
-      {/* MODE 6: EVS 5 SENSE ORGANS */}
+      {/* MODE 11: CLASS 1 ENGLISH — OPPOSITES, ACTION WORDS (VERBS) & ONE/MANY */}
+      {mode === 'eng-grammar-opposites' && (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          {/* Opposites (Antonyms) Explorer */}
+          <div className="p-4 rounded-xl bg-[#111827] border border-[#1F2937] space-y-3">
+            <h4 className="text-xs font-bold uppercase text-cyan-400">
+              Class 1 English — Opposites (Antonyms) Explorer
+            </h4>
+            <div className="grid grid-cols-2 gap-2 p-3 rounded-xl bg-[#090D16] border border-slate-800">
+              {[
+                { w1: '🔥 Hot Tea', w2: '🧊 Cold Ice', speech: 'The opposite of Hot is Cold!' },
+                { w1: '🐘 Big Elephant', w2: '🐭 Small Mouse', speech: 'The opposite of Big is Small!' },
+                { w1: '☀️ Day', w2: '🌙 Night', speech: 'The opposite of Day is Night!' },
+                { w1: '😊 Happy', w2: '😢 Sad', speech: 'The opposite of Happy is Sad!' },
+                { w1: '🐇 Fast Rabbit', w2: '🐢 Slow Tortoise', speech: 'The opposite of Fast is Slow!' },
+                { w1: '⬆️ Up', w2: '⬇️ Down', speech: 'The opposite of Up is Down!' },
+              ].map((pair, idx) => (
+                <button
+                  key={pair.w1}
+                  type="button"
+                  onClick={() => {
+                    setOppositeIdx(idx);
+                    awardStar(pair.speech);
+                  }}
+                  className={`p-2.5 rounded-xl border text-xs font-bold flex items-center justify-between ${
+                    oppositeIdx === idx
+                      ? 'bg-cyan-500/20 border-cyan-400 text-white'
+                      : 'bg-[#111827] border-slate-800 text-slate-300'
+                  }`}
+                >
+                  <span>{pair.w1}</span>
+                  <span className="text-cyan-400">↔</span>
+                  <span>{pair.w2}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Action Words (Verbs) & One/Many (Singular/Plural) */}
+          <div className="p-4 rounded-xl bg-[#111827] border border-[#1F2937] space-y-3">
+            <h4 className="text-xs font-bold uppercase text-emerald-400">
+              Action Words (Doing Words) & One vs. Many (Plurals)
+            </h4>
+            <div className="p-3.5 rounded-xl bg-[#090D16] border border-slate-800 space-y-3">
+              <div className="grid grid-cols-2 gap-2 text-xs">
+                {[
+                  { verb: '📖 Reading a book', speech: 'Reading is an action word!' },
+                  { verb: '🏃 Running fast', speech: 'Running is an action word!' },
+                  { verb: '🏊 Swimming in water', speech: 'Swimming is an action word!' },
+                  { verb: '🎤 Singing a song', speech: 'Singing is an action word!' },
+                ].map((v) => (
+                  <button
+                    key={v.verb}
+                    type="button"
+                    onClick={() => speak(v.speech, true)}
+                    className="p-2 rounded-lg bg-[#111827] border border-emerald-500/30 text-emerald-200 font-semibold text-left hover:border-emerald-400"
+                  >
+                    {v.verb} 🔊
+                  </button>
+                ))}
+              </div>
+
+              <div className="p-2.5 rounded-lg bg-[#111827] border border-slate-800 text-xs text-slate-300 space-y-1">
+                <div className="font-bold text-amber-300">One and Many (Add -s or -es):</div>
+                <div>• One Cat 🐱 → Many <strong>Cats</strong> 🐱🐱🐱</div>
+                <div>• One Star ⭐ → Many <strong>Stars</strong> ⭐⭐⭐</div>
+                <div>• One Mango 🥭 → Many <strong>Mangoes</strong> 🥭🥭🥭</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* MODE 12: EVS 5 SENSE ORGANS */}
       {mode === 'evs-sense-organs' && (
         <div className="p-4 rounded-xl bg-[#111827] border border-[#1F2937] space-y-4">
           <div className="flex flex-wrap gap-2">
@@ -1517,7 +1930,10 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
               <button
                 key={s.id}
                 type="button"
-                onClick={() => setSelectedSenseIdx(idx)}
+                onClick={() => {
+                  setSelectedSenseIdx(idx);
+                  speak(`${s.organ}. ${s.action}`);
+                }}
                 className={`px-3.5 py-2 rounded-xl text-xs font-bold border transition-all ${
                   selectedSenseIdx === idx
                     ? 'bg-cyan-500 text-slate-950 border-white'
@@ -1564,13 +1980,13 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
         </div>
       )}
 
-      {/* MODE 7: EVS GROWING PLANT & LIVING VS NON-LIVING */}
+      {/* MODE 13: EVS GROWING PLANT & LIVING VS NON-LIVING */}
       {mode === 'evs-plants-living' && (
         <div className="space-y-4">
           <Canvas2DWrapper
             title="Class 1 EVS — Parts of a Plant & What Plants Need to Grow"
             subtitle="Adjust Sunlight and Water to help the seed grow Roots, Stem, Leaves, and Flowers"
-            height={330}
+            height={320}
             onRender={renderPlantGrowth}
           />
           <ParameterPanel
@@ -1601,10 +2017,9 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
         </div>
       )}
 
-      {/* MODE 7B: EVS ANIMALS, HEALTHY FOOD & TRAFFIC SAFETY RULES */}
+      {/* MODE 14: EVS ANIMALS & TRAFFIC SAFETY */}
       {mode === 'evs-animals-food-safety' && (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-          {/* Animal World Classification */}
           <div className="p-4 rounded-xl bg-[#111827] border border-[#1F2937] space-y-3">
             <h4 className="text-xs font-bold uppercase text-emerald-400">
               Class 1 EVS — Animals Around Us (Wild, Domestic, Pet & Water)
@@ -1634,7 +2049,7 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
             </div>
 
             <div className="p-4 rounded-xl bg-[#090D16] border border-slate-800 space-y-2">
-              <div className="text-3xl flex justify-around py-2">
+              <div className="text-2xl flex justify-around py-2">
                 {animalCategory === 'wild' && (
                   <>
                     <span>🦁 Lion</span>
@@ -1666,26 +2081,28 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
               </div>
               <p className="text-xs text-slate-300">
                 {animalCategory === 'wild'
-                  ? 'Wild animals live naturally in forests and jungles. The Lion is called the King of the Jungle (lives in a Den).'
+                  ? 'Wild animals live in forests and jungles. The Lion lives in a Den.'
                   : animalCategory === 'domestic'
-                  ? 'Domestic farm animals help us: Cows give milk (live in a Shed), Sheep give wool, Horses pull carts (live in a Stable).'
+                  ? 'Domestic farm animals help us: Cows give milk (Shed), Sheep give wool, Horses pull carts (Stable).'
                   : animalCategory === 'pet'
-                  ? 'Pet animals live with us at home as our friends. A dog guards our house and lives in a Kennel.'
-                  : 'Water (aquatic) animals live in rivers, lakes, and oceans and breathe in water using gills or blowholes.'}
+                  ? 'Pet animals live with us at home as our friends. A dog guards our house (Kennel).'
+                  : 'Water (aquatic) animals live in rivers, lakes, and oceans.'}
               </p>
             </div>
           </div>
 
-          {/* Interactive Traffic Signal & Safety Habits */}
           <div className="p-4 rounded-xl bg-[#111827] border border-[#1F2937] space-y-3">
             <h4 className="text-xs font-bold uppercase text-amber-400">
-              Class 1 EVS — Road Safety & Traffic Signal Rules 🚦
+              Class 1 EVS — Tap the Traffic Signal Lights! 🚦
             </h4>
             <div className="flex items-center justify-around p-4 rounded-xl bg-[#090D16] border border-slate-800">
               <div className="p-3 rounded-2xl bg-slate-900 border-2 border-slate-700 flex flex-col gap-2.5">
                 <button
                   type="button"
-                  onClick={() => setTrafficLight('red')}
+                  onClick={() => {
+                    setTrafficLight('red');
+                    speak('Red light says STOP!');
+                  }}
                   className={`w-10 h-10 rounded-full transition-all ${
                     trafficLight === 'red'
                       ? 'bg-rose-500 shadow-lg shadow-rose-500/60 scale-110'
@@ -1694,7 +2111,10 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
                 />
                 <button
                   type="button"
-                  onClick={() => setTrafficLight('yellow')}
+                  onClick={() => {
+                    setTrafficLight('yellow');
+                    speak('Yellow light says WAIT and get ready!');
+                  }}
                   className={`w-10 h-10 rounded-full transition-all ${
                     trafficLight === 'yellow'
                       ? 'bg-amber-400 shadow-lg shadow-amber-400/60 scale-110'
@@ -1703,7 +2123,10 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
                 />
                 <button
                   type="button"
-                  onClick={() => setTrafficLight('green')}
+                  onClick={() => {
+                    setTrafficLight('green');
+                    speak('Green light says GO safely!');
+                  }}
                   className={`w-10 h-10 rounded-full transition-all ${
                     trafficLight === 'green'
                       ? 'bg-emerald-500 shadow-lg shadow-emerald-500/60 scale-110'
@@ -1717,12 +2140,12 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
                   {trafficLight === 'red'
                     ? '🔴 RED LIGHT SAYS: STOP!'
                     : trafficLight === 'yellow'
-                    ? '🟡 YELLOW LIGHT SAYS: WAIT / GET READY!'
-                    : '🟢 GREEN LIGHT SAYS: GO SAFELY!'}
+                    ? '🟡 YELLOW LIGHT SAYS: WAIT!'
+                    : '🟢 GREEN LIGHT SAYS: GO!'}
                 </div>
                 <p className="text-xs text-slate-300 leading-relaxed">
                   Always cross the road at the black-and-white{' '}
-                  <strong className="text-cyan-300">Zebra Crossing</strong> with an elder, and never play on the road!
+                  <strong className="text-cyan-300">Zebra Crossing</strong> with an elder!
                 </p>
               </div>
             </div>
@@ -1730,7 +2153,7 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
         </div>
       )}
 
-      {/* MODE 8: EVS SEASONS, WEATHER & DAY/NIGHT SKY */}
+      {/* MODE 15: EVS SEASONS, WEATHER & DAY/NIGHT SKY */}
       {mode === 'evs-seasons-sky' && (
         <div className="space-y-4">
           <div className="flex flex-wrap items-center justify-between gap-2 p-2.5 rounded-xl bg-[#111827] border border-[#1F2937]">
@@ -1739,7 +2162,10 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
                 <button
                   key={s}
                   type="button"
-                  onClick={() => setSeason(s)}
+                  onClick={() => {
+                    setSeason(s);
+                    speak(`${s} season`);
+                  }}
                   className={`px-3 py-1.5 rounded-lg text-xs font-bold uppercase ${
                     season === s
                       ? 'bg-cyan-500 text-slate-950'
@@ -1762,7 +2188,7 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
           <Canvas2DWrapper
             title="Class 1 EVS — Seasons, Clothes We Wear & The Sky Above Us"
             subtitle="Observe Summer, Monsoon Rain, Winter Snow, Spring Flowers, and Day vs. Night Sky"
-            height={330}
+            height={320}
             onRender={renderSeasonsAndSky}
           />
         </div>
