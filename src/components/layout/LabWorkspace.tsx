@@ -39,6 +39,7 @@ import {
   ChevronRight,
   Volume2,
   Sparkles,
+  Printer,
 } from 'lucide-react';
 
 interface LabWorkspaceProps {
@@ -383,9 +384,19 @@ export const LabWorkspace: React.FC<LabWorkspaceProps> = ({
                     Real-world home & classroom activities aligned with NEP 2020 (CBSE NCERT) & CISCE (ICSE)
                   </p>
                 </div>
-                <span className="px-2.5 py-1 rounded-lg bg-emerald-500/15 text-emerald-300 text-xs font-mono font-bold border border-emerald-500/30">
-                  Age 5–10 Experiential Pedagogy
-                </span>
+                <div className="flex flex-wrap items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => window.print()}
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs font-extrabold shadow-sm transition-all"
+                  >
+                    <Printer className="w-3.5 h-3.5" />
+                    🖨️ Print Practice Worksheet
+                  </button>
+                  <span className="px-2.5 py-1 rounded-lg bg-emerald-500/15 text-emerald-300 text-xs font-mono font-bold border border-emerald-500/30">
+                    Age 5–10 Experiential Pedagogy
+                  </span>
+                </div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
@@ -431,6 +442,66 @@ export const LabWorkspace: React.FC<LabWorkspaceProps> = ({
                     </button>
                   </div>
                 ))}
+              </div>
+
+              {/* Printable Class 1–5 Offline Practice Worksheet Card */}
+              <div className="p-4 rounded-2xl bg-white text-slate-900 border-2 border-amber-400 shadow-md space-y-3 print:border-black">
+                <div className="flex flex-wrap items-center justify-between gap-2 border-b-2 border-slate-200 pb-2">
+                  <div>
+                    <div className="text-[10px] font-mono font-bold uppercase text-slate-500">
+                      OmniLearn Labs • Printable Homework & Classwork Sheet ({chapter.streamCategory} • {chapter.subject})
+                    </div>
+                    <h4 className="text-sm font-black text-slate-900">
+                      📝 {chapter.title} ({chapter.chapterNumber})
+                    </h4>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => window.print()}
+                    className="px-3 py-1 rounded-lg bg-slate-900 text-amber-300 text-xs font-extrabold print:hidden"
+                  >
+                    🖨️ Print Sheet Now
+                  </button>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs font-bold text-slate-700 border-b border-dashed border-slate-300 pb-2">
+                  <div>Student Name: ______________________</div>
+                  <div>Class & Section: _______</div>
+                  <div>Date: ____ / ____ / 202__</div>
+                </div>
+
+                {chapter.keyFormulas[0] && (
+                  <div className="p-2.5 rounded-xl bg-amber-50 border border-amber-300 text-xs">
+                    <span className="font-extrabold text-amber-900">🌟 Golden Rule: </span>
+                    <span className="font-mono font-bold text-slate-900">{chapter.keyFormulas[0].latex}</span>
+                    <div className="text-[11px] text-slate-600 mt-0.5">{chapter.keyFormulas[0].description}</div>
+                  </div>
+                )}
+
+                <div className="space-y-2 text-xs">
+                  <div className="font-extrabold uppercase text-slate-700">
+                    Part A: Tick (✓) and Practice Questions
+                  </div>
+                  {chapter.quiz.map((q, qIdx) => (
+                    <div key={q.id} className="p-2 rounded-lg bg-slate-50 border border-slate-200 space-y-1">
+                      <div className="font-bold text-slate-900">
+                        Q{qIdx + 1}. {q.question}
+                      </div>
+                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 text-[11px] text-slate-700">
+                        {q.options.map((opt, oIdx) => (
+                          <div key={oIdx} className="flex items-center gap-1">
+                            <span className="inline-block w-3.5 h-3.5 border border-slate-400 rounded-sm shrink-0" />
+                            <span>{opt}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="p-3 rounded-xl border-2 border-dashed border-slate-300 text-xs text-slate-500 h-20 flex items-center justify-center">
+                  ✏️ Draw, Color, or Write 3 Examples from Today&apos;s Lesson Here!
+                </div>
               </div>
             </div>
           )}

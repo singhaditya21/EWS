@@ -26,6 +26,8 @@ interface NavbarProps {
   chapters: CurriculumChapter[];
   onSelectChapter: (chapter: CurriculumChapter) => void;
   onToggleMobileSidebar: () => void;
+  kidFocusMode?: boolean;
+  onToggleKidFocusMode?: () => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -38,6 +40,8 @@ export const Navbar: React.FC<NavbarProps> = ({
   chapters,
   onSelectChapter,
   onToggleMobileSidebar,
+  kidFocusMode = false,
+  onToggleKidFocusMode,
 }) => {
   const [searchOpen, setSearchOpen] = useState(false);
   const [query, setQuery] = useState('');
@@ -100,7 +104,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             </div>
           </div>
 
-          {/* Primary 3-Tier Track Switcher */}
+          {/* Primary 3-Tier Track Switcher (Simplified in Kid Focus Mode) */}
           <div className="flex items-center gap-1 bg-[#111827] p-1 rounded-xl border border-[#1F2937]">
             <button
               type="button"
@@ -112,38 +116,57 @@ export const Navbar: React.FC<NavbarProps> = ({
               }`}
             >
               <GraduationCap className="w-4 h-4" />
-              <span>School (Class 1–12)</span>
+              <span>{kidFocusMode ? '🎒 Primary Kids School (Class 1–5)' : 'School (Class 1–12)'}</span>
             </button>
 
-            <button
-              type="button"
-              onClick={() => onSelectTrack('engineering')}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-                activeTrack === 'engineering'
-                  ? 'bg-amber-500 text-slate-950 shadow-sm shadow-amber-500/30'
-                  : 'text-slate-300 hover:text-white'
-              }`}
-            >
-              <Cpu className="w-4 h-4" />
-              <span>Engineering</span>
-            </button>
+            {!kidFocusMode && (
+              <>
+                <button
+                  type="button"
+                  onClick={() => onSelectTrack('engineering')}
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                    activeTrack === 'engineering'
+                      ? 'bg-amber-500 text-slate-950 shadow-sm shadow-amber-500/30'
+                      : 'text-slate-300 hover:text-white'
+                  }`}
+                >
+                  <Cpu className="w-4 h-4" />
+                  <span>Engineering</span>
+                </button>
 
-            <button
-              type="button"
-              onClick={() => onSelectTrack('medical')}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-                activeTrack === 'medical'
-                  ? 'bg-emerald-500 text-slate-950 shadow-sm shadow-emerald-500/30'
-                  : 'text-slate-300 hover:text-white'
-              }`}
-            >
-              <HeartPulse className="w-4 h-4" />
-              <span>Medical</span>
-            </button>
+                <button
+                  type="button"
+                  onClick={() => onSelectTrack('medical')}
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                    activeTrack === 'medical'
+                      ? 'bg-emerald-500 text-slate-950 shadow-sm shadow-emerald-500/30'
+                      : 'text-slate-300 hover:text-white'
+                  }`}
+                >
+                  <HeartPulse className="w-4 h-4" />
+                  <span>Medical</span>
+                </button>
+              </>
+            )}
           </div>
 
-          {/* Right Controls: Dual-Board Switcher (CBSE vs ICSE) + Cmd+K Search */}
+          {/* Right Controls: Kid Focus Mode + Dual-Board Switcher (CBSE vs ICSE) + Cmd+K Search */}
           <div className="flex items-center gap-2">
+            {activeTrack === 'school' && onToggleKidFocusMode && (
+              <button
+                type="button"
+                onClick={onToggleKidFocusMode}
+                title="Lock navigation to Primary Class 1–5 for young children"
+                className={`px-2.5 py-1.5 rounded-xl text-xs font-extrabold border transition-all ${
+                  kidFocusMode
+                    ? 'bg-amber-400 text-slate-950 border-white shadow-sm'
+                    : 'bg-[#111827] text-amber-300 border-amber-500/40 hover:border-amber-400'
+                }`}
+              >
+                {kidFocusMode ? '🌞 Kid Mode: ON' : '🧒 Kid Mode'}
+              </button>
+            )}
+
             {activeTrack === 'school' && (
               <div className="hidden sm:flex items-center bg-[#111827] p-1 rounded-xl border border-[#1F2937]">
                 <button
@@ -191,18 +214,20 @@ export const Navbar: React.FC<NavbarProps> = ({
             <div className="max-w-[1600px] mx-auto flex items-center justify-between gap-2 overflow-x-auto no-scrollbar">
               <div className="flex items-center gap-1 shrink-0">
                 <BookOpen className="w-3.5 h-3.5 text-cyan-400 mr-1" />
-                <button
-                  type="button"
-                  onClick={() => onSelectClassLevel('ALL')}
-                  className={`px-2.5 py-0.5 rounded-md text-[11px] font-mono font-semibold transition-all ${
-                    activeClassLevel === 'ALL'
-                      ? 'bg-cyan-500 text-slate-950'
-                      : 'bg-[#111827] text-slate-400 hover:text-white border border-slate-800'
-                  }`}
-                >
-                  All Classes (1–12)
-                </button>
-                {Array.from({ length: 12 }, (_, i) => i + 1).map((cls) => (
+                {!kidFocusMode && (
+                  <button
+                    type="button"
+                    onClick={() => onSelectClassLevel('ALL')}
+                    className={`px-2.5 py-0.5 rounded-md text-[11px] font-mono font-semibold transition-all ${
+                      activeClassLevel === 'ALL'
+                        ? 'bg-cyan-500 text-slate-950'
+                        : 'bg-[#111827] text-slate-400 hover:text-white border border-slate-800'
+                    }`}
+                  >
+                    All Classes (1–12)
+                  </button>
+                )}
+                {Array.from({ length: kidFocusMode ? 5 : 12 }, (_, i) => i + 1).map((cls) => (
                   <button
                     key={cls}
                     type="button"

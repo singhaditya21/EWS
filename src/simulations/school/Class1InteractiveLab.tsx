@@ -32,6 +32,9 @@ import {
   Truck,
   Award,
   X,
+  Mic,
+  Gamepad2,
+  Home,
 } from 'lucide-react';
 
 export type Class1LabMode =
@@ -44,9 +47,11 @@ export type Class1LabMode =
   | 'clock-money'
   | 'patterns-pictograph'
   | 'spatial-ordinals-data'
+  | 'math-vertical-staircase'
   | 'eng-phonics-vowels'
   | 'eng-grammar-opposites'
   | 'eng-mridang-stories'
+  | 'eng-nouns-this-that'
   | 'hindi-varnamala'
   | 'computer-smart-machine'
   | 'evs-sense-organs'
@@ -55,6 +60,7 @@ export type Class1LabMode =
   | 'evs-seasons-sky'
   | 'evs-india-manners'
   | 'evs-helpers-transport'
+  | 'evs-houses-food'
   | 'arts-colors-music';
 
 type Class1SubjectGroup = 'math' | 'english' | 'hindi' | 'evs' | 'computer' | 'arts';
@@ -74,9 +80,11 @@ const MODE_CATALOG: {
   { id: 'clock-money', subject: 'math', label: '7. Clock, Calendar & ₹ Shop', icon: Clock },
   { id: 'patterns-pictograph', subject: 'math', label: '8. Patterns & Pictograph', icon: Shapes },
   { id: 'spatial-ordinals-data', subject: 'math', label: '9. Ordinals & Equal Groups', icon: Sparkles },
+  { id: 'math-vertical-staircase', subject: 'math', label: '10. Vertical T|O Sums & Stairs 🪜', icon: Calculator },
   { id: 'eng-phonics-vowels', subject: 'english', label: '1. Vowels (A,E,I,O,U) & CVC', icon: BookOpen },
   { id: 'eng-grammar-opposites', subject: 'english', label: '2. Opposites, Plurals & Verbs', icon: BookOpen },
   { id: 'eng-mridang-stories', subject: 'english', label: '3. Mridang Poems & Stories 🎭', icon: Sparkles },
+  { id: 'eng-nouns-this-that', subject: 'english', label: '4. Nouns (4 Baskets) & This/That 🧺', icon: BookOpen },
   { id: 'hindi-varnamala', subject: 'hindi', label: '1. सारंगी: वर्णमाला, मात्रा, गिनती व कविता', icon: Languages },
   { id: 'evs-sense-organs', subject: 'evs', label: '1. My Body & 5 Sense Organs', icon: Eye },
   { id: 'evs-plants-living', subject: 'evs', label: '2. Growing Plant & Living Things', icon: Sprout },
@@ -84,8 +92,119 @@ const MODE_CATALOG: {
   { id: 'evs-seasons-sky', subject: 'evs', label: '4. Seasons & Day/Night Sky', icon: Sun },
   { id: 'evs-india-manners', subject: 'evs', label: '5. Our India 🇮🇳 & Good Manners', icon: Flag },
   { id: 'evs-helpers-transport', subject: 'evs', label: '6. Helpers, Home & Transport 🚒', icon: Truck },
+  { id: 'evs-houses-food', subject: 'evs', label: '7. Houses (Kutcha/Pucca) & Food 🏡🍎', icon: Home },
   { id: 'computer-smart-machine', subject: 'computer', label: '1. Computer, Keyboard & Mouse 🖥️', icon: Monitor },
   { id: 'arts-colors-music', subject: 'arts', label: '1. Color Mixing & Xylophone 🎵', icon: Palette },
+];
+
+const NOUN_SORT_ITEMS: {
+  word: string;
+  icon: string;
+  category: 'Person' | 'Place' | 'Animal' | 'Thing';
+  hint: string;
+}[] = [
+  { word: 'Teacher', icon: '👩‍🏫', category: 'Person', hint: 'A Teacher is a PERSON who teaches us!' },
+  { word: 'School', icon: '🏫', category: 'Place', hint: 'A School is a PLACE where we go to study!' },
+  { word: 'Tiger', icon: '🐯', category: 'Animal', hint: 'A Tiger is an ANIMAL that lives in the forest!' },
+  { word: 'Pencil', icon: '✏️', category: 'Thing', hint: 'A Pencil is a non-living THING we write with!' },
+  { word: 'Doctor', icon: '👩‍⚕️', category: 'Person', hint: 'A Doctor is a PERSON who treats sick people!' },
+  { word: 'Park', icon: '🏞️', category: 'Place', hint: 'A Park is a PLACE where children play!' },
+  { word: 'Elephant', icon: '🐘', category: 'Animal', hint: 'An Elephant is a big ANIMAL with a trunk!' },
+  { word: 'Ball', icon: '⚽', category: 'Thing', hint: 'A Ball is a THING we kick and play with!' },
+];
+
+const HOUSE_TYPES = [
+  {
+    id: 'pucca',
+    name: 'Pucca House (Strong Brick House) 🏢',
+    materials: 'Bricks, Cement, Steel, Wood & Glass',
+    where: 'Towns and Cities',
+    fact: 'A Pucca house is very strong and permanent. It protects us from heavy rain, heat, and storms!',
+  },
+  {
+    id: 'kutcha',
+    name: 'Kutcha House (Mud & Straw Hut) 🛖',
+    materials: 'Mud, Bamboo, Dry Leaves & Straw Thatch',
+    where: 'Villages',
+    fact: 'A Kutcha hut stays cool in summer, but it is not as strong as a brick Pucca house.',
+  },
+  {
+    id: 'igloo',
+    name: 'Igloo (Snow House) ❄️',
+    materials: 'Blocks of Hard White Snow & Ice',
+    where: 'Very Cold Polar Lands',
+    fact: 'An Igloo has a round dome shape that traps warmth inside even when it is freezing outside!',
+  },
+  {
+    id: 'houseboat',
+    name: 'Houseboat (Floating House) 🛶',
+    materials: 'Carved Wood Floating on Water',
+    where: 'Dal Lake (Kashmir) & Backwaters (Kerala)',
+    fact: 'A Houseboat is a special wooden house that floats on calm lakes and rivers!',
+  },
+  {
+    id: 'tent',
+    name: 'Tent (Temporary Cloth House) ⛺',
+    materials: 'Waterproof Canvas Cloth, Ropes & Poles',
+    where: 'Camps, Deserts & Mountains',
+    fact: 'A Tent can be folded and carried in a backpack by campers, soldiers, and mountaineers!',
+  },
+];
+
+const HEALTHY_VS_JUNK_FOODS = [
+  { name: 'Fresh Milk 🥛', type: 'healthy', benefit: 'Makes our bones and teeth strong!' },
+  { name: 'Apple & Banana 🍎🍌', type: 'healthy', benefit: 'Protective foods full of vitamins!' },
+  { name: 'Dal, Rice & Roti 🍛', type: 'healthy', benefit: 'Gives us energy to study and play!' },
+  { name: 'Green Spinach 🥬', type: 'healthy', benefit: 'Keeps our eyes and blood healthy!' },
+  { name: 'Fizzy Soda Can 🥤', type: 'junk', benefit: 'Too much sugar—bad for teeth! Drink clean water or milk instead.' },
+  { name: 'Oily Chips Packet 🍟', type: 'junk', benefit: 'Salty and fried—eat only rarely, not every day!' },
+];
+
+const ARCADE_MISSIONS = [
+  {
+    prompt: '🔊 Number Bond Mission: Which number joins with 6 to make 10? (6 + ? = 10)',
+    options: ['2', '4 🎯', '7', '9'],
+    correct: 1,
+    rewardMsg: 'Super! 6 plus 4 makes 10!',
+  },
+  {
+    prompt: '🔊 English Noun Mission: Is “SCHOOL 🏫” a Person, Place, Animal, or Thing?',
+    options: ['Person 👧', 'Place 🏫', 'Animal 🐶', 'Thing ⚽'],
+    correct: 1,
+    rewardMsg: 'Awesome! A School is a PLACE where we learn!',
+  },
+  {
+    prompt: '🔊 Hindi Varnamala Mission: “आ से ___” — Which sweet yellow fruit starts with आ?',
+    options: ['अनार 🍎', 'आम (Mango) 🥭', 'उल्लू 🦉', 'कमल 🪷'],
+    correct: 1,
+    rewardMsg: 'शाबाश! आ से आम (Mango)!',
+  },
+  {
+    prompt: '🔊 EVS Animal Baby Mission: What is the baby (young one) of a DOG 🐶 called?',
+    options: ['Kitten 🐱', 'Puppy 🐶', 'Calf 🐄', 'Cub 🦁'],
+    correct: 1,
+    rewardMsg: 'Wonderful! A baby dog is called a Puppy!',
+  },
+  {
+    prompt: '🔊 Computer Whiz Mission: Which key is the LONGEST key on a computer keyboard?',
+    options: ['Enter Key ↵', 'Spacebar ━━━', 'Letter A', 'Number 1'],
+    correct: 1,
+    rewardMsg: 'Spot on! The Spacebar is the longest key on the keyboard!',
+  },
+  {
+    prompt: '🔊 Color Mixing Mission: What Secondary Color do you get when you mix BLUE 🔵 + YELLOW 🟡?',
+    options: ['Orange 🟠', 'Green 🟢', 'Purple 🟣', 'Red 🔴'],
+    correct: 1,
+    rewardMsg: 'Brilliant! Blue and Yellow mix to make Green!',
+  },
+];
+
+const SPEAK_PRACTICE_WORDS = [
+  { word: 'Good Morning', icon: '🌅', hint: 'Say: “Good Morning”' },
+  { word: 'Apple', icon: '🍎', hint: 'Say: “Apple”' },
+  { word: 'Thank You', icon: '🙏', hint: 'Say: “Thank You”' },
+  { word: 'Peacock', icon: '🦚', hint: 'Say: “Peacock”' },
+  { word: 'Twenty', icon: '2️⃣0️⃣', hint: 'Say: “Twenty”' },
 ];
 
 const DAYS_OF_WEEK = [
@@ -584,6 +703,78 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
   const [stickerModalOpen, setStickerModalOpen] = useState(false);
   const [childName, setChildName] = useState('Little Scientist');
 
+  // Vertical T|O Sums, Staircase Ordering, Noun 4-Basket Sorter, Houses/Food, Arcade & Mic states
+  const [vertA, setVertA] = useState(24);
+  const [vertB, setVertB] = useState(15);
+  const [vertOp, setVertOp] = useState<'add' | 'sub'>('add');
+  const [stairOrder, setStairOrder] = useState<'asc' | 'desc'>('asc');
+  const [evenOddTestNum, setEvenOddTestNum] = useState(8);
+
+  const [activeNounIdx, setActiveNounIdx] = useState(0);
+  const [nounFeedback, setNounFeedback] = useState<string | null>(null);
+  const [pointingMode, setPointingMode] = useState<'this' | 'that' | 'these' | 'those'>('this');
+
+  const [selectedHouseIdx, setSelectedHouseIdx] = useState(0);
+  const [selectedRoom, setSelectedRoom] = useState<'kitchen' | 'bedroom' | 'bathroom' | 'living'>('kitchen');
+
+  const [arcadeOpen, setArcadeOpen] = useState(false);
+  const [arcadeMissionIdx, setArcadeMissionIdx] = useState(0);
+  const [arcadeStreak, setArcadeStreak] = useState(0);
+
+  const [micModalOpen, setMicModalOpen] = useState(false);
+  const [speakWordIdx, setSpeakWordIdx] = useState(0);
+  const [isListening, setIsListening] = useState(false);
+  const [spokenTranscript, setSpokenTranscript] = useState<string>('');
+
+  const handleStartMicPractice = () => {
+    const target = SPEAK_PRACTICE_WORDS[speakWordIdx].word;
+    const SpeechRec =
+      (window as unknown as { SpeechRecognition?: unknown; webkitSpeechRecognition?: unknown })
+        .SpeechRecognition ||
+      (window as unknown as { webkitSpeechRecognition?: unknown }).webkitSpeechRecognition;
+
+    if (!SpeechRec) {
+      setIsListening(true);
+      setTimeout(() => {
+        setIsListening(false);
+        setSpokenTranscript(target);
+        awardStar(`Great voice practice saying "${target}"!`);
+      }, 1200);
+      return;
+    }
+
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const rec = new (SpeechRec as any)();
+      rec.lang = 'en-IN';
+      rec.interimResults = false;
+      rec.maxAlternatives = 1;
+      setIsListening(true);
+      setSpokenTranscript('Listening... Speak now! 🎙️');
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      rec.onresult = (event: any) => {
+        const transcript = event.results?.[0]?.[0]?.transcript || target;
+        setSpokenTranscript(transcript);
+        setIsListening(false);
+        awardStar(`Awesome! You spoke "${transcript}" clearly!`);
+      };
+      rec.onerror = () => {
+        setIsListening(false);
+        setSpokenTranscript(target);
+        awardStar(`Great effort practicing "${target}"!`);
+      };
+      rec.onend = () => {
+        setIsListening(false);
+      };
+      rec.start();
+    } catch {
+      setIsListening(false);
+      setSpokenTranscript(target);
+      awardStar(`Great voice practice saying "${target}"!`);
+    }
+  };
+
   const currentSubjectGroup: Class1SubjectGroup =
     MODE_CATALOG.find((m) => m.id === mode)?.subject || 'math';
 
@@ -928,13 +1119,52 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
           <button
             type="button"
             onClick={() => {
+              playPop();
+              setArcadeOpen((o) => !o);
+              setMicModalOpen(false);
+              setStickerModalOpen(false);
+              speak(ARCADE_MISSIONS[arcadeMissionIdx].prompt, true);
+            }}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-extrabold transition-all shadow-sm ${
+              arcadeOpen
+                ? 'bg-emerald-400 text-slate-950 ring-2 ring-white'
+                : 'bg-emerald-500/25 border border-emerald-400 text-emerald-200 hover:bg-emerald-500/35'
+            }`}
+          >
+            <Gamepad2 className="w-3.5 h-3.5" />
+            🎯 Challenge Arcade {arcadeStreak > 0 ? `(🔥${arcadeStreak})` : ''}
+          </button>
+
+          <button
+            type="button"
+            onClick={() => {
+              playPop();
+              setMicModalOpen((o) => !o);
+              setArcadeOpen(false);
+              setStickerModalOpen(false);
+            }}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-extrabold transition-all shadow-sm ${
+              micModalOpen
+                ? 'bg-rose-500 text-white ring-2 ring-white'
+                : 'bg-rose-500/25 border border-rose-400 text-rose-200 hover:bg-rose-500/35'
+            }`}
+          >
+            <Mic className="w-3.5 h-3.5" />
+            🎤 Speak to Mic
+          </button>
+
+          <button
+            type="button"
+            onClick={() => {
               playFanfare();
-              setStickerModalOpen(true);
+              setStickerModalOpen((o) => !o);
+              setArcadeOpen(false);
+              setMicModalOpen(false);
             }}
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-400 text-slate-950 text-xs font-extrabold hover:bg-amber-300 transition-colors shadow-sm"
           >
             <Award className="w-3.5 h-3.5" />
-            🏅 Sticker Book & Certificate
+            🏅 Sticker Book
           </button>
 
           <button
@@ -1064,16 +1294,162 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
         </div>
       )}
 
+      {/* Voice-Prompted Challenge Arcade Modal */}
+      {arcadeOpen && (
+        <div className="p-4 rounded-2xl bg-gradient-to-r from-emerald-950/70 via-[#111827] to-cyan-950/70 border-2 border-emerald-400/70 shadow-xl space-y-3">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <div className="flex items-center gap-2">
+              <Gamepad2 className="w-5 h-5 text-emerald-400" />
+              <span className="text-sm font-black text-white">
+                🎯 Class 1 Voice-Prompted Treasure Hunt Arcade
+              </span>
+              <span className="px-2.5 py-0.5 rounded-full bg-amber-500/20 border border-amber-400 text-xs font-mono font-bold text-amber-300">
+                🔥 Streak: {arcadeStreak}
+              </span>
+            </div>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => speak(ARCADE_MISSIONS[arcadeMissionIdx].prompt, true)}
+                className="px-2.5 py-1 rounded-lg bg-cyan-500 text-slate-950 text-xs font-extrabold"
+              >
+                🔊 Repeat Question
+              </button>
+              <button
+                type="button"
+                onClick={() => setArcadeOpen(false)}
+                className="p-1 rounded-lg bg-slate-800 text-slate-300 hover:text-white"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+
+          <div className="p-3.5 rounded-xl bg-[#090D16] border border-emerald-500/40 space-y-3">
+            <p className="text-sm font-bold text-emerald-200">
+              {ARCADE_MISSIONS[arcadeMissionIdx].prompt}
+            </p>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+              {ARCADE_MISSIONS[arcadeMissionIdx].options.map((opt, idx) => (
+                <button
+                  key={opt}
+                  type="button"
+                  onClick={() => {
+                    if (idx === ARCADE_MISSIONS[arcadeMissionIdx].correct) {
+                      playFanfare();
+                      setArcadeStreak((s) => s + 1);
+                      awardStar(ARCADE_MISSIONS[arcadeMissionIdx].rewardMsg);
+                      const nextIdx = (arcadeMissionIdx + 1) % ARCADE_MISSIONS.length;
+                      setArcadeMissionIdx(nextIdx);
+                    } else {
+                      speak('Good try! Listen carefully and tap another option!', true);
+                    }
+                  }}
+                  className="p-3 rounded-xl bg-[#111827] hover:bg-emerald-500/25 border-2 border-slate-700 hover:border-emerald-400 text-sm font-extrabold text-white transition-all"
+                >
+                  {opt}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Microphone "Speak to Learn" Oral Pronunciation Check */}
+      {micModalOpen && (
+        <div className="p-4 rounded-2xl bg-gradient-to-r from-rose-950/70 via-[#111827] to-amber-950/70 border-2 border-rose-400/70 shadow-xl space-y-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Mic className="w-5 h-5 text-rose-400" />
+              <div>
+                <h4 className="text-sm font-black text-white">
+                  🎤 Speak-to-Learn Oral Reading & Pronunciation Studio
+                </h4>
+                <p className="text-xs text-rose-200">
+                  Pick a word, listen to how it sounds, and tap the Microphone to say it aloud!
+                </p>
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={() => setMicModalOpen(false)}
+              className="p-1 rounded-lg bg-slate-800 text-slate-300 hover:text-white"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+
+          <div className="flex flex-wrap gap-1.5">
+            {SPEAK_PRACTICE_WORDS.map((item, idx) => (
+              <button
+                key={item.word}
+                type="button"
+                onClick={() => {
+                  setSpeakWordIdx(idx);
+                  setSpokenTranscript('');
+                  speak(item.word, true);
+                }}
+                className={`px-3 py-1.5 rounded-xl text-xs font-extrabold border ${
+                  speakWordIdx === idx
+                    ? 'bg-rose-500 text-white border-white'
+                    : 'bg-[#090D16] text-slate-300 border-slate-800'
+                }`}
+              >
+                {item.icon} {item.word}
+              </button>
+            ))}
+          </div>
+
+          <div className="p-4 rounded-xl bg-[#090D16] border border-rose-500/40 flex flex-wrap items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <span className="text-4xl">{SPEAK_PRACTICE_WORDS[speakWordIdx].icon}</span>
+              <div>
+                <div className="text-base font-black text-white">
+                  Target Word: &ldquo;{SPEAK_PRACTICE_WORDS[speakWordIdx].word}&rdquo;
+                </div>
+                <div className="text-xs text-amber-300 font-mono">
+                  {spokenTranscript
+                    ? `You Spoke: "${spokenTranscript}" 🌟`
+                    : 'Tap "🎤 Speak Now" and say the word aloud!'}
+                </div>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => speak(SPEAK_PRACTICE_WORDS[speakWordIdx].word, true)}
+                className="px-3 py-2 rounded-xl bg-slate-800 text-cyan-300 text-xs font-bold border border-slate-700"
+              >
+                🔊 Hear Word
+              </button>
+              <button
+                type="button"
+                onClick={handleStartMicPractice}
+                className={`px-4 py-2 rounded-xl text-xs font-extrabold flex items-center gap-1.5 ${
+                  isListening
+                    ? 'bg-amber-400 text-slate-950 animate-pulse'
+                    : 'bg-rose-500 text-white hover:bg-rose-400'
+                }`}
+              >
+                <Mic className="w-3.5 h-3.5" />
+                {isListening ? 'Listening...' : '🎤 Speak Now (+1 ⭐)'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Categorized Subject & Activity Selector Bar (Decluttered for 6-Year-Olds!) */}
       <div className="p-3 rounded-2xl bg-[#111827] border border-[#1F2937] space-y-2.5">
         <div className="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-slate-800/80">
           <div className="flex flex-wrap items-center gap-1.5">
             {(
               [
-                { id: 'math', label: '📐 Math (9)', color: 'bg-cyan-500 text-slate-950' },
-                { id: 'english', label: '📖 English / Mridang (3)', color: 'bg-amber-500 text-slate-950' },
+                { id: 'math', label: '📐 Math (10)', color: 'bg-cyan-500 text-slate-950' },
+                { id: 'english', label: '📖 English / Mridang (4)', color: 'bg-amber-500 text-slate-950' },
                 { id: 'hindi', label: '🇮🇳 Hindi / सारंगी (1)', color: 'bg-rose-500 text-white' },
-                { id: 'evs', label: '🌱 EVS & GK (6)', color: 'bg-emerald-500 text-slate-950' },
+                { id: 'evs', label: '🌱 EVS & GK (7)', color: 'bg-emerald-500 text-slate-950' },
                 { id: 'computer', label: '💻 Computer (1)', color: 'bg-violet-500 text-white' },
                 { id: 'arts', label: '🎨 Arts & Music (1)', color: 'bg-pink-500 text-white' },
               ] as const
@@ -3769,6 +4145,476 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
                   </button>
                 );
               })}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* MODE 21: MATH — VERTICAL TENS | ONES COLUMN SUMS, STAIRCASE ORDERING & ODD/EVEN PAIRS */}
+      {mode === 'math-vertical-staircase' && (
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
+          {/* Vertical Tens | Ones Column Addition & Subtraction Box */}
+          <div className="lg:col-span-6 p-4 rounded-2xl bg-[#111827] border border-[#1F2937] space-y-3">
+            <div className="flex items-center justify-between">
+              <div>
+                <h4 className="text-xs font-bold uppercase tracking-wider text-cyan-400">
+                  🧮 Vertical Tens | Ones (T | O) Column Sums
+                </h4>
+                <p className="text-xs text-slate-300">
+                  Step 1: Add/Subtract ONES column first • Step 2: Then TENS column!
+                </p>
+              </div>
+              <div className="flex gap-1.5">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setVertOp('add');
+                    setVertA(24);
+                    setVertB(15);
+                  }}
+                  className={`px-2.5 py-1 rounded-lg text-xs font-extrabold ${
+                    vertOp === 'add'
+                      ? 'bg-emerald-500 text-slate-950'
+                      : 'bg-[#090D16] text-slate-300 border border-slate-800'
+                  }`}
+                >
+                  + Add
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setVertOp('sub');
+                    setVertA(48);
+                    setVertB(12);
+                  }}
+                  className={`px-2.5 py-1 rounded-lg text-xs font-extrabold ${
+                    vertOp === 'sub'
+                      ? 'bg-rose-500 text-white'
+                      : 'bg-[#090D16] text-slate-300 border border-slate-800'
+                  }`}
+                >
+                  - Subtract
+                </button>
+              </div>
+            </div>
+
+            {(() => {
+              const t1 = Math.floor(vertA / 10);
+              const o1 = vertA % 10;
+              const t2 = Math.floor(vertB / 10);
+              const o2 = vertB % 10;
+              const ans = vertOp === 'add' ? vertA + vertB : Math.max(0, vertA - vertB);
+              const ansT = Math.floor(ans / 10);
+              const ansO = ans % 10;
+
+              return (
+                <div className="p-4 rounded-xl bg-[#090D16] border border-cyan-500/30 space-y-3">
+                  <div className="max-w-[240px] mx-auto font-mono text-center space-y-1">
+                    <div className="grid grid-cols-3 gap-2 text-xs font-bold text-slate-400 border-b border-slate-800 pb-1">
+                      <span>Sign</span>
+                      <span className="text-amber-300">TENS (T)</span>
+                      <span className="text-cyan-300">ONES (O)</span>
+                    </div>
+                    <div className="grid grid-cols-3 gap-2 text-xl font-black text-white py-1">
+                      <span />
+                      <span className="bg-amber-500/15 rounded-lg py-1 text-amber-300">{t1}</span>
+                      <span className="bg-cyan-500/15 rounded-lg py-1 text-cyan-300">{o1}</span>
+                    </div>
+                    <div className="grid grid-cols-3 gap-2 text-xl font-black text-white border-b-2 border-slate-600 pb-2">
+                      <span className={vertOp === 'add' ? 'text-emerald-400' : 'text-rose-400'}>
+                        {vertOp === 'add' ? '+' : '−'}
+                      </span>
+                      <span className="bg-amber-500/15 rounded-lg py-1 text-amber-300">{t2}</span>
+                      <span className="bg-cyan-500/15 rounded-lg py-1 text-cyan-300">{o2}</span>
+                    </div>
+                    <div className="grid grid-cols-3 gap-2 text-2xl font-black pt-1">
+                      <span className="text-xs font-sans text-emerald-400 self-center">Ans =</span>
+                      <span className="bg-emerald-500/25 border border-emerald-400 rounded-lg py-1 text-emerald-300">
+                        {ansT}
+                      </span>
+                      <span className="bg-emerald-500/25 border border-emerald-400 rounded-lg py-1 text-emerald-300">
+                        {ansO}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-wrap justify-center gap-1.5 pt-1">
+                    {[
+                      { a: 24, b: 15, op: 'add' as const, label: '24 + 15' },
+                      { a: 32, b: 26, op: 'add' as const, label: '32 + 26' },
+                      { a: 48, b: 12, op: 'sub' as const, label: '48 − 12' },
+                      { a: 57, b: 24, op: 'sub' as const, label: '57 − 24' },
+                    ].map((preset) => (
+                      <button
+                        key={preset.label}
+                        type="button"
+                        onClick={() => {
+                          setVertA(preset.a);
+                          setVertB(preset.b);
+                          setVertOp(preset.op);
+                          const res = preset.op === 'add' ? preset.a + preset.b : preset.a - preset.b;
+                          awardStar(
+                            `${preset.a} ${preset.op === 'add' ? 'plus' : 'minus'} ${preset.b} equals ${res}!`
+                          );
+                        }}
+                        className="px-2.5 py-1 rounded-lg bg-[#111827] border border-slate-700 hover:border-cyan-400 text-xs font-mono font-bold text-slate-200"
+                      >
+                        {preset.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              );
+            })()}
+          </div>
+
+          {/* Ascending vs. Descending Staircase + Even/Odd Pairing */}
+          <div className="lg:col-span-6 p-4 rounded-2xl bg-[#111827] border border-[#1F2937] space-y-4">
+            <div className="space-y-2.5">
+              <div className="flex items-center justify-between">
+                <h4 className="text-xs font-bold uppercase tracking-wider text-amber-400">
+                  🪜 Ascending (Smallest→Greatest) & Descending Stairs
+                </h4>
+                <div className="flex gap-1.5">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setStairOrder('asc');
+                      speak('Ascending order goes UP the stairs from Smallest to Greatest: 12, 25, 38, 54, 79!');
+                    }}
+                    className={`px-2.5 py-1 rounded-lg text-xs font-extrabold ${
+                      stairOrder === 'asc'
+                        ? 'bg-amber-400 text-slate-950'
+                        : 'bg-[#090D16] text-slate-300 border border-slate-800'
+                    }`}
+                  >
+                    ⬆️ Ascending (Up)
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setStairOrder('desc');
+                      speak('Descending order goes DOWN the stairs from Greatest to Smallest: 79, 54, 38, 25, 12!');
+                    }}
+                    className={`px-2.5 py-1 rounded-lg text-xs font-extrabold ${
+                      stairOrder === 'desc'
+                        ? 'bg-cyan-400 text-slate-950'
+                        : 'bg-[#090D16] text-slate-300 border border-slate-800'
+                    }`}
+                  >
+                    ⬇️ Descending (Down)
+                  </button>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-5 gap-2 items-end h-28 p-3 rounded-xl bg-[#090D16] border border-slate-800">
+                {(stairOrder === 'asc' ? [12, 25, 38, 54, 79] : [79, 54, 38, 25, 12]).map(
+                  (num, idx) => {
+                    const hPct = stairOrder === 'asc' ? 35 + idx * 16 : 99 - idx * 16;
+                    return (
+                      <button
+                        key={num}
+                        type="button"
+                        style={{ height: `${hPct}%` }}
+                        onClick={() => speak(`${num}, ${numberToWords(num)}`)}
+                        className="rounded-lg bg-gradient-to-t from-amber-500/30 to-cyan-500/40 border border-cyan-400 flex items-center justify-center font-mono text-sm font-black text-white"
+                      >
+                        {num}
+                      </button>
+                    );
+                  }
+                )}
+              </div>
+            </div>
+
+            {/* Even vs. Odd Shoe Pairing */}
+            <div className="p-3 rounded-xl bg-[#090D16] border border-emerald-500/30 space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold text-emerald-300">
+                  👟 Even (All in Pairs of 2) vs. Odd (1 Left Alone!)
+                </span>
+                <div className="flex gap-1">
+                  {[4, 5, 6, 7, 8, 9].map((n) => (
+                    <button
+                      key={n}
+                      type="button"
+                      onClick={() => {
+                        setEvenOddTestNum(n);
+                        speak(
+                          `${n} is an ${n % 2 === 0 ? 'EVEN' : 'ODD'} number!`
+                        );
+                      }}
+                      className={`px-2 py-0.5 rounded text-xs font-mono font-bold ${
+                        evenOddTestNum === n
+                          ? 'bg-emerald-400 text-slate-950'
+                          : 'bg-slate-800 text-slate-300'
+                      }`}
+                    >
+                      {n}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div className="flex items-center justify-between text-xs text-slate-200">
+                <div className="flex flex-wrap gap-1.5 text-base">
+                  {Array.from({ length: Math.floor(evenOddTestNum / 2) }).map((_, i) => (
+                    <span
+                      key={i}
+                      className="px-1.5 py-0.5 rounded bg-emerald-500/20 border border-emerald-400"
+                    >
+                      👟👟
+                    </span>
+                  ))}
+                  {evenOddTestNum % 2 === 1 && (
+                    <span className="px-1.5 py-0.5 rounded bg-rose-500/30 border border-rose-400">
+                      👟 (1 Left!)
+                    </span>
+                  )}
+                </div>
+                <span className="font-mono font-extrabold text-amber-300">
+                  {evenOddTestNum} is {evenOddTestNum % 2 === 0 ? 'EVEN' : 'ODD'}!
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* MODE 22: ENGLISH — NAMING WORDS (NOUNS 4-BASKET SORTER) & THIS / THAT / THESE / THOSE */}
+      {mode === 'eng-nouns-this-that' && (
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
+          {/* 4-Basket Naming Words (Nouns) Game */}
+          <div className="lg:col-span-7 p-4 rounded-2xl bg-[#111827] border border-[#1F2937] space-y-3">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-amber-400">
+              🧺 Naming Words (Nouns) 4-Basket Sorter: Person, Place, Animal, or Thing!
+            </h4>
+            <p className="text-xs text-slate-300">
+              Everything around us has a name! Put the word below into the right Noun Basket:
+            </p>
+
+            <div className="p-4 rounded-xl bg-[#090D16] border border-amber-500/40 flex flex-col items-center space-y-3">
+              <div className="flex flex-wrap gap-1.5">
+                {NOUN_SORT_ITEMS.map((item, idx) => (
+                  <button
+                    key={item.word}
+                    type="button"
+                    onClick={() => {
+                      setActiveNounIdx(idx);
+                      setNounFeedback(null);
+                      speak(item.word);
+                    }}
+                    className={`px-2.5 py-1 rounded-lg text-xs font-bold border ${
+                      activeNounIdx === idx
+                        ? 'bg-amber-400 text-slate-950 border-white'
+                        : 'bg-[#111827] text-slate-300 border-slate-800'
+                    }`}
+                  >
+                    {item.icon} {item.word}
+                  </button>
+                ))}
+              </div>
+
+              <div className="text-4xl">{NOUN_SORT_ITEMS[activeNounIdx].icon}</div>
+              <div className="text-base font-black text-white">
+                Which basket does &ldquo;{NOUN_SORT_ITEMS[activeNounIdx].word}&rdquo; belong in?
+              </div>
+
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 w-full">
+                {(
+                  [
+                    { cat: 'Person', icon: '👧 Person' },
+                    { cat: 'Place', icon: '🏫 Place' },
+                    { cat: 'Animal', icon: '🐶 Animal' },
+                    { cat: 'Thing', icon: '⚽ Thing' },
+                  ] as const
+                ).map((b) => (
+                  <button
+                    key={b.cat}
+                    type="button"
+                    onClick={() => {
+                      if (b.cat === NOUN_SORT_ITEMS[activeNounIdx].category) {
+                        setNounFeedback(`✅ Correct! ${NOUN_SORT_ITEMS[activeNounIdx].hint}`);
+                        awardStar(NOUN_SORT_ITEMS[activeNounIdx].hint);
+                      } else {
+                        setNounFeedback(`Try again! Think about what ${NOUN_SORT_ITEMS[activeNounIdx].word} is.`);
+                        speak('Try another basket!');
+                      }
+                    }}
+                    className="p-2.5 rounded-xl bg-[#111827] hover:bg-amber-500/20 border-2 border-slate-700 hover:border-amber-400 text-xs font-extrabold text-white"
+                  >
+                    🧺 {b.icon}
+                  </button>
+                ))}
+              </div>
+
+              {nounFeedback && (
+                <div className="text-xs font-bold text-emerald-300">{nounFeedback}</div>
+              )}
+            </div>
+          </div>
+
+          {/* This / That / These / Those Pointing Finger */}
+          <div className="lg:col-span-5 p-4 rounded-2xl bg-[#111827] border border-[#1F2937] space-y-3">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-cyan-400">
+              👉 This, That, These & Those (Near vs. Far)
+            </h4>
+            <div className="grid grid-cols-2 gap-1.5">
+              {(
+                [
+                  { id: 'this', label: 'THIS (1 Near)' },
+                  { id: 'that', label: 'THAT (1 Far)' },
+                  { id: 'these', label: 'THESE (Many Near)' },
+                  { id: 'those', label: 'THOSE (Many Far)' },
+                ] as const
+              ).map((pt) => (
+                <button
+                  key={pt.id}
+                  type="button"
+                  onClick={() => {
+                    setPointingMode(pt.id);
+                    const sentences = {
+                      this: 'THIS is an apple near me!',
+                      that: 'THAT is a tree far away!',
+                      these: 'THESE are apples near me!',
+                      those: 'THOSE are trees far away!',
+                    };
+                    speak(sentences[pt.id], true);
+                  }}
+                  className={`py-2 px-2.5 rounded-xl text-xs font-extrabold border ${
+                    pointingMode === pt.id
+                      ? 'bg-cyan-500 text-slate-950 border-white'
+                      : 'bg-[#090D16] text-slate-300 border-slate-800'
+                  }`}
+                >
+                  {pt.label}
+                </button>
+              ))}
+            </div>
+
+            <div className="p-4 rounded-xl bg-[#090D16] border border-cyan-500/30 space-y-2 text-center">
+              <div className="text-2xl py-2 font-mono">
+                {pointingMode === 'this' && '👉 🍎 (Near & One)'}
+                {pointingMode === 'that' && '👉 ┈┈┈┈┈┈┈┈┈ 🌳 (Far & One)'}
+                {pointingMode === 'these' && '👉 🍎🍎🍎 (Near & Many)'}
+                {pointingMode === 'those' && '👉 ┈┈┈┈┈┈┈┈┈ 🌳🌳🌳 (Far & Many)'}
+              </div>
+              <p className="text-xs font-bold text-white">
+                {pointingMode === 'this' && '“THIS is a sweet red apple.”'}
+                {pointingMode === 'that' && '“THAT is a tall green tree.”'}
+                {pointingMode === 'these' && '“THESE are sweet red apples.”'}
+                {pointingMode === 'those' && '“THOSE are tall green trees.”'}
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* MODE 23: EVS — TYPES OF HOUSES (KUTCHA/PUCCA), ROOMS IN A HOME & HEALTHY FOOD PLATE */}
+      {mode === 'evs-houses-food' && (
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
+          <div className="lg:col-span-6 p-4 rounded-2xl bg-[#111827] border border-[#1F2937] space-y-3">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-emerald-400">
+              🏡 Houses We Live In (Pucca, Kutcha, Igloo, Houseboat & Tent)
+            </h4>
+            <div className="flex flex-wrap gap-1.5">
+              {HOUSE_TYPES.map((h, idx) => (
+                <button
+                  key={h.id}
+                  type="button"
+                  onClick={() => {
+                    setSelectedHouseIdx(idx);
+                    awardStar(`${h.name}. ${h.fact}`);
+                  }}
+                  className={`px-2.5 py-1.5 rounded-xl text-xs font-extrabold border ${
+                    selectedHouseIdx === idx
+                      ? 'bg-emerald-500 text-slate-950 border-white'
+                      : 'bg-[#090D16] text-slate-300 border-slate-800'
+                  }`}
+                >
+                  {h.name.split(' (')[0]}
+                </button>
+              ))}
+            </div>
+
+            <div className="p-3.5 rounded-xl bg-[#090D16] border border-emerald-500/30 space-y-1 text-xs">
+              <div className="font-extrabold text-white text-sm">
+                {HOUSE_TYPES[selectedHouseIdx].name}
+              </div>
+              <div className="text-amber-300">
+                <strong>Made of:</strong> {HOUSE_TYPES[selectedHouseIdx].materials} •{' '}
+                <strong>Found in:</strong> {HOUSE_TYPES[selectedHouseIdx].where}
+              </div>
+              <p className="text-slate-200 leading-relaxed">{HOUSE_TYPES[selectedHouseIdx].fact}</p>
+            </div>
+
+            {/* Rooms in Our Home */}
+            <div className="p-3 rounded-xl bg-[#090D16] border border-slate-800 space-y-2">
+              <span className="text-[11px] font-bold text-cyan-300 uppercase">
+                🚪 Rooms in Our House (Tap a Room):
+              </span>
+              <div className="grid grid-cols-4 gap-1.5">
+                {(
+                  [
+                    { id: 'kitchen', label: '🍳 Kitchen', desc: 'We cook healthy food in the Kitchen!' },
+                    { id: 'bedroom', label: '🛏️ Bedroom', desc: 'We rest and sleep in the Bedroom!' },
+                    { id: 'bathroom', label: '🚿 Bathroom', desc: 'We brush and take a bath in the Bathroom!' },
+                    { id: 'living', label: '🛋️ Living', desc: 'We welcome guests and sit with family in the Living Room!' },
+                  ] as const
+                ).map((r) => (
+                  <button
+                    key={r.id}
+                    type="button"
+                    onClick={() => {
+                      setSelectedRoom(r.id);
+                      speak(r.desc, true);
+                    }}
+                    className={`p-1.5 rounded-lg text-[11px] font-bold border ${
+                      selectedRoom === r.id
+                        ? 'bg-cyan-500 text-slate-950 border-white'
+                        : 'bg-[#111827] text-slate-300 border-slate-800'
+                    }`}
+                  >
+                    {r.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <div className="lg:col-span-6 p-4 rounded-2xl bg-[#111827] border border-[#1F2937] space-y-3">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-amber-400">
+              🍎 Healthy Everyday Food Plate vs. Junk Food
+            </h4>
+            <p className="text-xs text-slate-300">
+              Tap each food item to see if it makes us strong and healthy or if it is junk food!
+            </p>
+            <div className="grid grid-cols-2 gap-2">
+              {HEALTHY_VS_JUNK_FOODS.map((f) => (
+                <button
+                  key={f.name}
+                  type="button"
+                  onClick={() => speak(`${f.name}: ${f.benefit}`, true)}
+                  className={`p-3 rounded-xl border text-left transition-all ${
+                    f.type === 'healthy'
+                      ? 'bg-emerald-950/30 border-emerald-500/50 hover:border-emerald-400'
+                      : 'bg-rose-950/30 border-rose-500/50 hover:border-rose-400'
+                  }`}
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-extrabold text-white">{f.name}</span>
+                    <span
+                      className={`text-[9px] font-mono px-1.5 py-0.5 rounded font-bold uppercase ${
+                        f.type === 'healthy'
+                          ? 'bg-emerald-500 text-slate-950'
+                          : 'bg-rose-500 text-white'
+                      }`}
+                    >
+                      {f.type === 'healthy' ? '✓ Healthy' : '⚠ Junk'}
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-slate-300 mt-1 leading-snug">{f.benefit}</p>
+                </button>
+              ))}
             </div>
           </div>
         </div>

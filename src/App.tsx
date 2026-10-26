@@ -18,6 +18,7 @@ export const App: React.FC = () => {
       CURRICULUM_DATA[0]
   );
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
+  const [kidFocusMode, setKidFocusMode] = useState(false);
   const [completedChapterIds, setCompletedChapterIds] = useState<string[]>(() => {
     try {
       const saved = localStorage.getItem('omnilearn_completed_chapters');
@@ -89,6 +90,21 @@ export const App: React.FC = () => {
     setSelectedChapter(ch);
   };
 
+  const handleToggleKidFocusMode = () => {
+    setKidFocusMode((prev) => {
+      const next = !prev;
+      if (next) {
+        setActiveTrack('school');
+        if (activeClassLevel === 'ALL' || (typeof activeClassLevel === 'number' && activeClassLevel > 5)) {
+          setActiveClassLevel(1);
+          const firstClass1 = CURRICULUM_DATA.find((c) => c.classLevel === 1);
+          if (firstClass1) setSelectedChapter(firstClass1);
+        }
+      }
+      return next;
+    });
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-[#090D16] text-slate-100">
       <Navbar
@@ -101,6 +117,8 @@ export const App: React.FC = () => {
         chapters={CURRICULUM_DATA}
         onSelectChapter={handleSelectChapter}
         onToggleMobileSidebar={() => setMobileSidebarOpen((o) => !o)}
+        kidFocusMode={kidFocusMode}
+        onToggleKidFocusMode={handleToggleKidFocusMode}
       />
 
       <div className="flex-1 flex min-h-0">
