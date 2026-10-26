@@ -18,6 +18,9 @@ import {
   Trophy,
   Target,
   BookOpen,
+  Monitor,
+  Flag,
+  Languages,
 } from 'lucide-react';
 
 export type Class1LabMode =
@@ -32,10 +35,178 @@ export type Class1LabMode =
   | 'spatial-ordinals-data'
   | 'eng-phonics-vowels'
   | 'eng-grammar-opposites'
+  | 'hindi-varnamala'
+  | 'computer-smart-machine'
   | 'evs-sense-organs'
   | 'evs-plants-living'
   | 'evs-animals-food-safety'
-  | 'evs-seasons-sky';
+  | 'evs-seasons-sky'
+  | 'evs-india-manners';
+
+type Class1SubjectGroup = 'math' | 'english' | 'hindi' | 'evs' | 'computer';
+
+const MODE_CATALOG: {
+  id: Class1LabMode;
+  subject: Class1SubjectGroup;
+  label: string;
+  icon: React.FC<{ className?: string }>;
+}[] = [
+  { id: 'spatial-prenumber', subject: 'math', label: '1. Spatial (Furry Cat)', icon: Sparkles },
+  { id: 'number-line-tenframe', subject: 'math', label: '2. Numbers 1–20 & < > =', icon: Sparkles },
+  { id: 'addition-subtraction', subject: 'math', label: '3. Add & Subtract Frog', icon: Calculator },
+  { id: 'tens-ones-abacus', subject: 'math', label: '4. Tens & Ones Abacus', icon: Plus },
+  { id: 'shapes-roll-slide', subject: 'math', label: '5. Shapes: Roll & Slide', icon: Shapes },
+  { id: 'measurement-balance', subject: 'math', label: '6. Handspan & Balance', icon: Calculator },
+  { id: 'clock-money', subject: 'math', label: '7. Clock & ₹ Toy Shop', icon: Clock },
+  { id: 'patterns-pictograph', subject: 'math', label: '8. Patterns & Pictograph', icon: Shapes },
+  { id: 'spatial-ordinals-data', subject: 'math', label: '9. Ordinals (1st–10th)', icon: Sparkles },
+  { id: 'eng-phonics-vowels', subject: 'english', label: '1. Vowels (A,E,I,O,U) & CVC', icon: BookOpen },
+  { id: 'eng-grammar-opposites', subject: 'english', label: '2. Opposites & Action Words', icon: BookOpen },
+  { id: 'hindi-varnamala', subject: 'hindi', label: '1. हिंदी वर्णमाला (Swar & Vyanjan)', icon: Languages },
+  { id: 'evs-sense-organs', subject: 'evs', label: '1. My Body & 5 Sense Organs', icon: Eye },
+  { id: 'evs-plants-living', subject: 'evs', label: '2. Growing Plant & Living Things', icon: Sprout },
+  { id: 'evs-animals-food-safety', subject: 'evs', label: '3. Animals & Traffic Safety', icon: CheckCircle2 },
+  { id: 'evs-seasons-sky', subject: 'evs', label: '4. Seasons & Day/Night Sky', icon: Sun },
+  { id: 'evs-india-manners', subject: 'evs', label: '5. Our India 🇮🇳 & Good Manners', icon: Flag },
+  { id: 'computer-smart-machine', subject: 'computer', label: '1. Computer: Smart Machine 🖥️', icon: Monitor },
+];
+
+const HINDI_SWAR = [
+  { letter: 'अ', roman: 'a', word: 'अ से अनार', eng: 'Pomegranate', icon: '🍎', speech: 'अ से अनार' },
+  { letter: 'आ', roman: 'aa', word: 'आ से आम', eng: 'Mango', icon: '🥭', speech: 'आ से आम' },
+  { letter: 'इ', roman: 'i', word: 'इ से इमली', eng: 'Tamarind', icon: '🫘', speech: 'इ से इमली' },
+  { letter: 'ई', roman: 'ee', word: 'ई से ईख', eng: 'Sugarcane', icon: '🎋', speech: 'ई से ईख' },
+  { letter: 'उ', roman: 'u', word: 'उ से उल्लू', eng: 'Owl', icon: '🦉', speech: 'उ से उल्लू' },
+  { letter: 'ऊ', roman: 'oo', word: 'ऊ से ऊन', eng: 'Wool', icon: '🧶', speech: 'ऊ से ऊन' },
+  { letter: 'ऋ', roman: 'ri', word: 'ऋ से ऋषि', eng: 'Sage', icon: '🧘', speech: 'ऋ से ऋषि' },
+  { letter: 'ए', roman: 'e', word: 'ए से एड़ी', eng: 'Heel', icon: '🦶', speech: 'ए से एड़ी' },
+  { letter: 'ऐ', roman: 'ai', word: 'ऐ से ऐनक', eng: 'Spectacles', icon: '👓', speech: 'ऐ से ऐनक' },
+  { letter: 'ओ', roman: 'o', word: 'ओ से ओखली', eng: 'Mortar', icon: '🥣', speech: 'ओ से ओखली' },
+  { letter: 'औ', roman: 'au', word: 'औ से औरत', eng: 'Woman', icon: '👩', speech: 'औ से औरत' },
+  { letter: 'अं', roman: 'am', word: 'अं से अंगूर', eng: 'Grapes', icon: '🍇', speech: 'अं से अंगूर' },
+  { letter: 'अः', roman: 'aha', word: 'अः खाली!', eng: 'Clap Hands!', icon: '👏', speech: 'अः खाली, बच्चों बजाओ ताली!' },
+];
+
+const HINDI_VYANJAN = [
+  { letter: 'क', roman: 'ka', word: 'क से कबूतर', eng: 'Pigeon', icon: '🕊️', speech: 'क से कबूतर' },
+  { letter: 'ख', roman: 'kha', word: 'ख से खरगोश', eng: 'Rabbit', icon: '🐰', speech: 'ख से खरगोश' },
+  { letter: 'ग', roman: 'ga', word: 'ग से गमला', eng: 'Flower Pot', icon: '🪴', speech: 'ग से गमला' },
+  { letter: 'घ', roman: 'gha', word: 'घ से घड़ी', eng: 'Clock / Watch', icon: '⌚', speech: 'घ से घड़ी' },
+  { letter: 'च', roman: 'cha', word: 'च से चम्मच', eng: 'Spoon', icon: '🥄', speech: 'च से चम्मच' },
+  { letter: 'छ', roman: 'chha', word: 'छ से छतरी', eng: 'Umbrella', icon: '☂️', speech: 'छ से छतरी' },
+  { letter: 'ज', roman: 'ja', word: 'ज से जहाज', eng: 'Ship', icon: '🚢', speech: 'ज से जहाज' },
+  { letter: 'झ', roman: 'jha', word: 'झ से झंडा', eng: 'National Flag', icon: '🇮🇳', speech: 'झ से झंडा' },
+  { letter: 'ट', roman: 'ta', word: 'ट से टमाटर', eng: 'Tomato', icon: '🍅', speech: 'ट से टमाटर' },
+  { letter: 'प', roman: 'pa', word: 'प से पतंग', eng: 'Kite', icon: '🪁', speech: 'प से पतंग' },
+  { letter: 'म', roman: 'ma', word: 'म से मछली', eng: 'Fish', icon: '🐟', speech: 'म से मछली' },
+  { letter: 'कमल', roman: 'ka-ma-la', word: 'क + म + ल = कमल', eng: 'Lotus (2/3-Letter Word)', icon: '🪷', speech: 'क म ल, कमल' },
+];
+
+const COMPUTER_PARTS = [
+  {
+    id: 'monitor',
+    name: 'Monitor (Screen) 🖥️',
+    role: 'Shows cartoons, pictures, words, and games just like a TV screen!',
+    type: 'Output Device',
+    tip: 'Sit at arm’s length from the monitor to protect your eyes.',
+  },
+  {
+    id: 'cpu',
+    name: 'CPU (Central Processing Unit) 🧠',
+    role: 'The BRAIN of the computer! It thinks, calculates, and remembers everything.',
+    type: 'Processing Brain',
+    tip: 'Without the CPU box, a computer cannot think or work.',
+  },
+  {
+    id: 'keyboard',
+    name: 'Keyboard (Typing Keys) ⌨️',
+    role: 'Has Alphabet keys (A–Z), Number keys (0–9), and a long Spacebar to type words!',
+    type: 'Input Device',
+    tip: 'Press the keys gently—never bang on the keyboard.',
+  },
+  {
+    id: 'mouse',
+    name: 'Mouse (Point & Click) 🖱️',
+    role: 'Moves the little arrow (pointer) on the screen to click and draw pictures!',
+    type: 'Pointing Device',
+    tip: 'Keep the mouse on a smooth mouse-pad.',
+  },
+  {
+    id: 'speakers',
+    name: 'Speakers (Sound) 🔊',
+    role: 'Helps us hear music, rhymes, and voice lessons from the computer.',
+    type: 'Audio Output',
+    tip: 'Keep the volume pleasant so it does not hurt your ears.',
+  },
+  {
+    id: 'printer',
+    name: 'Printer (Paper Copy) 🖨️',
+    role: 'Prints our colorful drawings and worksheets onto paper!',
+    type: 'Paper Output',
+    tip: 'Save paper—only print when needed!',
+  },
+];
+
+const NATIONAL_SYMBOLS = [
+  {
+    id: 'flag',
+    title: 'National Flag: Tiranga 🇮🇳',
+    fact: 'Has 3 bands: Saffron (Courage) at top, White (Peace) in middle with 24-spoke Navy Blue Ashoka Chakra, and Green (Growth) at bottom!',
+    icon: '🇮🇳',
+  },
+  {
+    id: 'bird',
+    title: 'National Bird: Peacock 🦚',
+    fact: 'The colorful Indian Peacock dances joyfully when monsoon rain clouds arrive!',
+    icon: '🦚',
+  },
+  {
+    id: 'animal',
+    title: 'National Animal: Royal Bengal Tiger 🐯',
+    fact: 'Strong, graceful, and striped in yellow and black! It lives in forests.',
+    icon: '🐯',
+  },
+  {
+    id: 'flower',
+    title: 'National Flower: Lotus 🪷',
+    fact: 'Blooms pink and pure on water ponds!',
+    icon: '🪷',
+  },
+  {
+    id: 'fruit',
+    title: 'National Fruit: Mango 🥭',
+    fact: 'Sweet, juicy yellow mango is called the King of Fruits!',
+    icon: '🥭',
+  },
+];
+
+const GOLDEN_MANNER_WORDS = [
+  {
+    word: 'PLEASE 🙏',
+    situation: 'When you ask someone for a pencil, water, or help.',
+    sentence: 'May I PLEASE have a glass of water?',
+  },
+  {
+    word: 'THANK YOU 😊',
+    situation: 'When someone gives you a gift, food, or helps you.',
+    sentence: 'THANK YOU for sharing your crayons with me!',
+  },
+  {
+    word: 'SORRY ❤️',
+    situation: 'When you make a mistake or accidentally bump into someone.',
+    sentence: 'I am SORRY for dropping your book.',
+  },
+  {
+    word: 'EXCUSE ME 🙋',
+    situation: 'When you sneeze, cough, or politely want someone’s attention.',
+    sentence: 'EXCUSE ME teacher, may I ask a question?',
+  },
+  {
+    word: 'YOU ARE WELCOME 🌟',
+    situation: 'When someone says Thank You to you!',
+    sentence: 'YOU ARE WELCOME, my friend!',
+  },
+];
 
 const ONES_WORDS = [
   'Zero', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine',
@@ -206,21 +377,34 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
   const [season, setSeason] = useState<'summer' | 'monsoon' | 'winter' | 'spring'>('summer');
   const [isNightSky, setIsNightSky] = useState(false);
 
-  const speak = (text: string, force = false) => {
+  // Hindi Varnamala, Computer & India/Manners states
+  const [hindiTab, setHindiTab] = useState<'swar' | 'vyanjan'>('swar');
+  const [selectedSwarIdx, setSelectedSwarIdx] = useState(0);
+  const [selectedVyanjanIdx, setSelectedVyanjanIdx] = useState(0);
+  const [selectedComputerPartIdx, setSelectedComputerPartIdx] = useState(0);
+  const [machineSortChoice, setMachineSortChoice] = useState<'natural' | 'manmade'>('manmade');
+  const [selectedSymbolIdx, setSelectedSymbolIdx] = useState(0);
+  const [selectedMannerIdx, setSelectedMannerIdx] = useState(0);
+
+  const currentSubjectGroup: Class1SubjectGroup =
+    MODE_CATALOG.find((m) => m.id === mode)?.subject || 'math';
+
+  const speak = (text: string, force = false, lang = 'en-IN') => {
     if ((!voiceEnabled && !force) || typeof window === 'undefined' || !('speechSynthesis' in window)) {
       return;
     }
     window.speechSynthesis.cancel();
     const u = new SpeechSynthesisUtterance(text);
+    u.lang = lang;
     u.rate = 0.92;
     u.pitch = 1.1;
     window.speechSynthesis.speak(u);
   };
 
-  const awardStar = (msg: string) => {
+  const awardStar = (msg: string, lang = 'en-IN') => {
     setStars((s) => s + 1);
     setMissionBanner(`🎉 ${msg} (+1 ⭐ Star!)`);
-    speak(msg, true);
+    speak(msg, true, lang);
   };
 
   const compSymbol = leftCount > rightCount ? '>' : leftCount < rightCount ? '<' : '=';
@@ -563,46 +747,72 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
         </div>
       </div>
 
-      {/* 15-Mode Class 1 Interactive Selector Bar (Math + English + EVS) */}
-      <div className="flex flex-wrap items-center gap-1.5 p-2.5 rounded-xl bg-[#111827] border border-[#1F2937]">
-        {[
-          { id: 'spatial-prenumber', label: '1. Spatial (Furry Cat)', icon: Sparkles },
-          { id: 'number-line-tenframe', label: '2. Numbers 1–20 & < > =', icon: Sparkles },
-          { id: 'addition-subtraction', label: '3. Add & Subtract Frog', icon: Calculator },
-          { id: 'tens-ones-abacus', label: '4. Tens & Ones Abacus', icon: Plus },
-          { id: 'shapes-roll-slide', label: '5. Shapes: Roll/Slide', icon: Shapes },
-          { id: 'measurement-balance', label: '6. Handspan & Balance', icon: Calculator },
-          { id: 'clock-money', label: '7. Clock & ₹ Toy Shop', icon: Clock },
-          { id: 'patterns-pictograph', label: '8. Patterns & Pictograph', icon: Shapes },
-          { id: 'spatial-ordinals-data', label: '9. Ordinals (1st–10th)', icon: Sparkles },
-          { id: 'eng-phonics-vowels', label: '10. English: Vowels & CVC', icon: BookOpen },
-          { id: 'eng-grammar-opposites', label: '11. English: Opposites/Verbs', icon: BookOpen },
-          { id: 'evs-sense-organs', label: '12. EVS: 5 Sense Organs', icon: Eye },
-          { id: 'evs-plants-living', label: '13. EVS: Growing Plant', icon: Sprout },
-          { id: 'evs-animals-food-safety', label: '14. EVS: Animals & Safety', icon: CheckCircle2 },
-          { id: 'evs-seasons-sky', label: '15. EVS: Seasons & Sky', icon: Sun },
-        ].map((m) => {
-          const Icon = m.icon;
-          const active = mode === m.id;
-          return (
-            <button
-              key={m.id}
-              type="button"
-              onClick={() => {
-                setMode(m.id as Class1LabMode);
-                setMissionBanner(null);
-              }}
-              className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-                active
-                  ? 'bg-cyan-500 text-slate-950 shadow-sm'
-                  : 'bg-[#090D16] text-slate-300 border border-slate-800 hover:text-white'
-              }`}
-            >
-              <Icon className="w-3.5 h-3.5" />
-              {m.label}
-            </button>
-          );
-        })}
+      {/* Categorized Subject & Activity Selector Bar (Decluttered for 6-Year-Olds!) */}
+      <div className="p-3 rounded-2xl bg-[#111827] border border-[#1F2937] space-y-2.5">
+        <div className="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-slate-800/80">
+          <div className="flex flex-wrap items-center gap-1.5">
+            {(
+              [
+                { id: 'math', label: '📐 Math (9)', color: 'bg-cyan-500 text-slate-950' },
+                { id: 'english', label: '📖 English (2)', color: 'bg-amber-500 text-slate-950' },
+                { id: 'hindi', label: '🇮🇳 Hindi / हिंदी (1)', color: 'bg-rose-500 text-white' },
+                { id: 'evs', label: '🌱 EVS & GK (5)', color: 'bg-emerald-500 text-slate-950' },
+                { id: 'computer', label: '💻 Computer (1)', color: 'bg-violet-500 text-white' },
+              ] as const
+            ).map((subj) => {
+              const activeSubj = currentSubjectGroup === subj.id;
+              return (
+                <button
+                  key={subj.id}
+                  type="button"
+                  onClick={() => {
+                    const firstInGroup = MODE_CATALOG.find((m) => m.subject === subj.id);
+                    if (firstInGroup) {
+                      setMode(firstInGroup.id);
+                      setMissionBanner(null);
+                    }
+                  }}
+                  className={`px-3 py-1.5 rounded-xl text-xs font-extrabold transition-all ${
+                    activeSubj
+                      ? `${subj.color} shadow-sm scale-102`
+                      : 'bg-[#090D16] text-slate-300 border border-slate-800 hover:text-white'
+                  }`}
+                >
+                  {subj.label}
+                </button>
+              );
+            })}
+          </div>
+          <span className="text-[11px] font-mono text-slate-400">
+            Showing {MODE_CATALOG.filter((m) => m.subject === currentSubjectGroup).length} Lessons in{' '}
+            <strong className="text-cyan-300 uppercase">{currentSubjectGroup}</strong>
+          </span>
+        </div>
+
+        <div className="flex flex-wrap items-center gap-1.5">
+          {MODE_CATALOG.filter((m) => m.subject === currentSubjectGroup).map((m) => {
+            const Icon = m.icon;
+            const active = mode === m.id;
+            return (
+              <button
+                key={m.id}
+                type="button"
+                onClick={() => {
+                  setMode(m.id);
+                  setMissionBanner(null);
+                }}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                  active
+                    ? 'bg-cyan-500/25 text-cyan-200 border-2 border-cyan-400 shadow-sm'
+                    : 'bg-[#090D16] text-slate-300 border border-slate-800 hover:text-white'
+                }`}
+              >
+                <Icon className="w-3.5 h-3.5 text-cyan-400" />
+                {m.label}
+              </button>
+            );
+          })}
+        </div>
       </div>
 
       {/* MODE 1: SPATIAL PRE-NUMBER CONCEPTS (FINDING THE FURRY CAT!) */}
@@ -2191,6 +2401,341 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
             height={320}
             onRender={renderSeasonsAndSky}
           />
+        </div>
+      )}
+
+      {/* MODE 16: HINDI VARNAMALA (SWAR & VYANJAN — NCERT SARANGI & ICSE HINDI) */}
+      {mode === 'hindi-varnamala' && (
+        <div className="p-4 rounded-2xl bg-[#111827] border border-[#1F2937] space-y-4">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <h4 className="text-xs font-bold uppercase tracking-wider text-rose-400">
+                NCERT Class 1 Sarangi (सारंगी) & ICSE Hindi — स्वर (Swar) और व्यंजन (Vyanjan)
+              </h4>
+              <p className="text-xs text-slate-300">
+                Tap any Hindi letter to see its picture, English sound, and hear Hindi pronunciation!
+              </p>
+            </div>
+            <div className="flex gap-1.5">
+              <button
+                type="button"
+                onClick={() => setHindiTab('swar')}
+                className={`px-3 py-1.5 rounded-xl text-xs font-extrabold ${
+                  hindiTab === 'swar'
+                    ? 'bg-rose-500 text-white'
+                    : 'bg-[#090D16] text-slate-300 border border-slate-800'
+                }`}
+              >
+                स्वर (Swar: अ – अः)
+              </button>
+              <button
+                type="button"
+                onClick={() => setHindiTab('vyanjan')}
+                className={`px-3 py-1.5 rounded-xl text-xs font-extrabold ${
+                  hindiTab === 'vyanjan'
+                    ? 'bg-amber-500 text-slate-950'
+                    : 'bg-[#090D16] text-slate-300 border border-slate-800'
+                }`}
+              >
+                व्यंजन व शब्द (क – कमल)
+              </button>
+            </div>
+          </div>
+
+          {hindiTab === 'swar' ? (
+            <div className="space-y-4">
+              <div className="grid grid-cols-4 sm:grid-cols-7 gap-2">
+                {HINDI_SWAR.map((item, idx) => (
+                  <button
+                    key={item.letter}
+                    type="button"
+                    onClick={() => {
+                      setSelectedSwarIdx(idx);
+                      awardStar(`${item.speech} (${item.eng})`, 'hi-IN');
+                    }}
+                    className={`p-2.5 rounded-xl border flex flex-col items-center gap-1 transition-all ${
+                      selectedSwarIdx === idx
+                        ? 'bg-rose-500/25 border-2 border-rose-400 scale-105'
+                        : 'bg-[#090D16] border-slate-800 hover:border-slate-700'
+                    }`}
+                  >
+                    <span className="text-2xl font-extrabold text-white">{item.letter}</span>
+                    <span className="text-lg">{item.icon}</span>
+                    <span className="text-[10px] font-mono text-rose-300">{item.roman}</span>
+                  </button>
+                ))}
+              </div>
+
+              <div className="p-4 rounded-xl bg-[#090D16] border border-rose-500/30 flex flex-wrap items-center justify-between gap-4">
+                <div className="flex items-center gap-4">
+                  <div className="w-20 h-20 rounded-2xl bg-rose-500/20 border-2 border-rose-400 flex items-center justify-center text-4xl font-black text-white">
+                    {HINDI_SWAR[selectedSwarIdx].letter}
+                  </div>
+                  <div className="space-y-1">
+                    <div className="text-lg font-extrabold text-white flex items-center gap-2">
+                      <span>{HINDI_SWAR[selectedSwarIdx].word}</span>
+                      <span className="text-2xl">{HINDI_SWAR[selectedSwarIdx].icon}</span>
+                    </div>
+                    <p className="text-xs text-slate-300">
+                      Sound: <strong className="text-rose-300">&ldquo;{HINDI_SWAR[selectedSwarIdx].roman}&rdquo;</strong> • Meaning:{' '}
+                      <strong className="text-emerald-300">{HINDI_SWAR[selectedSwarIdx].eng}</strong>
+                    </p>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() =>
+                    speak(HINDI_SWAR[selectedSwarIdx].speech, true, 'hi-IN')
+                  }
+                  className="px-4 py-2 rounded-xl bg-rose-500 text-white text-xs font-extrabold"
+                >
+                  🔊 सुनो (Speak Hindi)
+                </button>
+              </div>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
+                {HINDI_VYANJAN.map((item, idx) => (
+                  <button
+                    key={item.letter}
+                    type="button"
+                    onClick={() => {
+                      setSelectedVyanjanIdx(idx);
+                      awardStar(`${item.speech} (${item.eng})`, 'hi-IN');
+                    }}
+                    className={`p-2.5 rounded-xl border flex flex-col items-center gap-1 transition-all ${
+                      selectedVyanjanIdx === idx
+                        ? 'bg-amber-500/25 border-2 border-amber-400 scale-105'
+                        : 'bg-[#090D16] border-slate-800 hover:border-slate-700'
+                    }`}
+                  >
+                    <span className="text-2xl font-extrabold text-white">{item.letter}</span>
+                    <span className="text-lg">{item.icon}</span>
+                    <span className="text-[10px] font-mono text-amber-300">{item.roman}</span>
+                  </button>
+                ))}
+              </div>
+
+              <div className="p-4 rounded-xl bg-[#090D16] border border-amber-500/30 flex flex-wrap items-center justify-between gap-4">
+                <div className="flex items-center gap-4">
+                  <div className="w-20 h-20 rounded-2xl bg-amber-500/20 border-2 border-amber-400 flex items-center justify-center text-3xl font-black text-white">
+                    {HINDI_VYANJAN[selectedVyanjanIdx].letter}
+                  </div>
+                  <div className="space-y-1">
+                    <div className="text-lg font-extrabold text-white flex items-center gap-2">
+                      <span>{HINDI_VYANJAN[selectedVyanjanIdx].word}</span>
+                      <span className="text-2xl">{HINDI_VYANJAN[selectedVyanjanIdx].icon}</span>
+                    </div>
+                    <p className="text-xs text-slate-300">
+                      Sound: <strong className="text-amber-300">&ldquo;{HINDI_VYANJAN[selectedVyanjanIdx].roman}&rdquo;</strong> • Meaning:{' '}
+                      <strong className="text-emerald-300">{HINDI_VYANJAN[selectedVyanjanIdx].eng}</strong>
+                    </p>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() =>
+                    speak(HINDI_VYANJAN[selectedVyanjanIdx].speech, true, 'hi-IN')
+                  }
+                  className="px-4 py-2 rounded-xl bg-amber-500 text-slate-950 text-xs font-extrabold"
+                >
+                  🔊 सुनो (Speak Hindi)
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* MODE 17: COMPUTER STUDIES — A SMART MACHINE (ICSE & CBSE CLASS 1) */}
+      {mode === 'computer-smart-machine' && (
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
+          <div className="lg:col-span-7 p-4 rounded-2xl bg-[#111827] border border-[#1F2937] space-y-3">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-violet-400">
+              ICSE & CBSE Class 1 Computer Studies — Parts of a Computer 🖥️
+            </h4>
+            <p className="text-xs text-slate-300">
+              Tap each part of the computer to learn what job it does!
+            </p>
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+              {COMPUTER_PARTS.map((part, idx) => (
+                <button
+                  key={part.id}
+                  type="button"
+                  onClick={() => {
+                    setSelectedComputerPartIdx(idx);
+                    awardStar(`${part.name}: ${part.role}`);
+                  }}
+                  className={`p-3 rounded-xl border text-left transition-all ${
+                    selectedComputerPartIdx === idx
+                      ? 'bg-violet-500/25 border-2 border-violet-400 text-white'
+                      : 'bg-[#090D16] border-slate-800 text-slate-300'
+                  }`}
+                >
+                  <div className="text-xs font-extrabold">{part.name}</div>
+                  <div className="text-[10px] font-mono text-violet-300 mt-1">
+                    {part.type}
+                  </div>
+                </button>
+              ))}
+            </div>
+
+            <div className="p-4 rounded-xl bg-[#090D16] border border-violet-500/40 space-y-1.5">
+              <div className="text-sm font-extrabold text-violet-300">
+                {COMPUTER_PARTS[selectedComputerPartIdx].name}
+              </div>
+              <p className="text-xs text-slate-200 leading-relaxed">
+                {COMPUTER_PARTS[selectedComputerPartIdx].role}
+              </p>
+              <p className="text-[11px] text-emerald-300 font-semibold">
+                💡 Computer Lab Manners: {COMPUTER_PARTS[selectedComputerPartIdx].tip}
+              </p>
+            </div>
+          </div>
+
+          <div className="lg:col-span-5 p-4 rounded-2xl bg-[#111827] border border-[#1F2937] space-y-3">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-cyan-400">
+              Natural Things vs. Man-Made Machines ⚙️
+            </h4>
+            <div className="flex gap-2">
+              <button
+                type="button"
+                onClick={() => {
+                  setMachineSortChoice('manmade');
+                  speak('Man-made machines make our work fast and easy! A computer is a smart machine.');
+                }}
+                className={`flex-1 py-2 rounded-xl text-xs font-extrabold ${
+                  machineSortChoice === 'manmade'
+                    ? 'bg-cyan-500 text-slate-950'
+                    : 'bg-[#090D16] text-slate-300 border border-slate-800'
+                }`}
+              >
+                🤖 Man-Made Machines
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setMachineSortChoice('natural');
+                  speak('Natural things are made by nature, like trees, sun, mountains, and birds!');
+                }}
+                className={`flex-1 py-2 rounded-xl text-xs font-extrabold ${
+                  machineSortChoice === 'natural'
+                    ? 'bg-emerald-500 text-slate-950'
+                    : 'bg-[#090D16] text-slate-300 border border-slate-800'
+                }`}
+              >
+                🌳 Natural Things
+              </button>
+            </div>
+
+            <div className="p-4 rounded-xl bg-[#090D16] border border-slate-800 space-y-2.5">
+              {machineSortChoice === 'manmade' ? (
+                <>
+                  <div className="text-2xl flex justify-around py-1">
+                    <span>💻 Computer</span>
+                    <span>🚗 Car</span>
+                    <span>🚲 Bicycle</span>
+                  </div>
+                  <p className="text-xs text-slate-300 leading-relaxed">
+                    <strong className="text-cyan-300">Machines</strong> are made by humans to save time and effort! Some run on{' '}
+                    <strong>Electricity</strong> (Computer, Fan), some on <strong>Fuel</strong> (Car, Bus), and some on{' '}
+                    <strong>Human Power</strong> (Bicycle).
+                  </p>
+                </>
+              ) : (
+                <>
+                  <div className="text-2xl flex justify-around py-1">
+                    <span>🌳 Tree</span>
+                    <span>☀️ Sun</span>
+                    <span>🐦 Bird</span>
+                  </div>
+                  <p className="text-xs text-slate-300 leading-relaxed">
+                    <strong className="text-emerald-300">Natural Things</strong> are given to us by nature and are NOT made by humans in factories!
+                  </p>
+                </>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* MODE 18: EVS & GK — OUR COUNTRY INDIA & 5 GOLDEN MAGIC WORDS */}
+      {mode === 'evs-india-manners' && (
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
+          <div className="lg:col-span-6 p-4 rounded-2xl bg-[#111827] border border-[#1F2937] space-y-3">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-amber-400">
+              Our Country India 🇮🇳 — National Symbols
+            </h4>
+            <div className="flex flex-wrap gap-1.5">
+              {NATIONAL_SYMBOLS.map((sym, idx) => (
+                <button
+                  key={sym.id}
+                  type="button"
+                  onClick={() => {
+                    setSelectedSymbolIdx(idx);
+                    awardStar(`${sym.title}. ${sym.fact}`);
+                  }}
+                  className={`px-3 py-1.5 rounded-xl text-xs font-extrabold ${
+                    selectedSymbolIdx === idx
+                      ? 'bg-amber-500 text-slate-950'
+                      : 'bg-[#090D16] text-slate-300 border border-slate-800'
+                  }`}
+                >
+                  {sym.icon} {sym.title.split(':')[1]}
+                </button>
+              ))}
+            </div>
+
+            <div className="p-4 rounded-xl bg-[#090D16] border border-amber-500/30 space-y-2">
+              <div className="flex items-center gap-3">
+                <span className="text-4xl">{NATIONAL_SYMBOLS[selectedSymbolIdx].icon}</span>
+                <div className="text-sm font-extrabold text-white">
+                  {NATIONAL_SYMBOLS[selectedSymbolIdx].title}
+                </div>
+              </div>
+              <p className="text-xs text-slate-200 leading-relaxed">
+                {NATIONAL_SYMBOLS[selectedSymbolIdx].fact}
+              </p>
+            </div>
+          </div>
+
+          <div className="lg:col-span-6 p-4 rounded-2xl bg-[#111827] border border-[#1F2937] space-y-3">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-emerald-400">
+              🌟 The 5 Golden Magic Words of Good Manners
+            </h4>
+            <div className="flex flex-wrap gap-1.5">
+              {GOLDEN_MANNER_WORDS.map((m, idx) => (
+                <button
+                  key={m.word}
+                  type="button"
+                  onClick={() => {
+                    setSelectedMannerIdx(idx);
+                    awardStar(`${m.word}! ${m.sentence}`);
+                  }}
+                  className={`px-2.5 py-1.5 rounded-xl text-xs font-extrabold ${
+                    selectedMannerIdx === idx
+                      ? 'bg-emerald-500 text-slate-950'
+                      : 'bg-[#090D16] text-slate-300 border border-slate-800'
+                  }`}
+                >
+                  {m.word}
+                </button>
+              ))}
+            </div>
+
+            <div className="p-4 rounded-xl bg-[#090D16] border border-emerald-500/30 space-y-1.5">
+              <div className="text-sm font-extrabold text-emerald-300">
+                Magic Word: {GOLDEN_MANNER_WORDS[selectedMannerIdx].word}
+              </div>
+              <p className="text-xs text-slate-300">
+                <strong>When to say it:</strong> {GOLDEN_MANNER_WORDS[selectedMannerIdx].situation}
+              </p>
+              <p className="text-xs text-cyan-200 font-semibold italic">
+                &ldquo;{GOLDEN_MANNER_WORDS[selectedMannerIdx].sentence}&rdquo;
+              </p>
+            </div>
+          </div>
         </div>
       )}
     </div>

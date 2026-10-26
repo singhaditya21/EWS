@@ -19,6 +19,7 @@ interface CurriculumSidebarProps {
   activeClassLevel: number | 'ALL';
   selectedChapter: CurriculumChapter;
   onSelectChapter: (chapter: CurriculumChapter) => void;
+  completedChapterIds?: string[];
   mobileOpen: boolean;
   onCloseMobile: () => void;
 }
@@ -30,6 +31,7 @@ export const CurriculumSidebar: React.FC<CurriculumSidebarProps> = ({
   activeClassLevel,
   selectedChapter,
   onSelectChapter,
+  completedChapterIds = [],
   mobileOpen,
   onCloseMobile,
 }) => {
@@ -46,16 +48,25 @@ export const CurriculumSidebar: React.FC<CurriculumSidebarProps> = ({
     });
   }, [chapters, activeTrack, activeBoard, activeClassLevel]);
 
-  // Group chapters by streamCategory (e.g., "Class 1" .. "Class 12", or Engineering/Medical branch)
+  // Group chapters by Subject when a single Class is active, or by streamCategory when 'ALL' is active
   const grouped = useMemo(() => {
     const map = new Map<string, CurriculumChapter[]>();
     trackChapters.forEach((ch) => {
-      const list = map.get(ch.streamCategory) || [];
+      const groupKey =
+        activeTrack === 'school' && activeClassLevel !== 'ALL'
+          ? `Class ${ch.classLevel} • ${ch.subject}`
+          : ch.streamCategory;
+      const list = map.get(groupKey) || [];
       list.push(ch);
-      map.set(ch.streamCategory, list);
+      map.set(groupKey, list);
     });
     return Array.from(map.entries());
-  }, [trackChapters]);
+  }, [trackChapters, activeTrack, activeClassLevel]);
+
+  const completedInTrackCount = useMemo(
+    () => trackChapters.filter((ch) => completedChapterIds.includes(ch.id)).length,
+    [trackChapters, completedChapterIds]
+  );
 
   const accentBorder =
     activeTrack === 'school'
@@ -88,16 +99,43 @@ export const CurriculumSidebar: React.FC<CurriculumSidebarProps> = ({
         </span>
       </div>
 
+      {/* Lesson Completion Progress Bar */}
+      <div className="px-3.5 py-2 border-b border-[#1F2937] bg-[#0D1322] space-y-1">
+        <div className="flex items-center justify-between text-[10px] font-mono">
+          <span className="text-slate-300 font-semibold">
+            🌟 Progress ({completedInTrackCount}/{trackChapters.length} Done)
+          </span>
+          <span className="text-emerald-400 font-bold">
+            {trackChapters.length > 0
+              ? Math.round((completedInTrackCount / trackChapters.length) * 100)
+              : 0}
+            %
+          </span>
+        </div>
+        <div className="w-full h-1.5 rounded-full bg-slate-800 overflow-hidden">
+          <div
+            className="h-full bg-gradient-to-r from-cyan-400 to-emerald-400 transition-all duration-300"
+            style={{
+              width: `${
+                trackChapters.length > 0
+                  ? (completedInTrackCount / trackChapters.length) * 100
+                  : 0
+              }%`,
+            }}
+          />
+        </div>
+      </div>
+
       {/* Scrollable Curriculum Tree */}
       <div className="flex-1 overflow-y-auto p-2.5 space-y-3">
         {grouped.map(([category, items]) => (
           <div key={category} className="space-y-1">
-            <div className="flex items-center justify-between px-2 py-1 text-[11px] font-bold uppercase tracking-wider text-slate-400 bg-[#090D16]/60 rounded-lg">
+            <div className="flex items-center justify-between px-2 py-1 text-[11px] font-bold uppercase tracking-wider text-slate-300 bg-[#090D16]/80 rounded-lg border border-slate-800/60">
               <span className="flex items-center gap-1.5">
                 <Layers className="w-3 h-3 text-cyan-400" />
                 {category}
               </span>
-              <span className="font-mono text-[10px] text-slate-500">
+              <span className="font-mono text-[10px] text-cyan-300">
                 {items.length}
               </span>
             </div>
@@ -105,6 +143,7 @@ export const CurriculumSidebar: React.FC<CurriculumSidebarProps> = ({
             <div className="space-y-1 pl-1">
               {items.map((ch) => {
                 const isSelected = selectedChapter.id === ch.id;
+                const isDone = completedChapterIds.includes(ch.id);
                 return (
                   <button
                     key={ch.id}
@@ -122,8 +161,13 @@ export const CurriculumSidebar: React.FC<CurriculumSidebarProps> = ({
                     <div className="space-y-1 min-w-0">
                       <div className="flex items-center gap-1.5">
                         <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-slate-900 text-slate-300 border border-slate-800">
-                          {ch.subject}
+                          {ch.chapterNumber}
                         </span>
+                        {isDone && (
+                          <span className="text-[9px] font-mono px-1.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
+                            ✓ Done
+                          </span>
+                        )}
                         {ch.board === 'ICSE' && (
                           <span className="text-[9px] font-mono px-1.5 rounded bg-violet-500/20 text-violet-300 border border-violet-500/40">
                             ICSE Special
@@ -135,7 +179,9 @@ export const CurriculumSidebar: React.FC<CurriculumSidebarProps> = ({
                       </p>
                     </div>
 
-                    {isSelected ? (
+                    {isDone ? (
+                      <CheckCircle2 className="w-4 h-4 shrink-0 mt-0.5 text-emerald-400" />
+                    ) : isSelected ? (
                       <CheckCircle2 className="w-4 h-4 shrink-0 mt-0.5 text-cyan-400" />
                     ) : (
                       <ChevronRight className="w-3.5 h-3.5 shrink-0 mt-0.5 text-slate-500" />

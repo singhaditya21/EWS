@@ -6,6 +6,7 @@ import {
 import { FormulaCard } from '../engine/FormulaCard';
 import { InteractiveQuiz } from '../assessment/InteractiveQuiz';
 import { AnatomyCADInspector } from '../engine/AnatomyCADInspector';
+import { MagicTracingSlate } from '../engine/MagicTracingSlate';
 
 // Import all Flagship Simulations
 import { Class1InteractiveLab } from '../../simulations/school/Class1InteractiveLab';
@@ -31,19 +32,33 @@ import {
   FlaskConical,
   Award,
   Layers,
+  Pencil,
+  Users,
+  ChevronLeft,
+  ChevronRight,
+  Volume2,
+  Sparkles,
 } from 'lucide-react';
 
 interface LabWorkspaceProps {
   chapter: CurriculumChapter;
   activeBoard: SchoolBoard;
+  chapters?: CurriculumChapter[];
+  onSelectChapter?: (chapter: CurriculumChapter) => void;
+  completedChapterIds?: string[];
+  onToggleComplete?: (chapterId: string) => void;
 }
 
-type ViewportTab = 'simulation' | 'cad3d' | 'sandbox';
+type ViewportTab = 'simulation' | 'cad3d' | 'sandbox' | 'tracing' | 'guide';
 type DockTab = 'theory' | 'quiz' | 'syllabus';
 
 export const LabWorkspace: React.FC<LabWorkspaceProps> = ({
   chapter,
   activeBoard,
+  chapters = [],
+  onSelectChapter,
+  completedChapterIds = [],
+  onToggleComplete,
 }) => {
   const [viewportTab, setViewportTab] = useState<ViewportTab>('simulation');
   const [dockTab, setDockTab] = useState<DockTab>('theory');
@@ -52,6 +67,35 @@ export const LabWorkspace: React.FC<LabWorkspaceProps> = ({
   const [sandboxA, setSandboxA] = useState(12);
   const [sandboxB, setSandboxB] = useState(5);
   const [sandboxC, setSandboxC] = useState(9.8);
+
+  const isPrimaryWing =
+    chapter.track === 'school' && Boolean(chapter.classLevel && chapter.classLevel <= 5);
+  const isCompleted = completedChapterIds.includes(chapter.id);
+
+  // Compute Previous / Next Lesson within the same Class or Track
+  const peerChapters = chapters.filter((ch) => {
+    if (ch.track !== chapter.track) return false;
+    if (chapter.track === 'school') {
+      if (ch.board !== 'BOTH' && ch.board !== activeBoard) return false;
+      return ch.classLevel === chapter.classLevel;
+    }
+    return true;
+  });
+  const currentIdx = peerChapters.findIndex((c) => c.id === chapter.id);
+  const prevChapter = currentIdx > 0 ? peerChapters[currentIdx - 1] : null;
+  const nextChapter =
+    currentIdx >= 0 && currentIdx < peerChapters.length - 1
+      ? peerChapters[currentIdx + 1]
+      : null;
+
+  const speakNote = (text: string) => {
+    if (typeof window === 'undefined' || !('speechSynthesis' in window)) return;
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.rate = 0.92;
+    u.pitch = 1.08;
+    window.speechSynthesis.speak(u);
+  };
 
   useEffect(() => {
     setViewportTab('simulation');
@@ -161,46 +205,122 @@ export const LabWorkspace: React.FC<LabWorkspaceProps> = ({
             </p>
           </div>
 
-          {/* Viewport Mode Switcher */}
-          <div className="flex items-center gap-1.5 bg-[#090D16] p-1.5 rounded-xl border border-slate-800">
-            <button
-              type="button"
-              onClick={() => setViewportTab('simulation')}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-                viewportTab === 'simulation'
-                  ? 'bg-cyan-500 text-slate-950 shadow-sm'
-                  : 'text-slate-300 hover:text-white'
-              }`}
-            >
-              <FlaskConical className="w-3.5 h-3.5" />
-              Interactive Lab
-            </button>
+          {/* Viewport Mode Switcher (Child-Friendly Tabs for Class 1–5 vs. CAD/Formula for Class 6–12/Eng/Med) */}
+          <div className="flex flex-col sm:items-end gap-2">
+            <div className="flex flex-wrap items-center gap-1.5 bg-[#090D16] p-1.5 rounded-xl border border-slate-800">
+              <button
+                type="button"
+                onClick={() => setViewportTab('simulation')}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-extrabold transition-all ${
+                  viewportTab === 'simulation'
+                    ? 'bg-cyan-500 text-slate-950 shadow-sm'
+                    : 'text-slate-300 hover:text-white'
+                }`}
+              >
+                <FlaskConical className="w-3.5 h-3.5" />
+                {isPrimaryWing ? '🎮 Play & Learn Lab' : 'Interactive Lab'}
+              </button>
 
-            <button
-              type="button"
-              onClick={() => setViewportTab('cad3d')}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-                viewportTab === 'cad3d'
-                  ? 'bg-cyan-500 text-slate-950 shadow-sm'
-                  : 'text-slate-300 hover:text-white'
-              }`}
-            >
-              <Box className="w-3.5 h-3.5" />
-              3D CAD / Anatomy Slice
-            </button>
+              {isPrimaryWing ? (
+                <>
+                  <button
+                    type="button"
+                    onClick={() => setViewportTab('tracing')}
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-extrabold transition-all ${
+                      viewportTab === 'tracing'
+                        ? 'bg-amber-400 text-slate-950 shadow-sm'
+                        : 'text-slate-300 hover:text-white'
+                    }`}
+                  >
+                    <Pencil className="w-3.5 h-3.5" />
+                    ✏️ Magic Tracing Slate
+                  </button>
 
-            <button
-              type="button"
-              onClick={() => setViewportTab('sandbox')}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-                viewportTab === 'sandbox'
-                  ? 'bg-cyan-500 text-slate-950 shadow-sm'
-                  : 'text-slate-300 hover:text-white'
-              }`}
-            >
-              <Calculator className="w-3.5 h-3.5" />
-              Formula Sandbox
-            </button>
+                  <button
+                    type="button"
+                    onClick={() => setViewportTab('guide')}
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-extrabold transition-all ${
+                      viewportTab === 'guide'
+                        ? 'bg-emerald-400 text-slate-950 shadow-sm'
+                        : 'text-slate-300 hover:text-white'
+                    }`}
+                  >
+                    <Users className="w-3.5 h-3.5" />
+                    👨‍👩‍👧 Parent & Teacher Guide
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button
+                    type="button"
+                    onClick={() => setViewportTab('cad3d')}
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                      viewportTab === 'cad3d'
+                        ? 'bg-cyan-500 text-slate-950 shadow-sm'
+                        : 'text-slate-300 hover:text-white'
+                    }`}
+                  >
+                    <Box className="w-3.5 h-3.5" />
+                    3D CAD / Anatomy Slice
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setViewportTab('sandbox')}
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                      viewportTab === 'sandbox'
+                        ? 'bg-cyan-500 text-slate-950 shadow-sm'
+                        : 'text-slate-300 hover:text-white'
+                    }`}
+                  >
+                    <Calculator className="w-3.5 h-3.5" />
+                    Formula Sandbox
+                  </button>
+                </>
+              )}
+            </div>
+
+            {/* Sequential Lesson Navigation & Completion Toggle */}
+            <div className="flex flex-wrap items-center gap-1.5">
+              {prevChapter && onSelectChapter && (
+                <button
+                  type="button"
+                  onClick={() => onSelectChapter(prevChapter)}
+                  className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-[#090D16] border border-slate-800 hover:border-cyan-500/50 text-[11px] font-bold text-slate-300 hover:text-white"
+                  title={prevChapter.title}
+                >
+                  <ChevronLeft className="w-3.5 h-3.5 text-cyan-400" />
+                  Prev Lesson
+                </button>
+              )}
+
+              {onToggleComplete && (
+                <button
+                  type="button"
+                  onClick={() => onToggleComplete(chapter.id)}
+                  className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-[11px] font-extrabold border transition-all ${
+                    isCompleted
+                      ? 'bg-emerald-500/20 border-emerald-400 text-emerald-200'
+                      : 'bg-[#090D16] border-slate-700 text-slate-300 hover:border-emerald-400'
+                  }`}
+                >
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                  {isCompleted ? '🌟 Lesson Completed!' : 'Mark Lesson Done'}
+                </button>
+              )}
+
+              {nextChapter && onSelectChapter && (
+                <button
+                  type="button"
+                  onClick={() => onSelectChapter(nextChapter)}
+                  className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-cyan-500/15 border border-cyan-500/40 hover:bg-cyan-500/25 text-[11px] font-extrabold text-cyan-200"
+                  title={nextChapter.title}
+                >
+                  Next Lesson
+                  <ChevronRight className="w-3.5 h-3.5 text-cyan-300" />
+                </button>
+              )}
+            </div>
           </div>
         </div>
 
@@ -243,6 +363,72 @@ export const LabWorkspace: React.FC<LabWorkspaceProps> = ({
         {/* Left 70% (8 of 12 cols on xl): Real-Time 2D / 3D Simulation Viewport */}
         <div className="xl:col-span-8 space-y-4">
           {viewportTab === 'simulation' && renderActiveSimulation()}
+
+          {viewportTab === 'tracing' && <MagicTracingSlate />}
+
+          {viewportTab === 'guide' && (
+            <div className="rounded-2xl bg-[#111827] border border-[#1F2937] p-5 space-y-4">
+              <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3">
+                <div>
+                  <h3 className="text-base font-extrabold text-white flex items-center gap-2">
+                    <Sparkles className="w-4 h-4 text-emerald-400" />
+                    👨‍👩‍👧 Parent & Teacher Hands-On Activity Guide ({chapter.streamCategory})
+                  </h3>
+                  <p className="text-xs text-slate-300">
+                    Real-world home & classroom activities aligned with NEP 2020 (CBSE NCERT) & CISCE (ICSE)
+                  </p>
+                </div>
+                <span className="px-2.5 py-1 rounded-lg bg-emerald-500/15 text-emerald-300 text-xs font-mono font-bold border border-emerald-500/30">
+                  Age 5–10 Experiential Pedagogy
+                </span>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+                <div className="p-4 rounded-xl bg-[#090D16] border border-cyan-500/30 space-y-2">
+                  <div className="font-bold text-cyan-300 uppercase">
+                    🏠 5-Minute Home Activity for Parents
+                  </div>
+                  <p className="text-slate-200 leading-relaxed">
+                    Use everyday household items (spoons, bowls, fruits, coins, or crayons) to act out{' '}
+                    <strong className="text-white">{chapter.title}</strong> before or after playing the digital lab. Ask your child to explain what happened in their own words!
+                  </p>
+                </div>
+
+                <div className="p-4 rounded-xl bg-[#090D16] border border-amber-500/30 space-y-2">
+                  <div className="font-bold text-amber-300 uppercase">
+                    🏫 Classroom Tip for Teachers
+                  </div>
+                  <p className="text-slate-200 leading-relaxed">
+                    {chapter.syllabusAlignment.differenceNote}
+                  </p>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <div className="text-xs font-bold uppercase text-slate-300">
+                  Key Learning Outcomes & Talking Points (Click 🔊 to Read Aloud)
+                </div>
+                {chapter.conceptNotes.map((note, idx) => (
+                  <div
+                    key={idx}
+                    className="p-3 rounded-xl bg-[#090D16] border border-slate-800 flex items-center justify-between gap-3 text-xs text-slate-200"
+                  >
+                    <span>
+                      <strong className="text-emerald-400 mr-1.5">Step {idx + 1}:</strong>
+                      {note}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => speakNote(note)}
+                      className="px-2.5 py-1 rounded-lg bg-cyan-500/20 border border-cyan-500/40 text-cyan-200 font-bold shrink-0"
+                    >
+                      🔊 Speak
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
           {viewportTab === 'cad3d' && (
             <AnatomyCADInspector
@@ -437,17 +623,37 @@ export const LabWorkspace: React.FC<LabWorkspaceProps> = ({
               </div>
 
               <div className="space-y-2">
-                <h4 className="text-xs font-bold uppercase tracking-wider text-slate-300">
-                  Core Scientific Takeaways
-                </h4>
+                <div className="flex items-center justify-between">
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-slate-300">
+                    {isPrimaryWing ? '🌟 Key Learning Points' : 'Core Scientific Takeaways'}
+                  </h4>
+                  <button
+                    type="button"
+                    onClick={() => speakNote(chapter.conceptNotes.join('. '))}
+                    className="flex items-center gap-1 px-2 py-0.5 rounded bg-cyan-500/15 border border-cyan-500/40 text-[10px] font-bold text-cyan-200 hover:bg-cyan-500/25"
+                  >
+                    <Volume2 className="w-3 h-3" />
+                    🔊 Read All
+                  </button>
+                </div>
                 <ul className="space-y-2">
                   {chapter.conceptNotes.map((note, idx) => (
                     <li
                       key={idx}
-                      className="p-2.5 rounded-xl bg-[#090D16] border border-slate-800/90 text-xs text-slate-300 leading-relaxed flex items-start gap-2"
+                      className="p-2.5 rounded-xl bg-[#090D16] border border-slate-800/90 text-xs text-slate-300 leading-relaxed flex items-start justify-between gap-2"
                     >
-                      <CheckCircle2 className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" />
-                      <span>{note}</span>
+                      <div className="flex items-start gap-2">
+                        <CheckCircle2 className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" />
+                        <span>{note}</span>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => speakNote(note)}
+                        title="Read note aloud"
+                        className="p-1 rounded-lg bg-slate-800/80 hover:bg-cyan-500/20 text-cyan-300 shrink-0"
+                      >
+                        <Volume2 className="w-3.5 h-3.5" />
+                      </button>
                     </li>
                   ))}
                 </ul>

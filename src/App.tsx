@@ -14,10 +14,32 @@ export const App: React.FC = () => {
   const [activeBoard, setActiveBoard] = useState<SchoolBoard>('CBSE');
   const [activeClassLevel, setActiveClassLevel] = useState<number | 'ALL'>(1);
   const [selectedChapter, setSelectedChapter] = useState<CurriculumChapter>(
-    CURRICULUM_DATA.find((c) => c.id === 'cls1-math-numbers-comparison') ||
+    CURRICULUM_DATA.find((c) => c.id === 'cls1-math-spatial-furry-cat') ||
       CURRICULUM_DATA[0]
   );
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
+  const [completedChapterIds, setCompletedChapterIds] = useState<string[]>(() => {
+    try {
+      const saved = localStorage.getItem('omnilearn_completed_chapters');
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
+  });
+
+  const handleToggleComplete = (chapterId: string) => {
+    setCompletedChapterIds((prev) => {
+      const next = prev.includes(chapterId)
+        ? prev.filter((id) => id !== chapterId)
+        : [...prev, chapterId];
+      try {
+        localStorage.setItem('omnilearn_completed_chapters', JSON.stringify(next));
+      } catch {
+        // Ignore storage errors
+      }
+      return next;
+    });
+  };
 
   const handleSelectTrack = (track: EducationTrack) => {
     setActiveTrack(track);
@@ -89,6 +111,7 @@ export const App: React.FC = () => {
           activeClassLevel={activeClassLevel}
           selectedChapter={selectedChapter}
           onSelectChapter={handleSelectChapter}
+          completedChapterIds={completedChapterIds}
           mobileOpen={mobileSidebarOpen}
           onCloseMobile={() => setMobileSidebarOpen(false)}
         />
@@ -96,6 +119,10 @@ export const App: React.FC = () => {
         <LabWorkspace
           chapter={selectedChapter}
           activeBoard={activeBoard}
+          chapters={CURRICULUM_DATA}
+          onSelectChapter={handleSelectChapter}
+          completedChapterIds={completedChapterIds}
+          onToggleComplete={handleToggleComplete}
         />
       </div>
     </div>
