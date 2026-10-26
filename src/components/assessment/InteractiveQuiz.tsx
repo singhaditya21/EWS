@@ -1,16 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { QuizQuestion } from '../../types/curriculum.types';
-import { CheckCircle2, XCircle, HelpCircle, Award, RotateCcw, Volume2 } from 'lucide-react';
-import { playPop, playSuccessChime } from '../../utils/soundEffects';
+import { CheckCircle2, XCircle, HelpCircle, Award, RotateCcw, Volume2, Trophy } from 'lucide-react';
+import { playPop, playSuccessChime, playFanfare } from '../../utils/soundEffects';
 
 interface InteractiveQuizProps {
   questions: QuizQuestion[];
   chapterTitle: string;
+  isCompleted?: boolean;
+  onMarkComplete?: () => void;
 }
 
 export const InteractiveQuiz: React.FC<InteractiveQuizProps> = ({
   questions,
   chapterTitle,
+  isCompleted = false,
+  onMarkComplete,
 }) => {
   const [selectedAnswers, setSelectedAnswers] = useState<Record<string, number>>({});
   const [submitted, setSubmitted] = useState<Record<string, boolean>>({});
@@ -80,6 +84,34 @@ export const InteractiveQuiz: React.FC<InteractiveQuizProps> = ({
           </button>
         </div>
       </div>
+
+      {questions.length > 0 && correctCount === questions.length && (
+        <div className="p-3.5 rounded-xl bg-gradient-to-r from-amber-500/20 via-emerald-500/20 to-cyan-500/20 border-2 border-amber-400 flex flex-wrap items-center justify-between gap-2 animate-pulse">
+          <div className="flex items-center gap-2">
+            <Trophy className="w-5 h-5 text-amber-400 shrink-0" />
+            <div>
+              <div className="text-xs font-black text-white">
+                🏆 Perfect {correctCount}/{questions.length} Champion!
+              </div>
+              <div className="text-[11px] text-amber-200">
+                You mastered every question in this lesson!
+              </div>
+            </div>
+          </div>
+          {onMarkComplete && !isCompleted && (
+            <button
+              type="button"
+              onClick={() => {
+                playFanfare();
+                onMarkComplete();
+              }}
+              className="px-3 py-1.5 rounded-lg bg-emerald-400 text-slate-950 text-xs font-extrabold shadow-sm"
+            >
+              🌟 Mark Lesson Done!
+            </button>
+          )}
+        </div>
+      )}
 
       {questions.map((q, qIdx) => {
         const isAnswered = submitted[q.id];

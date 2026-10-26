@@ -48,11 +48,14 @@ export type Class1LabMode =
   | 'patterns-pictograph'
   | 'spatial-ordinals-data'
   | 'math-vertical-staircase'
+  | 'math-ordinals-fractions'
   | 'eng-phonics-vowels'
   | 'eng-grammar-opposites'
   | 'eng-mridang-stories'
   | 'eng-nouns-this-that'
+  | 'eng-pronouns-adjectives'
   | 'hindi-varnamala'
+  | 'hindi-shabd-train'
   | 'computer-smart-machine'
   | 'evs-sense-organs'
   | 'evs-plants-living'
@@ -61,6 +64,7 @@ export type Class1LabMode =
   | 'evs-india-manners'
   | 'evs-helpers-transport'
   | 'evs-houses-food'
+  | 'evs-water-air-habits'
   | 'arts-colors-music';
 
 type Class1SubjectGroup = 'math' | 'english' | 'hindi' | 'evs' | 'computer' | 'arts';
@@ -81,11 +85,14 @@ const MODE_CATALOG: {
   { id: 'patterns-pictograph', subject: 'math', label: '8. Patterns & Pictograph', icon: Shapes },
   { id: 'spatial-ordinals-data', subject: 'math', label: '9. Ordinals & Equal Groups', icon: Sparkles },
   { id: 'math-vertical-staircase', subject: 'math', label: '10. Vertical T|O Sums & Stairs 🪜', icon: Calculator },
+  { id: 'math-ordinals-fractions', subject: 'math', label: '11. 1st–10th Race & Pizza Halves 🍕', icon: Trophy },
   { id: 'eng-phonics-vowels', subject: 'english', label: '1. Vowels (A,E,I,O,U) & CVC', icon: BookOpen },
   { id: 'eng-grammar-opposites', subject: 'english', label: '2. Opposites, Plurals & Verbs', icon: BookOpen },
   { id: 'eng-mridang-stories', subject: 'english', label: '3. Mridang Poems & Stories 🎭', icon: Sparkles },
   { id: 'eng-nouns-this-that', subject: 'english', label: '4. Nouns (4 Baskets) & This/That 🧺', icon: BookOpen },
+  { id: 'eng-pronouns-adjectives', subject: 'english', label: '5. Pronouns (He/She/It) & Adjectives 🌟', icon: BookOpen },
   { id: 'hindi-varnamala', subject: 'hindi', label: '1. सारंगी: वर्णमाला, मात्रा, गिनती व कविता', icon: Languages },
+  { id: 'hindi-shabd-train', subject: 'hindi', label: '2. दो, तीन व चार अक्षर वाले शब्द रेलगाड़ी 🚂', icon: Languages },
   { id: 'evs-sense-organs', subject: 'evs', label: '1. My Body & 5 Sense Organs', icon: Eye },
   { id: 'evs-plants-living', subject: 'evs', label: '2. Growing Plant & Living Things', icon: Sprout },
   { id: 'evs-animals-food-safety', subject: 'evs', label: '3. Animals (Babies/Homes) & Safety', icon: CheckCircle2 },
@@ -93,9 +100,110 @@ const MODE_CATALOG: {
   { id: 'evs-india-manners', subject: 'evs', label: '5. Our India 🇮🇳 & Good Manners', icon: Flag },
   { id: 'evs-helpers-transport', subject: 'evs', label: '6. Helpers, Home & Transport 🚒', icon: Truck },
   { id: 'evs-houses-food', subject: 'evs', label: '7. Houses (Kutcha/Pucca) & Food 🏡🍎', icon: Home },
+  { id: 'evs-water-air-habits', subject: 'evs', label: '8. Water 💧, Air 🌬️ & Daily Habits 🪥', icon: Sun },
   { id: 'computer-smart-machine', subject: 'computer', label: '1. Computer, Keyboard & Mouse 🖥️', icon: Monitor },
   { id: 'arts-colors-music', subject: 'arts', label: '1. Color Mixing & Xylophone 🎵', icon: Palette },
 ];
+
+const ORDINAL_RUNNERS = [
+  { pos: 1, ord: '1st', word: 'First', animal: 'Cheetah 🐆', fact: '1st (First) is at the very front of the race!' },
+  { pos: 2, ord: '2nd', word: 'Second', animal: 'Horse 🐎', fact: '2nd (Second) comes right after 1st!' },
+  { pos: 3, ord: '3rd', word: 'Third', animal: 'Rabbit 🐇', fact: '3rd (Third) wins the bronze medal!' },
+  { pos: 4, ord: '4th', word: 'Fourth', animal: 'Deer 🦌', fact: '4th (Fourth) comes after 3rd!' },
+  { pos: 5, ord: '5th', word: 'Fifth', animal: 'Dog 🐶', fact: '5th (Fifth) is right in the middle of 10!' },
+  { pos: 6, ord: '6th', word: 'Sixth', animal: 'Cat 🐱', fact: '6th (Sixth) comes after 5th!' },
+  { pos: 7, ord: '7th', word: 'Seventh', animal: 'Elephant 🐘', fact: '7th (Seventh) is marching steadily!' },
+  { pos: 8, ord: '8th', word: 'Eighth', animal: 'Panda 🐼', fact: '8th (Eighth) comes before 9th!' },
+  { pos: 9, ord: '9th', word: 'Ninth', animal: 'Duck 🦆', fact: '9th (Ninth) is just before 10th!' },
+  { pos: 10, ord: '10th', word: 'Tenth', animal: 'Tortoise 🐢', fact: '10th (Tenth) never gives up and finishes the race!' },
+];
+
+const PRONOUN_CARDS = [
+  {
+    noun: 'Aarav (A Boy) 👦',
+    pronoun: 'HE',
+    sentence: 'Aarav is playing football. → HE is playing football.',
+    rule: 'We use HE for one boy, man, father, brother, or uncle.',
+  },
+  {
+    noun: 'Riya (A Girl) 👧',
+    pronoun: 'SHE',
+    sentence: 'Riya is reading a story book. → SHE is reading a story book.',
+    rule: 'We use SHE for one girl, woman, mother, sister, or aunt.',
+  },
+  {
+    noun: 'A Red Ball / A Puppy ⚽🐶',
+    pronoun: 'IT',
+    sentence: 'The ball is round. → IT is round.',
+    rule: 'We use IT for one animal, bird, tree, or non-living thing.',
+  },
+  {
+    noun: 'Riya, Aarav & Friends 👧👦🧒',
+    pronoun: 'THEY',
+    sentence: 'The children are happy. → THEY are happy.',
+    rule: 'We use THEY when talking about more than one person, animal, or thing.',
+  },
+  {
+    noun: 'My Friend and I (Me + You) 🙌',
+    pronoun: 'WE',
+    sentence: 'My sister and I study in Class 1. → WE study in Class 1.',
+    rule: 'We use WE when talking about ourselves together with others.',
+  },
+];
+
+const ADJECTIVE_ITEMS = [
+  { adj: 'RED & SWEET', noun: 'Apple 🍎', type: 'Color & Taste', sentence: 'This is a RED and SWEET apple.' },
+  { adj: 'TALL', noun: 'Giraffe 🦒', type: 'Size / Height', sentence: 'The giraffe has a TALL neck.' },
+  { adj: 'HOT', noun: 'Milk Glass 🥛♨️', type: 'Touch / Feel', sentence: 'Grandma gave me WARM milk.' },
+  { adj: 'COLD', noun: 'Ice-Cream 🍦❄️', type: 'Touch / Feel', sentence: 'Ice-cream is COLD and yummy.' },
+  { adj: 'THREE', noun: 'Balloons 🎈🎈🎈', type: 'Number (How Many)', sentence: 'I have THREE colorful balloons.' },
+  { adj: 'HAPPY', noun: 'Puppy 🐶', type: 'Feeling', sentence: 'The HAPPY puppy wagged its tail.' },
+];
+
+const HINDI_SHABD_TRAIN = {
+  two: [
+    { parts: ['घ', 'र'], word: 'घर', eng: 'House 🏠', sentence: 'चल, अब घर चल।' },
+    { parts: ['ज', 'ल'], word: 'जल', eng: 'Water 💧', sentence: 'साफ़ जल पी।' },
+    { parts: ['फ', 'ल'], word: 'फल', eng: 'Fruits 🍎🍌', sentence: 'ताज़ा फल चख।' },
+    { parts: ['ब', 'स'], word: 'बस', eng: 'Bus 🚌', sentence: 'बस पर चढ़।' },
+    { parts: ['न', 'ल'], word: 'नल', eng: 'Water Tap 🚰', sentence: 'नल बंद रख।' },
+  ],
+  three: [
+    { parts: ['क', 'म', 'ल'], word: 'कमल', eng: 'Lotus 🪷', sentence: 'तालाब में कमल खिला है।' },
+    { parts: ['म', 'ट', 'र'], word: 'मटर', eng: 'Green Peas 🫛', sentence: 'हरी मटर चख।' },
+    { parts: ['ब', 'त', 'ख'], word: 'बतख', eng: 'Duck 🦆', sentence: 'बतख जल में तैरती है।' },
+    { parts: ['स', 'ड़', 'क'], word: 'सड़क', eng: 'Road 🛣️', sentence: 'सड़क पर मत दौड़।' },
+    { parts: ['श', 'ह', 'द'], word: 'शहद', eng: 'Honey 🍯', sentence: 'मीठा शहद चख।' },
+  ],
+  four: [
+    { parts: ['अ', 'ज', 'ग', 'र'], word: 'अजगर', eng: 'Python 🐍', sentence: 'पेड़ पर बड़ा अजगर है।' },
+    { parts: ['श', 'र', 'ब', 'त'], word: 'शरबत', eng: 'Sweet Drink 🍹', sentence: 'ठंडा शरबत पी।' },
+    { parts: ['थ', 'र', 'म', 'स'], word: 'थरमस', eng: 'Thermos Flask 🍼', sentence: 'थरमस इधर रख।' },
+    { parts: ['ब', 'र', 'ग', 'द'], word: 'बरगद', eng: 'Banyan Tree 🌳', sentence: 'बरगद हमारा राष्ट्रीय पेड़ है।' },
+  ],
+};
+
+const WATER_AIR_HABITS = {
+  waterSources: [
+    { name: 'Rain (Main Source) 🌧️', use: 'Fills rivers, lakes, ponds, and underground wells!' },
+    { name: 'River & Lake 🏞️', use: 'Fresh water flows from mountains into rivers and lakes.' },
+    { name: 'Home Tap & Filter 🚰', use: 'Always drink clean, filtered or boiled water, and turn off taps to save every drop!' },
+  ],
+  waterUses: ['Drinking 🥤', 'Cooking Food 🍲', 'Bathing & Brushing 🚿', 'Washing Clothes 👕', 'Watering Plants 🌱'],
+  airFacts: [
+    { title: 'We Cannot See Air, But We Feel It! 🌬️', detail: 'Air is all around us. Moving air is called WIND. A gentle wind is a BREEZE; a strong wind is a STORM!' },
+    { title: 'All Living Things Breathe Air 🫁', detail: 'People, animals, birds, and plants need fresh air to breathe and stay alive.' },
+    { title: 'Air Takes Up Space & Has Weight 🎈', detail: 'When we blow air into a flat balloon or football, it becomes big and round!' },
+  ],
+  dailyHabits: [
+    { time: '6:30 AM 🌅', habit: 'Wake up early & say Good Morning to parents', icon: '🌞' },
+    { time: '7:00 AM 🪥', habit: 'Brush teeth twice a day (Morning & Night) and take a bath', icon: '🚿' },
+    { time: '8:00 AM 🥛', habit: 'Wash hands with soap before & after eating healthy breakfast', icon: '🍎' },
+    { time: '9:00 AM 🏫', habit: 'Go to school on time, listen to teachers & share with friends', icon: '🎒' },
+    { time: '5:00 PM ⚽', habit: 'Play outdoor games in the park and water garden plants', icon: '🌱' },
+    { time: '9:00 PM 🌙', habit: 'Brush teeth at night, pack school bag & sleep on time', icon: '🛌' },
+  ],
+};
 
 const NOUN_SORT_ITEMS: {
   word: string;
@@ -725,6 +833,17 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
   const [speakWordIdx, setSpeakWordIdx] = useState(0);
   const [isListening, setIsListening] = useState(false);
   const [spokenTranscript, setSpokenTranscript] = useState<string>('');
+  const [bilingualMode, setBilingualMode] = useState(false);
+
+  // New Class 1 States (Ordinals/Fractions, Pronouns/Adjectives, Hindi Shabd Train, Water/Air/Habits)
+  const [raceSelectedOrd, setRaceSelectedOrd] = useState(1);
+  const [beforeAfterNum, setBeforeAfterNum] = useState(15);
+  const [pizzaSlices, setPizzaSlices] = useState<1 | 2 | 4>(2);
+  const [activePronounIdx, setActivePronounIdx] = useState(0);
+  const [activeAdjIdx, setActiveAdjIdx] = useState(0);
+  const [shabdType, setShabdType] = useState<'two' | 'three' | 'four'>('two');
+  const [activeShabdIdx, setActiveShabdIdx] = useState(0);
+  const [activeHabitIdx, setActiveHabitIdx] = useState(0);
 
   const handleStartMicPractice = () => {
     const target = SPEAK_PRACTICE_WORDS[speakWordIdx].word;
@@ -789,6 +908,12 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
     u.rate = 0.92;
     u.pitch = 1.1;
     window.speechSynthesis.speak(u);
+    if (bilingualMode && lang === 'en-IN') {
+      const hiU = new SpeechSynthesisUtterance('शाबाश बच्चों! ध्यान से सीखो!');
+      hiU.lang = 'hi-IN';
+      hiU.rate = 0.92;
+      window.speechSynthesis.speak(hiU);
+    }
   };
 
   const awardStar = (msg: string, lang = 'en-IN') => {
@@ -802,6 +927,12 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
       u.rate = 0.92;
       u.pitch = 1.1;
       window.speechSynthesis.speak(u);
+      if (bilingualMode && lang === 'en-IN') {
+        const hiU = new SpeechSynthesisUtterance('बहुत बढ़िया! आपको एक स्टार मिला!');
+        hiU.lang = 'hi-IN';
+        hiU.rate = 0.92;
+        window.speechSynthesis.speak(hiU);
+      }
     }
   };
 
@@ -1183,6 +1314,22 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
 
           <button
             type="button"
+            onClick={() => {
+              setBilingualMode((b) => !b);
+              speak('नमस्ते बच्चों! Bilingual English and Hindi voice helper is ready!', true, 'hi-IN');
+            }}
+            className={`flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-xs font-extrabold border transition-all ${
+              bilingualMode
+                ? 'bg-orange-500 text-slate-950 border-white shadow-sm'
+                : 'bg-slate-800 border-slate-700 text-amber-200 hover:border-amber-400'
+            }`}
+            title="NEP 2020 Bilingual English + Hindi Voice Scaffolding"
+          >
+            🇮🇳 {bilingualMode ? 'EN + हिंदी: ON' : 'EN + हिंदी'}
+          </button>
+
+          <button
+            type="button"
             onClick={() => setVoiceEnabled((v) => !v)}
             className={`flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-xs font-bold border ${
               voiceEnabled
@@ -1446,10 +1593,10 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
           <div className="flex flex-wrap items-center gap-1.5">
             {(
               [
-                { id: 'math', label: '📐 Math (10)', color: 'bg-cyan-500 text-slate-950' },
-                { id: 'english', label: '📖 English / Mridang (4)', color: 'bg-amber-500 text-slate-950' },
-                { id: 'hindi', label: '🇮🇳 Hindi / सारंगी (1)', color: 'bg-rose-500 text-white' },
-                { id: 'evs', label: '🌱 EVS & GK (7)', color: 'bg-emerald-500 text-slate-950' },
+                { id: 'math', label: '📐 Math (11)', color: 'bg-cyan-500 text-slate-950' },
+                { id: 'english', label: '📖 English / Mridang (5)', color: 'bg-amber-500 text-slate-950' },
+                { id: 'hindi', label: '🇮🇳 Hindi / सारंगी (2)', color: 'bg-rose-500 text-white' },
+                { id: 'evs', label: '🌱 EVS & GK (8)', color: 'bg-emerald-500 text-slate-950' },
                 { id: 'computer', label: '💻 Computer (1)', color: 'bg-violet-500 text-white' },
                 { id: 'arts', label: '🎨 Arts & Music (1)', color: 'bg-pink-500 text-white' },
               ] as const
@@ -4613,6 +4760,432 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
                     </span>
                   </div>
                   <p className="text-[11px] text-slate-300 mt-1 leading-snug">{f.benefit}</p>
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* MODE 25: MATH — ORDINAL NUMBERS (1ST TO 10TH RACE), BEFORE/BETWEEN/AFTER & EQUAL SHARING PIZZA FRACTIONS */}
+      {mode === 'math-ordinals-fractions' && (
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
+          {/* 1st to 10th Animal Race Track */}
+          <div className="lg:col-span-7 p-4 rounded-2xl bg-[#111827] border border-[#1F2937] space-y-3">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-cyan-400">
+              🏁 Ordinal Numbers (1st First to 10th Tenth) Animal Race Track!
+            </h4>
+            <p className="text-xs text-slate-300">
+              Ordinal numbers tell us the <strong>POSITION</strong> of an object in a line! Tap any runner from 1st to 10th:
+            </p>
+            <div className="grid grid-cols-5 sm:grid-cols-10 gap-1.5">
+              {ORDINAL_RUNNERS.map((r) => (
+                <button
+                  key={r.pos}
+                  type="button"
+                  onClick={() => {
+                    setRaceSelectedOrd(r.pos);
+                    awardStar(`${r.animal} is in ${r.ord} (${r.word}) place!`);
+                  }}
+                  className={`p-2 rounded-xl border text-center transition-all ${
+                    raceSelectedOrd === r.pos
+                      ? 'bg-cyan-500 text-slate-950 border-white scale-105 font-black'
+                      : 'bg-[#090D16] text-slate-200 border-slate-800 hover:border-cyan-400'
+                  }`}
+                >
+                  <div className="text-xl">{r.animal.split(' ')[1]}</div>
+                  <div className="text-xs font-mono font-extrabold">{r.ord}</div>
+                  <div className="text-[9px] opacity-80">{r.word}</div>
+                </button>
+              ))}
+            </div>
+
+            {(() => {
+              const activeRunner = ORDINAL_RUNNERS[raceSelectedOrd - 1] || ORDINAL_RUNNERS[0];
+              return (
+                <div className="p-3.5 rounded-xl bg-[#090D16] border border-cyan-500/40 flex items-center justify-between gap-3">
+                  <div>
+                    <div className="text-sm font-black text-white">
+                      🏆 Position {activeRunner.ord} ({activeRunner.word}) — {activeRunner.animal}
+                    </div>
+                    <p className="text-xs text-cyan-200 mt-0.5">{activeRunner.fact}</p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => speak(`${activeRunner.ord} is spelled ${activeRunner.word}. ${activeRunner.fact}`, true)}
+                    className="px-3 py-1.5 rounded-xl bg-cyan-500 text-slate-950 text-xs font-extrabold shrink-0"
+                  >
+                    🔊 Speak Position
+                  </button>
+                </div>
+              );
+            })()}
+
+            {/* Before, Between & After Number Explorer */}
+            <div className="p-3.5 rounded-xl bg-[#090D16] border border-amber-500/30 space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold uppercase text-amber-300">
+                  🔢 Before, Between & After Explorer (1 to 99)
+                </span>
+                <div className="flex gap-1.5">
+                  <button
+                    type="button"
+                    onClick={() => setBeforeAfterNum((n) => Math.max(2, n - 1))}
+                    className="px-2.5 py-0.5 rounded bg-slate-800 text-xs font-bold text-white"
+                  >
+                    -1
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setBeforeAfterNum((n) => Math.min(98, n + 1))}
+                    className="px-2.5 py-0.5 rounded bg-amber-400 text-slate-950 text-xs font-extrabold"
+                  >
+                    +1
+                  </button>
+                </div>
+              </div>
+              <div className="grid grid-cols-3 gap-2 text-center font-mono">
+                <div className="p-2 rounded-xl bg-[#111827] border border-rose-500/40">
+                  <div className="text-[10px] text-rose-300 uppercase">Just BEFORE (-1)</div>
+                  <div className="text-xl font-black text-white">{beforeAfterNum - 1}</div>
+                </div>
+                <div className="p-2 rounded-xl bg-amber-500/20 border-2 border-amber-400">
+                  <div className="text-[10px] text-amber-200 uppercase">BETWEEN (Middle)</div>
+                  <div className="text-xl font-black text-amber-300">{beforeAfterNum}</div>
+                </div>
+                <div className="p-2 rounded-xl bg-[#111827] border border-emerald-500/40">
+                  <div className="text-[10px] text-emerald-300 uppercase">Just AFTER (+1)</div>
+                  <div className="text-xl font-black text-white">{beforeAfterNum + 1}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Equal Sharing Pizza Slicer (Whole, Half 1/2, Quarter 1/4) */}
+          <div className="lg:col-span-5 p-4 rounded-2xl bg-[#111827] border border-[#1F2937] space-y-3">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-amber-400">
+              🍕 Equal Sharing Pizza Slicer (Whole, Half & Quarter)
+            </h4>
+            <p className="text-xs text-slate-300">
+              When we share food with friends, every piece must be <strong>EQUAL</strong>! Choose how to slice the pizza:
+            </p>
+            <div className="grid grid-cols-3 gap-1.5">
+              {(
+                [
+                  { parts: 1, label: '1 Whole Pizza', msg: '1 Whole Pizza with no cuts!' },
+                  { parts: 2, label: '2 Equal Halves (½)', msg: 'Cut into 2 equal parts! Each part is One-Half!' },
+                  { parts: 4, label: '4 Equal Quarters (¼)', msg: 'Cut into 4 equal parts! Each part is One-Quarter!' },
+                ] as const
+              ).map((sl) => (
+                <button
+                  key={sl.parts}
+                  type="button"
+                  onClick={() => {
+                    setPizzaSlices(sl.parts);
+                    awardStar(sl.msg);
+                  }}
+                  className={`py-2 px-2 rounded-xl text-xs font-extrabold border ${
+                    pizzaSlices === sl.parts
+                      ? 'bg-amber-400 text-slate-950 border-white'
+                      : 'bg-[#090D16] text-slate-300 border-slate-800'
+                  }`}
+                >
+                  {sl.label}
+                </button>
+              ))}
+            </div>
+
+            <div className="p-4 rounded-xl bg-[#090D16] border border-amber-500/30 flex flex-col items-center space-y-2">
+              <svg width="160" height="160" viewBox="-80 -80 160 160">
+                <circle r="68" fill="#f59e0b" stroke="#b45309" strokeWidth="6" />
+                <circle r="56" fill="#ef4444" />
+                <circle cx="-22" cy="-18" r="7" fill="#fde047" />
+                <circle cx="22" cy="-18" r="7" fill="#fde047" />
+                <circle cx="-20" cy="22" r="7" fill="#fde047" />
+                <circle cx="20" cy="22" r="7" fill="#fde047" />
+                {pizzaSlices >= 2 && (
+                  <line x1="0" y1="-68" x2="0" y2="68" stroke="#090D16" strokeWidth="4" strokeDasharray="4 2" />
+                )}
+                {pizzaSlices === 4 && (
+                  <line x1="-68" y1="0" x2="68" y2="0" stroke="#090D16" strokeWidth="4" strokeDasharray="4 2" />
+                )}
+              </svg>
+              <div className="text-xs font-extrabold text-amber-200 text-center">
+                {pizzaSlices === 1 && '🍕 1 Whole = 1 Complete Pizza for everyone!'}
+                {pizzaSlices === 2 && '🍕 2 Equal Halves = 2 Friends get 1 Half (1/2) each!'}
+                {pizzaSlices === 4 && '🍕 4 Equal Quarters = 4 Friends get 1 Quarter (1/4) each!'}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* MODE 26: ENGLISH — PRONOUNS (HE, SHE, IT, WE, THEY) & DESCRIBING WORDS (ADJECTIVES) */}
+      {mode === 'eng-pronouns-adjectives' && (
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
+          <div className="lg:col-span-6 p-4 rounded-2xl bg-[#111827] border border-[#1F2937] space-y-3">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-cyan-400">
+              🙋‍♀️ Pronouns (Words Used in Place of Naming Words: He, She, It, We, They)
+            </h4>
+            <p className="text-xs text-slate-300">
+              Instead of repeating a Naming Word again and again, we use a special helper word called a <strong>PRONOUN</strong>!
+            </p>
+            <div className="flex flex-wrap gap-1.5">
+              {PRONOUN_CARDS.map((p, idx) => (
+                <button
+                  key={p.pronoun}
+                  type="button"
+                  onClick={() => {
+                    setActivePronounIdx(idx);
+                    awardStar(`${p.pronoun}: ${p.sentence}`);
+                  }}
+                  className={`px-3 py-1.5 rounded-xl text-xs font-extrabold border ${
+                    activePronounIdx === idx
+                      ? 'bg-cyan-500 text-slate-950 border-white'
+                      : 'bg-[#090D16] text-slate-300 border-slate-800'
+                  }`}
+                >
+                  {p.pronoun} ({p.noun.split(' (')[0]})
+                </button>
+              ))}
+            </div>
+
+            <div className="p-4 rounded-xl bg-[#090D16] border border-cyan-500/40 space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-mono text-slate-400">
+                  Naming Word: <strong className="text-white">{PRONOUN_CARDS[activePronounIdx].noun}</strong>
+                </span>
+                <span className="px-3 py-0.5 rounded-full bg-cyan-500 text-slate-950 font-mono text-xs font-black">
+                  Pronoun: {PRONOUN_CARDS[activePronounIdx].pronoun}
+                </span>
+              </div>
+              <div className="text-sm font-black text-emerald-300">
+                &ldquo;{PRONOUN_CARDS[activePronounIdx].sentence}&rdquo;
+              </div>
+              <p className="text-xs text-slate-300">{PRONOUN_CARDS[activePronounIdx].rule}</p>
+            </div>
+          </div>
+
+          <div className="lg:col-span-6 p-4 rounded-2xl bg-[#111827] border border-[#1F2937] space-y-3">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-amber-400">
+              🌈 Describing Words (Adjectives: Color, Size, Number & Feeling)
+            </h4>
+            <p className="text-xs text-slate-300">
+              Words that tell us <strong>more about a Naming Word</strong> (how it looks, feels, or how many) are called <strong>Describing Words</strong>!
+            </p>
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+              {ADJECTIVE_ITEMS.map((item, idx) => (
+                <button
+                  key={item.noun}
+                  type="button"
+                  onClick={() => {
+                    setActiveAdjIdx(idx);
+                    awardStar(item.sentence);
+                  }}
+                  className={`p-2.5 rounded-xl border text-left transition-all ${
+                    activeAdjIdx === idx
+                      ? 'bg-amber-500/25 border-amber-400 text-white'
+                      : 'bg-[#090D16] border-slate-800 text-slate-300'
+                  }`}
+                >
+                  <div className="text-[10px] font-mono text-amber-300 uppercase">{item.type}</div>
+                  <div className="text-xs font-black text-white mt-0.5">
+                    <span className="text-amber-300 underline">{item.adj}</span> {item.noun}
+                  </div>
+                </button>
+              ))}
+            </div>
+            <div className="p-3.5 rounded-xl bg-[#090D16] border border-amber-500/40 flex items-center justify-between gap-2">
+              <div className="text-xs text-slate-200">
+                <strong className="text-amber-300">Sentence:</strong> &ldquo;{ADJECTIVE_ITEMS[activeAdjIdx].sentence}&rdquo;
+              </div>
+              <button
+                type="button"
+                onClick={() => speak(ADJECTIVE_ITEMS[activeAdjIdx].sentence, true)}
+                className="px-3 py-1 rounded-lg bg-amber-400 text-slate-950 text-xs font-extrabold shrink-0"
+              >
+                🔊 Speak
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* MODE 27: HINDI — दो, तीन और चार अक्षर वाले शब्द रेलगाड़ी (2, 3 & 4-LETTER WORD TRAIN) */}
+      {mode === 'hindi-shabd-train' && (
+        <div className="p-4 rounded-2xl bg-[#111827] border border-[#1F2937] space-y-4">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <h4 className="text-xs font-bold uppercase tracking-wider text-rose-400">
+                🚂 NCERT सारंगी: दो, तीन और चार अक्षर वाले बिना मात्रा के शब्द (Hindi Word Train)
+              </h4>
+              <p className="text-xs text-slate-300">
+                अक्षरों के डिब्बों को जोड़कर नया शब्द बनाएँ और उसका वाक्य सुनें!
+              </p>
+            </div>
+            <div className="flex gap-1.5">
+              {(
+                [
+                  { id: 'two', label: '२ अक्षर (घर, जल)' },
+                  { id: 'three', label: '३ अक्षर (कमल, मटर)' },
+                  { id: 'four', label: '४ अक्षर (अजगर, शरबत)' },
+                ] as const
+              ).map((tab) => (
+                <button
+                  key={tab.id}
+                  type="button"
+                  onClick={() => {
+                    setShabdType(tab.id);
+                    setActiveShabdIdx(0);
+                  }}
+                  className={`px-3 py-1.5 rounded-xl text-xs font-extrabold border ${
+                    shabdType === tab.id
+                      ? 'bg-rose-500 text-white border-white'
+                      : 'bg-[#090D16] text-slate-300 border-slate-800'
+                  }`}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {(() => {
+            const list = HINDI_SHABD_TRAIN[shabdType];
+            const item = list[activeShabdIdx] || list[0];
+            return (
+              <div className="space-y-4">
+                <div className="flex flex-wrap gap-2">
+                  {list.map((w, idx) => (
+                    <button
+                      key={w.word}
+                      type="button"
+                      onClick={() => {
+                        setActiveShabdIdx(idx);
+                        awardStar(`${w.parts.join(' जमा ')} बराबर ${w.word}! ${w.sentence}`, 'hi-IN');
+                      }}
+                      className={`px-3.5 py-2 rounded-xl text-sm font-black border transition-all ${
+                        activeShabdIdx === idx
+                          ? 'bg-amber-400 text-slate-950 border-white scale-105'
+                          : 'bg-[#090D16] text-slate-200 border-slate-800'
+                      }`}
+                    >
+                      {w.word} ({w.eng})
+                    </button>
+                  ))}
+                </div>
+
+                {/* Animated Train Coaches */}
+                <div className="p-5 rounded-2xl bg-[#090D16] border border-rose-500/40 flex flex-wrap items-center justify-center gap-3">
+                  <div className="text-3xl">🚂</div>
+                  {item.parts.map((ch, idx) => (
+                    <React.Fragment key={idx}>
+                      <div className="px-5 py-3 rounded-2xl bg-rose-500/20 border-2 border-rose-400 text-2xl font-black text-white shadow-md">
+                        {ch}
+                      </div>
+                      {idx < item.parts.length - 1 && (
+                        <span className="text-xl font-black text-amber-400">+</span>
+                      )}
+                    </React.Fragment>
+                  ))}
+                  <span className="text-2xl font-black text-emerald-400">=</span>
+                  <div className="px-6 py-3 rounded-2xl bg-emerald-500/25 border-2 border-emerald-400 text-2xl font-black text-emerald-200">
+                    {item.word} ({item.eng})
+                  </div>
+                </div>
+
+                <div className="p-3.5 rounded-xl bg-[#090D16] border border-slate-800 flex items-center justify-between">
+                  <div className="text-sm font-bold text-amber-200">
+                    📖 वाक्य (Sentence): &ldquo;{item.sentence}&rdquo;
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => speak(`${item.word}। ${item.sentence}`, true, 'hi-IN')}
+                    className="px-3 py-1.5 rounded-xl bg-rose-500 text-white text-xs font-extrabold"
+                  >
+                    🔊 हिंदी में सुनें
+                  </button>
+                </div>
+              </div>
+            );
+          })()}
+        </div>
+      )}
+
+      {/* MODE 28: EVS & MORAL SCIENCE — WATER, AIR & DAILY GOOD HABITS CLOCK */}
+      {mode === 'evs-water-air-habits' && (
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
+          {/* Water & Air Science */}
+          <div className="lg:col-span-6 p-4 rounded-2xl bg-[#111827] border border-[#1F2937] space-y-3">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-cyan-400">
+              💧 Precious Water & 🌬️ Fresh Air Around Us
+            </h4>
+            <div className="space-y-2">
+              {WATER_AIR_HABITS.waterSources.map((ws) => (
+                <button
+                  key={ws.name}
+                  type="button"
+                  onClick={() => speak(`${ws.name}. ${ws.use}`, true)}
+                  className="w-full text-left p-2.5 rounded-xl bg-[#090D16] border border-cyan-500/30 hover:border-cyan-400"
+                >
+                  <div className="text-xs font-extrabold text-cyan-300">{ws.name}</div>
+                  <div className="text-[11px] text-slate-300">{ws.use}</div>
+                </button>
+              ))}
+            </div>
+            <div className="flex flex-wrap gap-1.5">
+              {WATER_AIR_HABITS.waterUses.map((u) => (
+                <span
+                  key={u}
+                  onClick={() => speak(`We use water for ${u}`, true)}
+                  className="cursor-pointer px-2.5 py-1 rounded-lg bg-cyan-500/15 border border-cyan-500/30 text-[11px] font-bold text-cyan-200"
+                >
+                  {u}
+                </span>
+              ))}
+            </div>
+            <div className="space-y-1.5 pt-1">
+              {WATER_AIR_HABITS.airFacts.map((af) => (
+                <div
+                  key={af.title}
+                  onClick={() => speak(`${af.title}. ${af.detail}`, true)}
+                  className="cursor-pointer p-2.5 rounded-xl bg-[#090D16] border border-emerald-500/30 text-xs"
+                >
+                  <div className="font-bold text-emerald-300">{af.title}</div>
+                  <div className="text-[11px] text-slate-300">{af.detail}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Morning-to-Night Good Habits Routine */}
+          <div className="lg:col-span-6 p-4 rounded-2xl bg-[#111827] border border-[#1F2937] space-y-3">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-amber-400">
+              🪥 Morning-to-Night Good Daily Habits & Moral Values
+            </h4>
+            <p className="text-xs text-slate-300">
+              Tap each time of the day to practice healthy Class 1 habits and earn a star!
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              {WATER_AIR_HABITS.dailyHabits.map((h, idx) => (
+                <button
+                  key={h.time}
+                  type="button"
+                  onClick={() => {
+                    setActiveHabitIdx(idx);
+                    awardStar(`${h.time}: ${h.habit}`);
+                  }}
+                  className={`p-3 rounded-xl border text-left transition-all ${
+                    activeHabitIdx === idx
+                      ? 'bg-amber-500/25 border-amber-400 text-white'
+                      : 'bg-[#090D16] border-slate-800 text-slate-300'
+                  }`}
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="font-mono text-xs font-extrabold text-amber-300">{h.time}</span>
+                    <span className="text-lg">{h.icon}</span>
+                  </div>
+                  <p className="text-xs font-semibold text-white mt-1 leading-snug">{h.habit}</p>
                 </button>
               ))}
             </div>

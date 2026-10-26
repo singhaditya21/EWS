@@ -784,6 +784,10 @@ export const LabWorkspace: React.FC<LabWorkspaceProps> = ({
             <InteractiveQuiz
               questions={chapter.quiz}
               chapterTitle={chapter.title}
+              isCompleted={isCompleted}
+              onMarkComplete={
+                onToggleComplete ? () => onToggleComplete(chapter.id) : undefined
+              }
             />
           )}
         </div>

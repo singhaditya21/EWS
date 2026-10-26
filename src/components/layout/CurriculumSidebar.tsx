@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import {
   CurriculumChapter,
   EducationTrack,
@@ -35,6 +35,12 @@ export const CurriculumSidebar: React.FC<CurriculumSidebarProps> = ({
   mobileOpen,
   onCloseMobile,
 }) => {
+  const [subjectFilter, setSubjectFilter] = useState<string>('ALL');
+
+  useEffect(() => {
+    setSubjectFilter('ALL');
+  }, [activeTrack, activeClassLevel]);
+
   const trackChapters = useMemo(() => {
     return chapters.filter((ch) => {
       if (ch.track !== activeTrack) return false;
@@ -48,10 +54,21 @@ export const CurriculumSidebar: React.FC<CurriculumSidebarProps> = ({
     });
   }, [chapters, activeTrack, activeBoard, activeClassLevel]);
 
+  const availableSubjects = useMemo(() => {
+    const set = new Set<string>();
+    trackChapters.forEach((ch) => set.add(ch.subject));
+    return Array.from(set);
+  }, [trackChapters]);
+
+  const filteredTrackChapters = useMemo(() => {
+    if (subjectFilter === 'ALL') return trackChapters;
+    return trackChapters.filter((ch) => ch.subject === subjectFilter);
+  }, [trackChapters, subjectFilter]);
+
   // Group chapters by Subject when a single Class is active, or by streamCategory when 'ALL' is active
   const grouped = useMemo(() => {
     const map = new Map<string, CurriculumChapter[]>();
-    trackChapters.forEach((ch) => {
+    filteredTrackChapters.forEach((ch) => {
       const groupKey =
         activeTrack === 'school' && activeClassLevel !== 'ALL'
           ? `Class ${ch.classLevel} • ${ch.subject}`
@@ -61,7 +78,7 @@ export const CurriculumSidebar: React.FC<CurriculumSidebarProps> = ({
       map.set(groupKey, list);
     });
     return Array.from(map.entries());
-  }, [trackChapters, activeTrack, activeClassLevel]);
+  }, [filteredTrackChapters, activeTrack, activeClassLevel]);
 
   const completedInTrackCount = useMemo(
     () => trackChapters.filter((ch) => completedChapterIds.includes(ch.id)).length,
@@ -125,6 +142,52 @@ export const CurriculumSidebar: React.FC<CurriculumSidebarProps> = ({
           />
         </div>
       </div>
+
+      {/* 1-Click Subject Filter Pills (When multiple subjects exist in the active view) */}
+      {availableSubjects.length > 1 && (
+        <div className="px-2.5 py-2 border-b border-[#1F2937] bg-[#090D16] flex flex-wrap gap-1">
+          <button
+            type="button"
+            onClick={() => setSubjectFilter('ALL')}
+            className={`px-2 py-0.5 rounded-lg text-[10px] font-extrabold border transition-all ${
+              subjectFilter === 'ALL'
+                ? 'bg-cyan-500 text-slate-950 border-white'
+                : 'bg-[#111827] text-slate-300 border-slate-800 hover:text-white'
+            }`}
+          >
+            🌟 All ({trackChapters.length})
+          </button>
+          {availableSubjects.map((subj) => {
+            const shortLabel = subj.includes('Math')
+              ? '🔢 Math'
+              : subj.includes('English')
+              ? '📖 English'
+              : subj.includes('Hindi')
+              ? '🪔 Hindi'
+              : subj.includes('EVS')
+              ? '🌱 EVS'
+              : subj.includes('Computer')
+              ? '💻 Computer'
+              : subj.includes('Arts')
+              ? '🎨 Arts'
+              : subj.split(' ')[0];
+            return (
+              <button
+                key={subj}
+                type="button"
+                onClick={() => setSubjectFilter(subj)}
+                className={`px-2 py-0.5 rounded-lg text-[10px] font-extrabold border transition-all ${
+                  subjectFilter === subj
+                    ? 'bg-amber-400 text-slate-950 border-white'
+                    : 'bg-[#111827] text-slate-300 border-slate-800 hover:text-white'
+                }`}
+              >
+                {shortLabel}
+              </button>
+            );
+          })}
+        </div>
+      )}
 
       {/* Scrollable Curriculum Tree */}
       <div className="flex-1 overflow-y-auto p-2.5 space-y-3">

@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect, useCallback } from 'react';
 import { Eraser, Volume2, Sparkles, CheckCircle2, Palette } from 'lucide-react';
 
-type TraceCategory = 'numbers' | 'english' | 'hindi' | 'shapes';
+type TraceCategory = 'numbers' | 'english' | 'hindi' | 'ginti_shabd' | 'shapes';
 
 interface TraceItem {
   char: string;
@@ -51,6 +51,18 @@ const TRACE_ITEMS: Record<TraceCategory, TraceItem[]> = {
     { char: 'ग', title: 'व्यंजन ग (ga)', word: 'ग से गमला (Flowerpot) 🪴', lang: 'hi-IN' },
     { char: 'घ', title: 'व्यंजन घ (gha)', word: 'घ से घर (House) 🏠', lang: 'hi-IN' },
   ],
+  ginti_shabd: [
+    { char: '१', title: 'हिंदी गिनती १ (Ek)', word: '१ = एक सूरज ☀️', lang: 'hi-IN' },
+    { char: '२', title: 'हिंदी गिनती २ (Do)', word: '२ = दो आँखें 👀', lang: 'hi-IN' },
+    { char: '३', title: 'हिंदी गिनती ३ (Teen)', word: '३ = तीन पहिए 🛺', lang: 'hi-IN' },
+    { char: '४', title: 'हिंदी गिनती ४ (Chaar)', word: '४ = चार दिशाएँ 🧭', lang: 'hi-IN' },
+    { char: '५', title: 'हिंदी गिनती ५ (Paanch)', word: '५ = पाँच उँगलियाँ 🖐️', lang: 'hi-IN' },
+    { char: '१०', title: 'हिंदी गिनती १० (Das)', word: '१० = दस सितारे ⭐', lang: 'hi-IN' },
+    { char: 'घर', title: 'दो अक्षर का शब्द: घर', word: 'घ + र = घर 🏠', lang: 'hi-IN' },
+    { char: 'फल', title: 'दो अक्षर का शब्द: फल', word: 'फ + ल = फल 🍎', lang: 'hi-IN' },
+    { char: 'जल', title: 'दो अक्षर का शब्द: जल', word: 'ज + ल = जल 💧', lang: 'hi-IN' },
+    { char: 'कमल', title: 'तीन अक्षर का शब्द: कमल', word: 'क + म + ल = कमल 🪷', lang: 'hi-IN' },
+  ],
   shapes: [
     { char: '◯', title: 'Circle (Round)', word: '0 Corners, 1 Curved Edge 🔴' },
     { char: '□', title: 'Square (4 Equal Sides)', word: '4 Equal Sides, 4 Corners 🟦' },
@@ -73,6 +85,8 @@ export const MagicTracingSlate: React.FC = () => {
   const [category, setCategory] = useState<TraceCategory>('numbers');
   const [itemIdx, setItemIdx] = useState(0);
   const [crayonColor, setCrayonColor] = useState('#22d3ee');
+  const [rainbowMode, setRainbowMode] = useState(false);
+  const hueRef = useRef(0);
   const [brushSize, setBrushSize] = useState(14);
   const [isDrawing, setIsDrawing] = useState(false);
   const [tracedSuccess, setTracedSuccess] = useState(false);
@@ -182,12 +196,36 @@ export const MagicTracingSlate: React.FC = () => {
     if (!ctx) return;
 
     const { x, y } = getPointerPos(e);
-    ctx.strokeStyle = crayonColor;
+    if (rainbowMode) {
+      hueRef.current = (hueRef.current + 6) % 360;
+      ctx.strokeStyle = `hsl(${hueRef.current}, 95%, 62%)`;
+    } else {
+      ctx.strokeStyle = crayonColor;
+    }
     ctx.lineWidth = brushSize;
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
     ctx.lineTo(x, y);
     ctx.stroke();
+    if (rainbowMode) {
+      ctx.beginPath();
+      ctx.moveTo(x, y);
+    }
+  };
+
+  const stampSticker = (emoji: string) => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    const rx = 60 + Math.random() * (canvas.width - 120);
+    const ry = 55 + Math.random() * (canvas.height - 110);
+    ctx.save();
+    ctx.font = '38px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(emoji, rx, ry);
+    ctx.restore();
   };
 
   const stopDraw = () => {
@@ -205,6 +243,7 @@ export const MagicTracingSlate: React.FC = () => {
               { id: 'numbers', label: '🔢 Trace Numbers (1–10)' },
               { id: 'english', label: '🔤 Trace English (A–Z)' },
               { id: 'hindi', label: '🇮🇳 Trace Hindi (अ–अः, क–घ)' },
+              { id: 'ginti_shabd', label: '🪔 हिंदी गिनती (१–१०) व शब्द' },
               { id: 'shapes', label: '🔺 Trace 2D Shapes' },
             ] as const
           ).map((cat) => (
@@ -297,13 +336,42 @@ export const MagicTracingSlate: React.FC = () => {
             <button
               key={c.hex}
               type="button"
-              onClick={() => setCrayonColor(c.hex)}
+              onClick={() => {
+                setRainbowMode(false);
+                setCrayonColor(c.hex);
+              }}
               title={c.name}
               style={{ backgroundColor: c.hex }}
               className={`w-7 h-7 rounded-full border-2 transition-transform ${
-                crayonColor === c.hex ? 'border-white scale-125' : 'border-transparent'
+                !rainbowMode && crayonColor === c.hex ? 'border-white scale-125' : 'border-transparent'
               }`}
             />
+          ))}
+          <button
+            type="button"
+            onClick={() => setRainbowMode((r) => !r)}
+            className={`px-2.5 py-1 rounded-full text-xs font-extrabold border transition-all ${
+              rainbowMode
+                ? 'bg-gradient-to-r from-rose-500 via-amber-400 to-cyan-400 text-slate-950 border-white scale-105'
+                : 'bg-slate-800 text-slate-200 border-slate-700'
+            }`}
+          >
+            🌈 Rainbow Chalk
+          </button>
+        </div>
+
+        <div className="flex items-center gap-1.5">
+          <span className="text-xs text-slate-400">Stamps:</span>
+          {['⭐', '🍎', '🦋', '🚀'].map((st) => (
+            <button
+              key={st}
+              type="button"
+              onClick={() => stampSticker(st)}
+              className="px-2 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-sm border border-slate-700"
+              title="Stamp sticker on blackboard"
+            >
+              {st}
+            </button>
           ))}
         </div>
 
