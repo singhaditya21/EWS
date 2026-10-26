@@ -49,14 +49,18 @@ export type Class1LabMode =
   | 'spatial-ordinals-data'
   | 'math-vertical-staircase'
   | 'math-ordinals-fractions'
+  | 'math-word-problems-tables'
   | 'eng-phonics-vowels'
   | 'eng-grammar-opposites'
   | 'eng-mridang-stories'
   | 'eng-nouns-this-that'
   | 'eng-pronouns-adjectives'
+  | 'eng-digraphs-sentences'
   | 'hindi-varnamala'
   | 'hindi-shabd-train'
+  | 'hindi-barahkhadi-vyakaran'
   | 'computer-smart-machine'
+  | 'computer-paint-manners'
   | 'evs-sense-organs'
   | 'evs-plants-living'
   | 'evs-animals-food-safety'
@@ -65,7 +69,9 @@ export type Class1LabMode =
   | 'evs-helpers-transport'
   | 'evs-houses-food'
   | 'evs-water-air-habits'
-  | 'arts-colors-music';
+  | 'evs-clothes-places-games'
+  | 'arts-colors-music'
+  | 'olympiad-reasoning-gym';
 
 type Class1SubjectGroup = 'math' | 'english' | 'hindi' | 'evs' | 'computer' | 'arts';
 
@@ -86,13 +92,16 @@ const MODE_CATALOG: {
   { id: 'spatial-ordinals-data', subject: 'math', label: '9. Ordinals & Equal Groups', icon: Sparkles },
   { id: 'math-vertical-staircase', subject: 'math', label: '10. Vertical T|O Sums & Stairs 🪜', icon: Calculator },
   { id: 'math-ordinals-fractions', subject: 'math', label: '11. 1st–10th Race & Pizza Halves 🍕', icon: Trophy },
+  { id: 'math-word-problems-tables', subject: 'math', label: '12. Story Sums & Musical Tables (2×, 5×, 10×) 🧮', icon: Calculator },
   { id: 'eng-phonics-vowels', subject: 'english', label: '1. Vowels (A,E,I,O,U) & CVC', icon: BookOpen },
   { id: 'eng-grammar-opposites', subject: 'english', label: '2. Opposites, Plurals & Verbs', icon: BookOpen },
   { id: 'eng-mridang-stories', subject: 'english', label: '3. Mridang Poems & Stories 🎭', icon: Sparkles },
   { id: 'eng-nouns-this-that', subject: 'english', label: '4. Nouns (4 Baskets) & This/That 🧺', icon: BookOpen },
   { id: 'eng-pronouns-adjectives', subject: 'english', label: '5. Pronouns (He/She/It) & Adjectives 🌟', icon: BookOpen },
+  { id: 'eng-digraphs-sentences', subject: 'english', label: '6. Digraphs (ch/sh/th) & Sentence Builder ✍️', icon: BookOpen },
   { id: 'hindi-varnamala', subject: 'hindi', label: '1. सारंगी: वर्णमाला, मात्रा, गिनती व कविता', icon: Languages },
   { id: 'hindi-shabd-train', subject: 'hindi', label: '2. दो, तीन व चार अक्षर वाले शब्द रेलगाड़ी 🚂', icon: Languages },
+  { id: 'hindi-barahkhadi-vyakaran', subject: 'hindi', label: '3. बारहखड़ी (क–कः), विलोम व एक–अनेक 🪔', icon: Languages },
   { id: 'evs-sense-organs', subject: 'evs', label: '1. My Body & 5 Sense Organs', icon: Eye },
   { id: 'evs-plants-living', subject: 'evs', label: '2. Growing Plant & Living Things', icon: Sprout },
   { id: 'evs-animals-food-safety', subject: 'evs', label: '3. Animals (Babies/Homes) & Safety', icon: CheckCircle2 },
@@ -101,8 +110,185 @@ const MODE_CATALOG: {
   { id: 'evs-helpers-transport', subject: 'evs', label: '6. Helpers, Home & Transport 🚒', icon: Truck },
   { id: 'evs-houses-food', subject: 'evs', label: '7. Houses (Kutcha/Pucca) & Food 🏡🍎', icon: Home },
   { id: 'evs-water-air-habits', subject: 'evs', label: '8. Water 💧, Air 🌬️ & Daily Habits 🪥', icon: Sun },
+  { id: 'evs-clothes-places-games', subject: 'evs', label: '9. Clothes 👕, Neighbourhood 🏥 & Games ♟️⚽', icon: Home },
   { id: 'computer-smart-machine', subject: 'computer', label: '1. Computer, Keyboard & Mouse 🖥️', icon: Monitor },
+  { id: 'computer-paint-manners', subject: 'computer', label: '2. Kid Paint Studio 🎨 & Lab Manners ✅', icon: Monitor },
   { id: 'arts-colors-music', subject: 'arts', label: '1. Color Mixing & Xylophone 🎵', icon: Palette },
+  { id: 'olympiad-reasoning-gym', subject: 'arts', label: '2. Olympiad Brain Gym (Odd One Out & Analogies) 🧠', icon: Trophy },
+];
+
+const WORD_PROBLEM_STORIES = [
+  {
+    title: '🍎 Apples in the Basket (Addition +)',
+    story: 'Riya has 8 red apples 🍎 in her basket. Her mother gives her 5 more green apples 🍏. How many apples does Riya have ALTOGETHER?',
+    clueWord: 'ALTOGETHER / IN ALL → means ADD (+)',
+    a: 8,
+    b: 5,
+    op: '+' as const,
+    ans: 13,
+    iconsA: '🍎🍎🍎🍎🍎🍎🍎🍎',
+    iconsB: '🍏🍏🍏🍏🍏',
+  },
+  {
+    title: '🐦 Birds on a Tree Branch (Subtraction -)',
+    story: 'There were 12 little birds 🐦 sitting on a mango tree. 4 birds FLEW AWAY into the sky. How many birds are LEFT on the tree?',
+    clueWord: 'FLEW AWAY / LEFT → means SUBTRACT (-)',
+    a: 12,
+    b: 4,
+    op: '-' as const,
+    ans: 8,
+    iconsA: '🐦🐦🐦🐦🐦🐦🐦🐦',
+    iconsB: '❌🐦❌🐦❌🐦❌🐦',
+  },
+  {
+    title: '🎈 Birthday Party Balloons (Addition +)',
+    story: 'Aarav blew up 9 blue balloons 🎈 and his sister blew up 6 yellow balloons 🎈. What is the TOTAL number of balloons?',
+    clueWord: 'TOTAL → means ADD (+)',
+    a: 9,
+    b: 6,
+    op: '+' as const,
+    ans: 15,
+    iconsA: '🎈🎈🎈🎈🎈🎈🎈🎈🎈',
+    iconsB: '🎈🎈🎈🎈🎈🎈',
+  },
+  {
+    title: '🍪 Cookies on a Plate (Subtraction -)',
+    story: 'Grandma baked 15 yummy chocolate cookies 🍪. Hungry puppy Bruno ATE 5 cookies! How many cookies REMAIN on the plate?',
+    clueWord: 'ATE / REMAIN → means SUBTRACT (-)',
+    a: 15,
+    b: 5,
+    op: '-' as const,
+    ans: 10,
+    iconsA: '🍪🍪🍪🍪🍪🍪🍪🍪🍪🍪',
+    iconsB: '❌🍪❌🍪❌🍪❌🍪❌🍪',
+  },
+];
+
+const DIGRAPH_CARDS = [
+  { digraph: 'CH', sound: 'ch (च)', words: ['Chair 🪑', 'Cheese 🧀', 'Chick 🐥', 'Chalk 🖍️'], sentence: 'The little CHick sat on a CHair.' },
+  { digraph: 'SH', sound: 'sh (श)', words: ['Ship 🚢', 'Shell 🐚', 'Shoe 👟', 'Sheep 🐑'], sentence: 'She found a pink SHell near the SHip.' },
+  { digraph: 'TH', sound: 'th (थ/द)', words: ['Thumb 👍', 'Three 3️⃣', 'Tree Think 💭', 'Bath 🛁'], sentence: 'I have THree rings on my THumb.' },
+  { digraph: 'WH', sound: 'wh (व्ह)', words: ['Whale 🐋', 'Wheel 🛞', 'Whistle 🪈', 'White ⚪'], sentence: 'A big blue WHale swam in the sea.' },
+];
+
+const JUMBLED_SENTENCES = [
+  {
+    jumbled: ['sky', 'blue.', 'is', 'The'],
+    correct: 'The sky is blue.',
+    rule: 'Start with CAPITAL "The" and end with a Full Stop (.)!',
+  },
+  {
+    jumbled: ['milk.', 'drinks', 'cat', 'The'],
+    correct: 'The cat drinks milk.',
+    rule: 'Subject (The cat) + Action (drinks) + Object (milk.)!',
+  },
+  {
+    jumbled: ['your', 'name?', 'is', 'What'],
+    correct: 'What is your name?',
+    rule: 'A question starts with a Question Word (What) and ends with a Question Mark (?)!',
+  },
+];
+
+const BARAHKHADI_CONSONANTS = [
+  { base: 'क', name: 'क (Ka)', forms: ['क', 'का', 'कि', 'की', 'कु', 'कू', 'के', 'कै', 'को', 'कौ', 'कं', 'कः'] },
+  { base: 'ग', name: 'ग (Ga)', forms: ['ग', 'गा', 'गि', 'गी', 'गु', 'गू', 'गे', 'गै', 'गो', 'गौ', 'गं', 'गः'] },
+  { base: 'च', name: 'च (Cha)', forms: ['च', 'चा', 'चि', 'ची', 'चु', 'चू', 'चे', 'चै', 'चो', 'चौ', 'चं', 'चः'] },
+  { base: 'म', name: 'म (Ma)', forms: ['म', 'मा', 'मि', 'मी', 'मु', 'मू', 'मे', 'मै', 'मो', 'मौ', 'मं', 'मः'] },
+  { base: 'स', name: 'स (Sa)', forms: ['स', 'सा', 'सि', 'सी', 'सु', 'सू', 'से', 'सै', 'सो', 'सौ', 'सं', 'सः'] },
+];
+
+const HINDI_VILOM_VACHAN = {
+  vilom: [
+    { a: 'दिन (Day) ☀️', b: 'रात (Night) 🌙' },
+    { a: 'बड़ा (Big) 🐘', b: 'छोटा (Small) 🐜' },
+    { a: 'ठंडा (Cold) 🍦', b: 'गरम (Hot) ☕' },
+    { a: 'ऊपर (Up) ⬆️', b: 'नीचे (Down) ⬇️' },
+    { a: 'हँसना (Laugh) 😄', b: 'रोना (Cry) 😢' },
+    { a: 'अंदर (Inside) 📦', b: 'बाहर (Outside) 🏃' },
+  ],
+  vachan: [
+    { ek: 'एक तारा ⭐', anek: 'अनेक तारे ⭐⭐⭐' },
+    { ek: 'एक लड़का 👦', anek: 'अनेक लड़के 👦👦' },
+    { ek: 'एक किताब 📖', anek: 'अनेक किताबें 📚' },
+    { ek: 'एक तितली 🦋', anek: 'अनेक तितलियाँ 🦋🦋' },
+    { ek: 'एक केला 🍌', anek: 'अनेक केले 🍌🍌' },
+  ],
+};
+
+const CLOTHES_PLACES_GAMES = {
+  clothes: [
+    { season: 'Summer Clothes ☀️', items: 'Light Cotton Shirt, Frock, Shorts & Cap 👕🧢', source: 'We get COTTON from the fluffy white pods of the Cotton Plant 🌱!' },
+    { season: 'Winter Clothes ❄️', items: 'Warm Woollen Sweater, Jacket, Muffler & Gloves 🧣🧤', source: 'We get soft warm WOOL from the fleece of a Sheep 🐑!' },
+    { season: 'Rainy / Monsoon Clothes 🌧️', items: 'Waterproof Raincoat, Gumboots & Umbrella 🧥☔', source: 'Waterproof plastic and rubber keep us dry in the rain!' },
+  ],
+  places: [
+    { place: 'Hospital 🏥', who: 'Doctor & Nurse 👩‍⚕️', why: 'We go here when we are sick or hurt to get medicine and care.' },
+    { place: 'Post Office 🏤', who: 'Postmaster & Postman 📮', why: 'We buy stamps, postcards, and send letters and parcels here.' },
+    { place: 'School 🏫', who: 'Principal & Teachers 👩‍🏫', why: 'We learn to read, write, count, paint, and make friends here!' },
+    { place: 'Fire Station 🚒', who: 'Brave Firefighters 👨‍🚒', why: 'Red fire engines stay ready here to put out fires!' },
+    { place: 'Park & Playground 🏞️', who: 'Children, Families & Gardener 👨‍🌾', why: 'We play on swings, slides, and walk among green trees!' },
+  ],
+  games: [
+    { name: 'Chess & Carrom ♟️', type: 'Indoor Game (Inside Home)', benefit: 'Sharpens our brain and focus!' },
+    { name: 'Ludo & Snakes-and-Ladders 🎲', type: 'Indoor Game (Inside Home)', benefit: 'Fun number counting with family!' },
+    { name: 'Football & Cricket ⚽🏏', type: 'Outdoor Game (Playground)', benefit: 'Makes our legs, heart, and muscles strong!' },
+    { name: 'Badminton & Cycling 🏸🚲', type: 'Outdoor Game (Park)', benefit: 'Gives us fresh air and balance!' },
+  ],
+};
+
+const PAINT_TOOLS_MANNERS = {
+  tools: [
+    { name: 'Pencil / Brush Tool 🖌️', desc: 'Used to draw freehand lines and color pictures just like a real crayon!' },
+    { name: 'Fill with Color (Bucket) 🪣', desc: 'Fills an entire closed shape with your favorite bright color in 1 click!' },
+    { name: 'Eraser Tool 🧽', desc: 'Rubs out any mistake on the drawing canvas cleanly!' },
+    { name: 'Shapes Tool (Circle/Rectangle) ◯▭', desc: 'Draws neat circles, squares, stars, and straight lines automatically!' },
+    { name: 'Text Tool (A) 🔤', desc: 'Lets you type your name on your drawing using the Keyboard!' },
+  ],
+  manners: [
+    { rule: 'Sit straight at arm’s length from the monitor', good: true, icon: '✅🪑' },
+    { rule: 'Remove shoes or keep the computer lab clean & dust-free', good: true, icon: '✅✨' },
+    { rule: 'Press keyboard keys gently and move the mouse on a mouse pad', good: true, icon: '✅⌨️' },
+    { rule: 'Never eat food or spill water/juice near the computer!', good: false, icon: '❌🥤' },
+    { rule: 'Never pull electric wires or touch plugs with wet hands!', good: false, icon: '❌🔌' },
+  ],
+};
+
+const OLYMPIAD_PUZZLES = [
+  {
+    category: 'Odd One Out (Find the Different One)',
+    question: 'Look at the 4 items below. Three belong to the same family, and ONE is different. Tap the Odd One Out!',
+    options: ['🍎 Apple', '🍌 Banana', '🚗 Red Car (Odd One!)', '🥭 Mango'],
+    correct: 2,
+    explanation: 'Apple, Banana, and Mango are FRUITS we eat, while a Car 🚗 is a vehicle!',
+  },
+  {
+    category: 'Picture Analogy (Pair Matching)',
+    question: 'Bird 🐦 lives in a Nest 🪺. In the same way, a Lion 🦁 lives in a ___?',
+    options: ['Kennel 🏠', 'Den 🪨🦁', 'Stable ', 'Aquarium 🐠'],
+    correct: 1,
+    explanation: 'A Bird lives in a Nest, and a Lion lives in a Den!',
+  },
+  {
+    category: 'Shape Counting (Visual Geometry)',
+    question: 'A toy snowman ⛄ is drawn using 1 small circle for the head, 1 big circle for the body, and 2 tiny circles for eyes. How many CIRCLES in total?',
+    options: ['2 Circles', '3 Circles', '4 Circles 🎯', '6 Circles'],
+    correct: 2,
+    explanation: '1 (head) + 1 (body) + 2 (eyes) = 4 Circles in total!',
+  },
+  {
+    category: 'Number Pattern Detective (IMO Olympiad)',
+    question: 'Find the missing number in the jumping pattern: 5, 10, 15, ___, 25',
+    options: ['16', '20 🎯', '22', '30'],
+    correct: 1,
+    explanation: 'We are skip counting by 5s: 5, 10, 15, 20, 25!',
+  },
+];
+
+const YOGA_STRETCHES = [
+  { name: '🌳 Tall Tree Pose (Vrikshasana)', action: 'Stand tall like a green mango tree and stretch both arms high toward the sun!' },
+  { name: '🦋 Butterfly Wings (Titli Asana)', action: 'Sit comfortably, join your feet, and gently flap your knees like a colorful butterfly!' },
+  { name: '🦁 Brave Lion Breath (Simhasana)', action: 'Take a deep breath in through your nose, open your mouth wide, and let out a gentle HAAA!' },
+  { name: '⭐ Twinkling Star Stretch', action: 'Spread your arms wide like a shining star and wiggle your 10 fingers!' },
 ];
 
 const ORDINAL_RUNNERS = [
@@ -845,6 +1031,22 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
   const [activeShabdIdx, setActiveShabdIdx] = useState(0);
   const [activeHabitIdx, setActiveHabitIdx] = useState(0);
 
+  // States for 6 Final Curriculum & Olympiad Modules + Brain Break & Report Card Modals
+  const [breathingModalOpen, setBreathingModalOpen] = useState(false);
+  const [breathIn, setBreathIn] = useState(true);
+  const [reportCardOpen, setReportCardOpen] = useState(false);
+  const [storyProblemIdx, setStoryProblemIdx] = useState(0);
+  const [tableMultiplier, setTableMultiplier] = useState<1 | 2 | 5 | 10>(2);
+  const [digraphIdx, setDigraphIdx] = useState(0);
+  const [jumbledIdx, setJumbledIdx] = useState(0);
+  const [barahkhadiIdx, setBarahkhadiIdx] = useState(0);
+  const [barahkhadiFormIdx, setBarahkhadiFormIdx] = useState(0);
+  const [clothesSeasonIdx, setClothesSeasonIdx] = useState(0);
+  const [placeIdx, setPlaceIdx] = useState(0);
+  const [paintToolIdx, setPaintToolIdx] = useState(0);
+  const [olympiadIdx, setOlympiadIdx] = useState(0);
+  const [olympiadFeedback, setOlympiadFeedback] = useState<string | null>(null);
+
   const handleStartMicPractice = () => {
     const target = SPEAK_PRACTICE_WORDS[speakWordIdx].word;
     const SpeechRec =
@@ -1287,6 +1489,46 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
           <button
             type="button"
             onClick={() => {
+              playPop();
+              setBreathingModalOpen((o) => !o);
+              setReportCardOpen(false);
+              setArcadeOpen(false);
+              setMicModalOpen(false);
+              setStickerModalOpen(false);
+              speak('Time for a 1-minute Panchakosha Brain Break! Breathe in slowly like a big balloon, and breathe out gently!', true);
+            }}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-extrabold transition-all shadow-sm ${
+              breathingModalOpen
+                ? 'bg-teal-400 text-slate-950 ring-2 ring-white'
+                : 'bg-teal-500/20 border border-teal-400 text-teal-200 hover:bg-teal-500/30'
+            }`}
+          >
+            🧘‍♂️ Brain Break
+          </button>
+
+          <button
+            type="button"
+            onClick={() => {
+              playPop();
+              setReportCardOpen((o) => !o);
+              setBreathingModalOpen(false);
+              setArcadeOpen(false);
+              setMicModalOpen(false);
+              setStickerModalOpen(false);
+              speak('Opening your Class 1 NIPUN Bharat Skill Report Card!', true);
+            }}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-extrabold transition-all shadow-sm ${
+              reportCardOpen
+                ? 'bg-violet-400 text-slate-950 ring-2 ring-white'
+                : 'bg-violet-500/20 border border-violet-400 text-violet-200 hover:bg-violet-500/30'
+            }`}
+          >
+            📊 Report Card
+          </button>
+
+          <button
+            type="button"
+            onClick={() => {
               playFanfare();
               setStickerModalOpen((o) => !o);
               setArcadeOpen(false);
@@ -1587,18 +1829,143 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
         </div>
       )}
 
+      {/* Panchakosha 1-Minute Brain Break & Kids Yoga Breathing Modal */}
+      {breathingModalOpen && (
+        <div className="p-4 rounded-2xl bg-gradient-to-r from-teal-950/75 via-[#111827] to-cyan-950/75 border-2 border-teal-400/70 shadow-xl space-y-4">
+          <div className="flex items-center justify-between border-b border-teal-500/30 pb-2">
+            <div>
+              <h4 className="text-sm font-black text-white">
+                🧘‍♂️ NCF-FS Panchakosha 1-Minute Brain Break & Kids Yoga Buddy
+              </h4>
+              <p className="text-xs text-teal-200">
+                Refresh your mind and body with Balloon Belly Breathing and playful Animal Stretches!
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => setBreathingModalOpen(false)}
+              className="p-1 rounded-lg bg-slate-800 text-slate-300 hover:text-white"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
+            <div className="md:col-span-5 p-4 rounded-xl bg-[#090D16] border border-teal-500/40 flex flex-col items-center space-y-3">
+              <div
+                onClick={() => {
+                  setBreathIn((b) => !b);
+                  speak(
+                    !breathIn
+                      ? 'Breathe IN slowly through your nose... 1, 2, 3!'
+                      : 'Breathe OUT gently through your mouth... 1, 2, 3!',
+                    true
+                  );
+                }}
+                className={`cursor-pointer rounded-full flex items-center justify-center transition-all duration-700 font-black text-xs text-slate-950 shadow-lg ${
+                  breathIn
+                    ? 'w-28 h-28 bg-teal-400 scale-110 ring-4 ring-teal-200'
+                    : 'w-20 h-20 bg-cyan-300 scale-95'
+                }`}
+              >
+                {breathIn ? '🎈 Breathe IN' : '🌬️ Breathe OUT'}
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  setBreathIn((b) => !b);
+                  awardStar('Great mindful Balloon Breathing! Your brain is fresh and ready!');
+                }}
+                className="px-3 py-1.5 rounded-xl bg-teal-400 text-slate-950 text-xs font-extrabold"
+              >
+                Tap Balloon to Switch Inhale / Exhale (+1 ⭐)
+              </button>
+            </div>
+
+            <div className="md:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-2">
+              {YOGA_STRETCHES.map((y) => (
+                <button
+                  key={y.name}
+                  type="button"
+                  onClick={() => awardStar(`${y.name}: ${y.action}`)}
+                  className="p-3 rounded-xl bg-[#090D16] border border-slate-800 hover:border-teal-400 text-left space-y-1"
+                >
+                  <div className="text-xs font-extrabold text-teal-300">{y.name}</div>
+                  <p className="text-[11px] text-slate-300 leading-snug">{y.action}</p>
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* NIPUN Bharat & CISCE Class 1 Parent/Teacher Report Card Modal */}
+      {reportCardOpen && (
+        <div className="p-4 rounded-2xl bg-gradient-to-r from-violet-950/75 via-[#111827] to-indigo-950/75 border-2 border-violet-400/70 shadow-xl space-y-4">
+          <div className="flex flex-wrap items-center justify-between gap-2 border-b border-violet-500/30 pb-2">
+            <div>
+              <h4 className="text-sm font-black text-white">
+                📊 Class 1 NIPUN Bharat (FLN) & CBSE/ICSE Competency Report Card
+              </h4>
+              <p className="text-xs text-violet-200">
+                Holistic 360° Foundational Literacy & Numeracy (FLN) Progress Tracker for {childName}
+              </p>
+            </div>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => window.print()}
+                className="px-3 py-1 rounded-lg bg-amber-400 text-slate-950 text-xs font-extrabold"
+              >
+                🖨️ Print Report Card
+              </button>
+              <button
+                type="button"
+                onClick={() => setReportCardOpen(false)}
+                className="p-1 rounded-lg bg-slate-800 text-slate-300 hover:text-white"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5">
+            {[
+              { subj: '📐 Math (12 Labs)', skill: 'Numbers 1–100, T|O, Money, Clock, Fractions', badge: 'Numeracy Star 🌟' },
+              { subj: '📖 English (6 Labs)', skill: 'Phonics, Digraphs, Nouns, Pronouns, Mridang', badge: 'Reading Whiz 📚' },
+              { subj: '🇮🇳 Hindi (3 Labs)', skill: 'स्वर, व्यंजन, मात्रा, बारहखड़ी, शब्द रेल', badge: 'सारंगी सितारा 🪔' },
+              { subj: '🌱 EVS & GK (9 Labs)', skill: 'Senses, Plants, Animals, Houses, Water, India', badge: 'Nature Explorer 🌍' },
+              { subj: '💻 Computer (2 Labs)', skill: 'CPU/Monitor/Mouse, Keyboard, Kid Paint', badge: 'Tech Champ 🖥️' },
+              { subj: '🧠 Arts & Olympiad (2)', skill: 'Color Mixing, Sargam, Logical Reasoning', badge: 'Brain Gym Hero 🏆' },
+            ].map((item) => (
+              <div
+                key={item.subj}
+                className="p-3 rounded-xl bg-[#090D16] border border-violet-500/30 space-y-1.5"
+              >
+                <div className="text-xs font-extrabold text-white">{item.subj}</div>
+                <div className="text-[10px] text-slate-400 leading-snug">{item.skill}</div>
+                <div className="w-full h-1.5 rounded-full bg-slate-800 overflow-hidden">
+                  <div className="h-full bg-emerald-400 w-full" />
+                </div>
+                <div className="text-[10px] font-mono font-bold text-amber-300">{item.badge}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Categorized Subject & Activity Selector Bar (Decluttered for 6-Year-Olds!) */}
       <div className="p-3 rounded-2xl bg-[#111827] border border-[#1F2937] space-y-2.5">
         <div className="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-slate-800/80">
           <div className="flex flex-wrap items-center gap-1.5">
             {(
               [
-                { id: 'math', label: '📐 Math (11)', color: 'bg-cyan-500 text-slate-950' },
-                { id: 'english', label: '📖 English / Mridang (5)', color: 'bg-amber-500 text-slate-950' },
-                { id: 'hindi', label: '🇮🇳 Hindi / सारंगी (2)', color: 'bg-rose-500 text-white' },
-                { id: 'evs', label: '🌱 EVS & GK (8)', color: 'bg-emerald-500 text-slate-950' },
-                { id: 'computer', label: '💻 Computer (1)', color: 'bg-violet-500 text-white' },
-                { id: 'arts', label: '🎨 Arts & Music (1)', color: 'bg-pink-500 text-white' },
+                { id: 'math', label: '📐 Math (12)', color: 'bg-cyan-500 text-slate-950' },
+                { id: 'english', label: '📖 English / Mridang (6)', color: 'bg-amber-500 text-slate-950' },
+                { id: 'hindi', label: '🇮🇳 Hindi / सारंगी (3)', color: 'bg-rose-500 text-white' },
+                { id: 'evs', label: '🌱 EVS & GK (9)', color: 'bg-emerald-500 text-slate-950' },
+                { id: 'computer', label: '💻 Computer (2)', color: 'bg-violet-500 text-white' },
+                { id: 'arts', label: '🎨 Arts & Olympiad (2)', color: 'bg-pink-500 text-white' },
               ] as const
             ).map((subj) => {
               const activeSubj = currentSubjectGroup === subj.id;
@@ -5190,6 +5557,542 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
               ))}
             </div>
           </div>
+        </div>
+      )}
+
+      {/* MODE 29: MATH — STORY WORD PROBLEMS (READ → PICTURE → SIGN → ANSWER) & MUSICAL TABLES (1×, 2×, 5×, 10×) */}
+      {mode === 'math-word-problems-tables' && (
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
+          {/* Step-by-Step Story Word Problem Solver */}
+          <div className="lg:col-span-7 p-4 rounded-2xl bg-[#111827] border border-[#1F2937] space-y-3">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-cyan-400">
+              📖 Step-by-Step Story Word Problem Detective (Add + vs. Subtract -)
+            </h4>
+            <div className="flex flex-wrap gap-1.5">
+              {WORD_PROBLEM_STORIES.map((wp, idx) => (
+                <button
+                  key={wp.title}
+                  type="button"
+                  onClick={() => {
+                    setStoryProblemIdx(idx);
+                    speak(wp.story);
+                  }}
+                  className={`px-2.5 py-1.5 rounded-xl text-xs font-extrabold border ${
+                    storyProblemIdx === idx
+                      ? 'bg-cyan-500 text-slate-950 border-white'
+                      : 'bg-[#090D16] text-slate-300 border-slate-800'
+                  }`}
+                >
+                  {wp.title}
+                </button>
+              ))}
+            </div>
+
+            {(() => {
+              const st = WORD_PROBLEM_STORIES[storyProblemIdx] || WORD_PROBLEM_STORIES[0];
+              return (
+                <div className="p-4 rounded-xl bg-[#090D16] border border-cyan-500/40 space-y-3">
+                  <p className="text-sm font-bold text-white leading-relaxed">&ldquo;{st.story}&rdquo;</p>
+                  <div className="p-2.5 rounded-lg bg-amber-500/15 border border-amber-400/50 text-xs text-amber-200 font-bold">
+                    🔍 Clue Word Detective: <span className="text-white">{st.clueWord}</span>
+                  </div>
+                  <div className="p-3 rounded-xl bg-[#111827] border border-slate-800 flex flex-wrap items-center justify-between gap-3">
+                    <div className="text-lg tracking-widest">
+                      {st.iconsA} <span className="font-mono font-black text-cyan-400 mx-1">{st.op}</span> {st.iconsB}
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        awardStar(`${st.a} ${st.op === '+' ? 'plus' : 'minus'} ${st.b} equals ${st.ans}!`)
+                      }
+                      className="px-3.5 py-1.5 rounded-xl bg-emerald-400 text-slate-950 font-mono text-sm font-black"
+                    >
+                      {st.a} {st.op} {st.b} = {st.ans} 🔊
+                    </button>
+                  </div>
+                </div>
+              );
+            })()}
+          </div>
+
+          {/* Musical Multiplication Tables (1×, 2×, 5×, 10×) */}
+          <div className="lg:col-span-5 p-4 rounded-2xl bg-[#111827] border border-[#1F2937] space-y-3">
+            <div className="flex items-center justify-between">
+              <h4 className="text-xs font-bold uppercase tracking-wider text-amber-400">
+                🎵 Musical Multiplication Tables ({tableMultiplier}×)
+              </h4>
+              <div className="flex gap-1">
+                {([1, 2, 5, 10] as const).map((m) => (
+                  <button
+                    key={m}
+                    type="button"
+                    onClick={() => {
+                      setTableMultiplier(m);
+                      speak(`Table of ${m}!`);
+                    }}
+                    className={`px-2.5 py-1 rounded-lg text-xs font-mono font-extrabold border ${
+                      tableMultiplier === m
+                        ? 'bg-amber-400 text-slate-950 border-white'
+                        : 'bg-[#090D16] text-slate-300 border-slate-800'
+                    }`}
+                  >
+                    {m}×
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-1.5">
+              {Array.from({ length: 10 }, (_, i) => i + 1).map((step) => {
+                const prod = tableMultiplier * step;
+                return (
+                  <button
+                    key={step}
+                    type="button"
+                    onClick={() => {
+                      playMusicalNote(240 + step * 28);
+                      speak(`${tableMultiplier} times ${step} is ${prod}`, true);
+                    }}
+                    className="p-2 rounded-xl bg-[#090D16] hover:bg-amber-500/20 border border-slate-800 hover:border-amber-400 font-mono text-xs font-bold text-slate-200 flex items-center justify-between"
+                  >
+                    <span>
+                      {tableMultiplier} × {step} =
+                    </span>
+                    <span className="text-amber-300 font-black text-sm">{prod}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* MODE 30: ENGLISH — DIGRAPHS (CH, SH, TH, WH), PUNCTUATION & JUMBLED SENTENCE BUILDER */}
+      {mode === 'eng-digraphs-sentences' && (
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
+          <div className="lg:col-span-6 p-4 rounded-2xl bg-[#111827] border border-[#1F2937] space-y-3">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-amber-400">
+              🔤 Two-Letter Special Sounds (Digraphs: CH, SH, TH, WH)
+            </h4>
+            <p className="text-xs text-slate-300">
+              When two letters hold hands to make ONE new sound, we call it a <strong>Digraph</strong>!
+            </p>
+            <div className="grid grid-cols-4 gap-2">
+              {DIGRAPH_CARDS.map((d, idx) => (
+                <button
+                  key={d.digraph}
+                  type="button"
+                  onClick={() => {
+                    setDigraphIdx(idx);
+                    awardStar(`${d.digraph} makes the ${d.sound} sound! ${d.sentence}`);
+                  }}
+                  className={`py-2.5 rounded-xl font-mono text-base font-black border ${
+                    digraphIdx === idx
+                      ? 'bg-amber-400 text-slate-950 border-white'
+                      : 'bg-[#090D16] text-slate-200 border-slate-800'
+                  }`}
+                >
+                  {d.digraph}
+                </button>
+              ))}
+            </div>
+            <div className="p-4 rounded-xl bg-[#090D16] border border-amber-500/40 space-y-2">
+              <div className="text-xs font-mono text-amber-300 font-bold">
+                Sound: {DIGRAPH_CARDS[digraphIdx].sound}
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {DIGRAPH_CARDS[digraphIdx].words.map((w) => (
+                  <button
+                    key={w}
+                    type="button"
+                    onClick={() => speak(w, true)}
+                    className="px-3 py-1.5 rounded-xl bg-[#111827] border border-slate-700 text-xs font-extrabold text-white"
+                  >
+                    {w} 🔊
+                  </button>
+                ))}
+              </div>
+              <p className="text-xs text-emerald-300 font-bold pt-1">
+                📖 &ldquo;{DIGRAPH_CARDS[digraphIdx].sentence}&rdquo;
+              </p>
+            </div>
+          </div>
+
+          <div className="lg:col-span-6 p-4 rounded-2xl bg-[#111827] border border-[#1F2937] space-y-3">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-cyan-400">
+              ✍️ Sentence Rules (Capital Letter, Full Stop . & Question Mark ?)
+            </h4>
+            <div className="flex gap-1.5">
+              {JUMBLED_SENTENCES.map((js, idx) => (
+                <button
+                  key={js.correct}
+                  type="button"
+                  onClick={() => {
+                    setJumbledIdx(idx);
+                    speak(js.correct);
+                  }}
+                  className={`px-3 py-1.5 rounded-xl text-xs font-extrabold border ${
+                    jumbledIdx === idx
+                      ? 'bg-cyan-500 text-slate-950 border-white'
+                      : 'bg-[#090D16] text-slate-300 border-slate-800'
+                  }`}
+                >
+                  Sentence #{idx + 1}
+                </button>
+              ))}
+            </div>
+
+            <div className="p-4 rounded-xl bg-[#090D16] border border-cyan-500/40 space-y-3">
+              <div className="text-xs text-slate-400">
+                Jumbled Words:{' '}
+                {JUMBLED_SENTENCES[jumbledIdx].jumbled.map((w) => (
+                  <span
+                    key={w}
+                    className="inline-block mx-1 px-2 py-0.5 rounded bg-slate-800 text-amber-300 font-mono font-bold"
+                  >
+                    {w}
+                  </span>
+                ))}
+              </div>
+              <div className="p-3 rounded-xl bg-emerald-950/30 border border-emerald-500/50 flex items-center justify-between">
+                <div>
+                  <div className="text-[10px] font-mono uppercase text-emerald-300">
+                    ✓ Correct Unscrambled Sentence
+                  </div>
+                  <div className="text-base font-black text-white">
+                    {JUMBLED_SENTENCES[jumbledIdx].correct}
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() =>
+                    awardStar(`${JUMBLED_SENTENCES[jumbledIdx].correct} ${JUMBLED_SENTENCES[jumbledIdx].rule}`)
+                  }
+                  className="px-3 py-1.5 rounded-xl bg-emerald-400 text-slate-950 text-xs font-extrabold"
+                >
+                  🔊 Read Rule
+                </button>
+              </div>
+              <p className="text-xs text-cyan-200">{JUMBLED_SENTENCES[jumbledIdx].rule}</p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* MODE 31: HINDI — बारहखड़ी (12-SOUND BARAHKHADI STRIP), विलोम शब्द (OPPOSITES) & एक–अनेक (PLURALS) */}
+      {mode === 'hindi-barahkhadi-vyakaran' && (
+        <div className="space-y-4">
+          <div className="p-4 rounded-2xl bg-[#111827] border border-[#1F2937] space-y-3">
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <h4 className="text-xs font-bold uppercase tracking-wider text-rose-400">
+                🪔 बारहखड़ी (12-Sound Consonant + Matra Strip: क से कः)
+              </h4>
+              <div className="flex gap-1.5">
+                {BARAHKHADI_CONSONANTS.map((bc, idx) => (
+                  <button
+                    key={bc.base}
+                    type="button"
+                    onClick={() => {
+                      setBarahkhadiIdx(idx);
+                      setBarahkhadiFormIdx(0);
+                      speak(bc.forms.join(', '), true, 'hi-IN');
+                    }}
+                    className={`px-3 py-1 rounded-xl text-xs font-extrabold border ${
+                      barahkhadiIdx === idx
+                        ? 'bg-rose-500 text-white border-white'
+                        : 'bg-[#090D16] text-slate-300 border-slate-800'
+                    }`}
+                  >
+                    {bc.name}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="grid grid-cols-6 sm:grid-cols-12 gap-1.5">
+              {BARAHKHADI_CONSONANTS[barahkhadiIdx].forms.map((fm, fIdx) => (
+                <button
+                  key={fm}
+                  type="button"
+                  onClick={() => {
+                    setBarahkhadiFormIdx(fIdx);
+                    speak(fm, true, 'hi-IN');
+                  }}
+                  className={`py-2.5 rounded-xl text-lg font-black border transition-all ${
+                    barahkhadiFormIdx === fIdx
+                      ? 'bg-amber-400 text-slate-950 border-white scale-105'
+                      : 'bg-[#090D16] text-white border-slate-800 hover:border-rose-400'
+                  }`}
+                >
+                  {fm}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="p-4 rounded-2xl bg-[#111827] border border-[#1F2937] space-y-2.5">
+              <h4 className="text-xs font-bold uppercase tracking-wider text-amber-400">
+                🔄 विलोम शब्द (Ulte Arth Wale Shabd / Hindi Opposites)
+              </h4>
+              <div className="grid grid-cols-2 gap-2">
+                {HINDI_VILOM_VACHAN.vilom.map((v) => (
+                  <button
+                    key={v.a}
+                    type="button"
+                    onClick={() => awardStar(`${v.a} का उल्टा ${v.b}`, 'hi-IN')}
+                    className="p-2.5 rounded-xl bg-[#090D16] border border-slate-800 hover:border-amber-400 text-xs font-bold text-slate-200 flex items-center justify-between"
+                  >
+                    <span>{v.a}</span>
+                    <span className="text-amber-400">⇄</span>
+                    <span className="text-emerald-300">{v.b}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="p-4 rounded-2xl bg-[#111827] border border-[#1F2937] space-y-2.5">
+              <h4 className="text-xs font-bold uppercase tracking-wider text-cyan-400">
+                🌟 एक और अनेक (वचन बदलो / One vs. Many in Hindi)
+              </h4>
+              <div className="space-y-2">
+                {HINDI_VILOM_VACHAN.vachan.map((vc) => (
+                  <button
+                    key={vc.ek}
+                    type="button"
+                    onClick={() => awardStar(`${vc.ek}, ${vc.anek}`, 'hi-IN')}
+                    className="w-full p-2.5 rounded-xl bg-[#090D16] border border-slate-800 hover:border-cyan-400 text-xs font-bold text-white flex items-center justify-between"
+                  >
+                    <span className="text-cyan-300">{vc.ek}</span>
+                    <span>→</span>
+                    <span className="text-amber-300">{vc.anek}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* MODE 32: EVS — CLOTHES WE WEAR (COTTON/WOOL/RAINCOAT), NEIGHBOURHOOD PLACES & INDOOR/OUTDOOR GAMES */}
+      {mode === 'evs-clothes-places-games' && (
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
+          <div className="lg:col-span-6 p-4 rounded-2xl bg-[#111827] border border-[#1F2937] space-y-3">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-emerald-400">
+              👕🧣 Clothes We Wear in Different Seasons (Cotton, Wool & Raincoat)
+            </h4>
+            <div className="flex flex-wrap gap-1.5">
+              {CLOTHES_PLACES_GAMES.clothes.map((c, idx) => (
+                <button
+                  key={c.season}
+                  type="button"
+                  onClick={() => {
+                    setClothesSeasonIdx(idx);
+                    awardStar(`${c.season}: ${c.items}. ${c.source}`);
+                  }}
+                  className={`px-3 py-1.5 rounded-xl text-xs font-extrabold border ${
+                    clothesSeasonIdx === idx
+                      ? 'bg-emerald-500 text-slate-950 border-white'
+                      : 'bg-[#090D16] text-slate-300 border-slate-800'
+                  }`}
+                >
+                  {c.season}
+                </button>
+              ))}
+            </div>
+            <div className="p-3.5 rounded-xl bg-[#090D16] border border-emerald-500/40 space-y-1 text-xs">
+              <div className="font-extrabold text-white text-sm">
+                {CLOTHES_PLACES_GAMES.clothes[clothesSeasonIdx].items}
+              </div>
+              <p className="text-emerald-200">{CLOTHES_PLACES_GAMES.clothes[clothesSeasonIdx].source}</p>
+            </div>
+
+            <h4 className="text-xs font-bold uppercase tracking-wider text-cyan-400 pt-1">
+              🏥🏤 Important Places in Our Neighbourhood
+            </h4>
+            <div className="flex flex-wrap gap-1.5">
+              {CLOTHES_PLACES_GAMES.places.map((pl, idx) => (
+                <button
+                  key={pl.place}
+                  type="button"
+                  onClick={() => {
+                    setPlaceIdx(idx);
+                    speak(`${pl.place}: ${pl.why}`, true);
+                  }}
+                  className={`px-2.5 py-1 rounded-lg text-xs font-bold border ${
+                    placeIdx === idx
+                      ? 'bg-cyan-500 text-slate-950 border-white'
+                      : 'bg-[#090D16] text-slate-300 border-slate-800'
+                  }`}
+                >
+                  {pl.place}
+                </button>
+              ))}
+            </div>
+            <div className="p-3 rounded-xl bg-[#090D16] border border-cyan-500/30 text-xs space-y-0.5">
+              <div className="font-bold text-cyan-300">
+                {CLOTHES_PLACES_GAMES.places[placeIdx].place} — {CLOTHES_PLACES_GAMES.places[placeIdx].who}
+              </div>
+              <p className="text-slate-300">{CLOTHES_PLACES_GAMES.places[placeIdx].why}</p>
+            </div>
+          </div>
+
+          <div className="lg:col-span-6 p-4 rounded-2xl bg-[#111827] border border-[#1F2937] space-y-3">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-amber-400">
+              ♟️⚽ Indoor Games (Inside Home) vs. Outdoor Games (Playground)
+            </h4>
+            <p className="text-xs text-slate-300">
+              Tap each game to see if it is played indoors or outdoors and how it helps us!
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+              {CLOTHES_PLACES_GAMES.games.map((g) => (
+                <button
+                  key={g.name}
+                  type="button"
+                  onClick={() => awardStar(`${g.name} is an ${g.type}. ${g.benefit}`)}
+                  className="p-3.5 rounded-xl bg-[#090D16] border border-slate-800 hover:border-amber-400 text-left space-y-1"
+                >
+                  <div className="text-xs font-extrabold text-white">{g.name}</div>
+                  <div className="text-[10px] font-mono text-amber-300 uppercase">{g.type}</div>
+                  <p className="text-[11px] text-slate-300">{g.benefit}</p>
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* MODE 33: COMPUTER CH 2 — KID PAINT / TUX PAINT TOOLS & SAFE COMPUTER LAB MANNERS */}
+      {mode === 'computer-paint-manners' && (
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
+          <div className="lg:col-span-6 p-4 rounded-2xl bg-[#111827] border border-[#1F2937] space-y-3">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-violet-400">
+              🎨 Fun with MS Paint / Tux Paint Drawing Tools
+            </h4>
+            <div className="flex flex-wrap gap-1.5">
+              {PAINT_TOOLS_MANNERS.tools.map((t, idx) => (
+                <button
+                  key={t.name}
+                  type="button"
+                  onClick={() => {
+                    setPaintToolIdx(idx);
+                    awardStar(`${t.name}: ${t.desc}`);
+                  }}
+                  className={`px-3 py-1.5 rounded-xl text-xs font-extrabold border ${
+                    paintToolIdx === idx
+                      ? 'bg-violet-500 text-white border-white'
+                      : 'bg-[#090D16] text-slate-300 border-slate-800'
+                  }`}
+                >
+                  {t.name}
+                </button>
+              ))}
+            </div>
+            <div className="p-4 rounded-xl bg-[#090D16] border border-violet-500/40 space-y-1">
+              <div className="text-sm font-black text-white">
+                {PAINT_TOOLS_MANNERS.tools[paintToolIdx].name}
+              </div>
+              <p className="text-xs text-violet-200">{PAINT_TOOLS_MANNERS.tools[paintToolIdx].desc}</p>
+            </div>
+          </div>
+
+          <div className="lg:col-span-6 p-4 rounded-2xl bg-[#111827] border border-[#1F2937] space-y-3">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-emerald-400">
+              ✅ Computer Lab Manners (Do&apos;s and Don&apos;ts)
+            </h4>
+            <div className="space-y-2">
+              {PAINT_TOOLS_MANNERS.manners.map((m) => (
+                <button
+                  key={m.rule}
+                  type="button"
+                  onClick={() => speak(m.rule, true)}
+                  className={`w-full p-2.5 rounded-xl border text-left text-xs font-bold flex items-center justify-between ${
+                    m.good
+                      ? 'bg-emerald-950/30 border-emerald-500/40 text-emerald-200'
+                      : 'bg-rose-950/30 border-rose-500/40 text-rose-200'
+                  }`}
+                >
+                  <span>
+                    {m.icon} {m.rule}
+                  </span>
+                  <span className="font-mono text-[10px] uppercase px-2 py-0.5 rounded bg-black/40">
+                    {m.good ? 'Always DO' : 'NEVER DO'}
+                  </span>
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* MODE 34: OLYMPIAD & LOGICAL REASONING BRAIN GYM (SOF IMO / NSO / IEO / IGKO CLASS 1) */}
+      {mode === 'olympiad-reasoning-gym' && (
+        <div className="p-4 rounded-2xl bg-[#111827] border border-[#1F2937] space-y-4">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <h4 className="text-xs font-bold uppercase tracking-wider text-pink-400">
+                🧠 Class 1 Olympiad Logical Reasoning Brain Gym (Odd One Out, Analogies & Shape Count)
+              </h4>
+              <p className="text-xs text-slate-300">
+                Practice SOF IMO / NSO / IEO / IGKO Section-1 Logical Thinking puzzles!
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-1.5">
+              {OLYMPIAD_PUZZLES.map((pz, idx) => (
+                <button
+                  key={pz.category}
+                  type="button"
+                  onClick={() => {
+                    setOlympiadIdx(idx);
+                    setOlympiadFeedback(null);
+                    speak(pz.question);
+                  }}
+                  className={`px-3 py-1.5 rounded-xl text-xs font-extrabold border ${
+                    olympiadIdx === idx
+                      ? 'bg-pink-500 text-white border-white'
+                      : 'bg-[#090D16] text-slate-300 border-slate-800'
+                  }`}
+                >
+                  Puzzle #{idx + 1}: {pz.category.split(' (')[0]}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {(() => {
+            const pz = OLYMPIAD_PUZZLES[olympiadIdx] || OLYMPIAD_PUZZLES[0];
+            return (
+              <div className="p-4 rounded-xl bg-[#090D16] border border-pink-500/40 space-y-3">
+                <div className="text-xs font-mono uppercase text-pink-300 font-bold">{pz.category}</div>
+                <p className="text-sm font-black text-white">{pz.question}</p>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                  {pz.options.map((opt, oIdx) => (
+                    <button
+                      key={opt}
+                      type="button"
+                      onClick={() => {
+                        if (oIdx === pz.correct) {
+                          setOlympiadFeedback(`🏆 Brilliant! ${pz.explanation}`);
+                          awardStar(pz.explanation);
+                        } else {
+                          setOlympiadFeedback('Think carefully and try another option!');
+                          speak('Try again!');
+                        }
+                      }}
+                      className="p-3 rounded-xl bg-[#111827] hover:bg-pink-500/20 border-2 border-slate-700 hover:border-pink-400 text-xs font-extrabold text-white"
+                    >
+                      {opt}
+                    </button>
+                  ))}
+                </div>
+                {olympiadFeedback && (
+                  <div className="p-2.5 rounded-lg bg-emerald-950/40 border border-emerald-400/50 text-xs font-bold text-emerald-200">
+                    {olympiadFeedback}
+                  </div>
+                )}
+              </div>
+            );
+          })()}
         </div>
       )}
     </div>
