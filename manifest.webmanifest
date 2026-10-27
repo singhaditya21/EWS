@@ -1,0 +1,14 @@
+{
+  "name": "OmniLearn Labs — Class 1",
+  "short_name": "OmniLearn",
+  "description": "Play-based Class 1 learning for CBSE and ICSE: maths, English, Hindi, EVS, computers and arts.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#090D16",
+  "theme_color": "#090D16",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}
