@@ -6,9 +6,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "node scripts/check-content.mjs && tsc -b && vite build",
     "preview": "vite preview",
-    "deploy": "gh-pages -d dist"
+    "deploy": "gh-pages -d dist",
+    "check:content": "node scripts/check-content.mjs"
   },
   "dependencies": {
     "@react-three/drei": "^9.114.0",

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Canvas2DWrapper, CanvasRenderContext } from '../../components/engine/Canvas2DWrapper';
 import { ParameterPanel } from '../../components/engine/ParameterPanel';
 import {
@@ -7,6 +7,10 @@ import {
   playFanfare,
   playMusicalNote,
 } from '../../utils/soundEffects';
+import { cancelSpeech, speakText, useHasVoice } from '../../utils/speech';
+import { progress, useProgress } from '../../class1/progressStore';
+import { ProgressReport } from '../../class1/components/ProgressReport';
+import { SchoolBoard } from '../../types/curriculum.types';
 import {
   Calculator,
   Shapes,
@@ -912,14 +916,37 @@ const SHAPES_3D = [
   },
 ];
 
-export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
-  initialMode,
-}) => {
+export const Class1InteractiveLab: React.FC<{
+  initialMode?: string;
+  board?: SchoolBoard;
+  /** Called when the child picks another activity, so the chapter panel follows along. */
+  onModeChange?: (mode: string) => void;
+}> = ({ initialMode, board = 'CBSE', onModeChange }) => {
   const [mode, setMode] = useState<Class1LabMode>(
     (initialMode as Class1LabMode) || 'spatial-prenumber'
   );
-  const [voiceEnabled, setVoiceEnabled] = useState(true);
-  const [stars, setStars] = useState(3);
+  const store = useProgress();
+  const profile = store.profiles[store.activeProfileId];
+  const voiceEnabled = store.prefs.voice;
+  const stars = profile.stars;
+  const childName = profile.name;
+  const recognitionRef = useRef<{ abort?: () => void } | null>(null);
+  const hasHindiVoice = useHasVoice('hi-IN');
+
+  // Stop talking and listening when the child leaves this chapter.
+  useEffect(
+    () => () => {
+      cancelSpeech();
+      recognitionRef.current?.abort?.();
+    },
+    []
+  );
+
+  const goToMode = (next: Class1LabMode) => {
+    setMissionBanner(null);
+    if (onModeChange) onModeChange(next);
+    else setMode(next);
+  };
   const [missionBanner, setMissionBanner] = useState<string | null>(null);
 
   // Mode states
@@ -998,7 +1025,6 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
   const [colorB, setColorB] = useState<'red' | 'blue' | 'yellow'>('yellow');
   const [activeXylophoneKey, setActiveXylophoneKey] = useState<number | null>(null);
   const [stickerModalOpen, setStickerModalOpen] = useState(false);
-  const [childName, setChildName] = useState('Little Scientist');
 
   // Vertical T|O Sums, Staircase Ordering, Noun 4-Basket Sorter, Houses/Food, Arcade & Mic states
   const [vertA, setVertA] = useState(24);
@@ -1060,35 +1086,48 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
       (window as unknown as { webkitSpeechRecognition?: unknown }).webkitSpeechRecognition;
 
     if (!SpeechRec) {
-      setIsListening(true);
-      setTimeout(() => {
-        setIsListening(false);
-        setSpokenTranscript(target);
-        awardStar(`Great voice practice saying "${target}"!`);
-      }, 1200);
+      setIsListening(false);
+      setSpokenTranscript('🎙️ This browser can’t listen to speech. Try Chrome or Edge, or say the word to a grown-up!');
       return;
     }
+
+    const normalise = (t: string) => t.toLowerCase().replace(/[^a-z\u0900-\u097f ]/g, ' ').replace(/\s+/g, ' ').trim();
+    const wanted = normalise(target);
 
     try {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const rec = new (SpeechRec as any)();
+      recognitionRef.current = rec;
       rec.lang = 'en-IN';
       rec.interimResults = false;
-      rec.maxAlternatives = 1;
+      rec.maxAlternatives = 3;
       setIsListening(true);
       setSpokenTranscript('Listening... Speak now! 🎙️');
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       rec.onresult = (event: any) => {
-        const transcript = event.results?.[0]?.[0]?.transcript || target;
-        setSpokenTranscript(transcript);
+        const alts: string[] = Array.from(event.results?.[0] ?? []).map(
+          (alt) => (alt as { transcript: string }).transcript
+        );
+        const heard = alts[0] ?? '';
+        const matched = alts.some((t) => normalise(t).split(' ').includes(wanted) || normalise(t) === wanted);
         setIsListening(false);
-        awardStar(`Awesome! You spoke "${transcript}" clearly!`);
+        if (matched) {
+          setSpokenTranscript(heard);
+          awardStar(`Awesome! You said "${target}" clearly!`, 'en-IN', `mic:${target}`);
+        } else {
+          setSpokenTranscript(heard ? `I heard "${heard}". Try saying "${target}" again!` : `Try saying "${target}" again!`);
+          speak(`Nice try! Say ${target} again.`);
+        }
       };
-      rec.onerror = () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      rec.onerror = (event: any) => {
         setIsListening(false);
-        setSpokenTranscript(target);
-        awardStar(`Great effort practicing "${target}"!`);
+        setSpokenTranscript(
+          event?.error === 'not-allowed' || event?.error === 'service-not-allowed'
+            ? '🎙️ The microphone is blocked. Ask a grown-up to allow it in the browser settings.'
+            : 'I didn’t catch that. Tap the mic and try again!'
+        );
       };
       rec.onend = () => {
         setIsListening(false);
@@ -1096,50 +1135,37 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
       rec.start();
     } catch {
       setIsListening(false);
-      setSpokenTranscript(target);
-      awardStar(`Great voice practice saying "${target}"!`);
+      setSpokenTranscript('I couldn’t start the microphone. Tap the mic and try again!');
     }
   };
 
   const currentSubjectGroup: Class1SubjectGroup =
     MODE_CATALOG.find((m) => m.id === mode)?.subject || 'math';
 
-  const speak = (text: string, force = false, lang = 'en-IN') => {
+  const speak = (text: string, force = false, lang: 'en-IN' | 'hi-IN' = 'en-IN') => {
     playPop();
-    if ((!voiceEnabled && !force) || typeof window === 'undefined' || !('speechSynthesis' in window)) {
-      return;
-    }
-    window.speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(text);
-    u.lang = lang;
-    u.rate = 0.92;
-    u.pitch = 1.1;
-    window.speechSynthesis.speak(u);
+    speakText(text, { force, lang });
     if (bilingualMode && lang === 'en-IN') {
-      const hiU = new SpeechSynthesisUtterance('शाबाश बच्चों! ध्यान से सीखो!');
-      hiU.lang = 'hi-IN';
-      hiU.rate = 0.92;
-      window.speechSynthesis.speak(hiU);
+      speakText('शाबाश बच्चों! ध्यान से सीखो!', { force, lang: 'hi-IN', queue: true });
     }
   };
 
-  const awardStar = (msg: string, lang = 'en-IN') => {
-    playSuccessChime();
-    setStars((s) => s + 1);
-    setMissionBanner(`🎉 ${msg} (+1 ⭐ Star!)`);
-    if ((voiceEnabled || true) && typeof window !== 'undefined' && 'speechSynthesis' in window) {
-      window.speechSynthesis.cancel();
-      const u = new SpeechSynthesisUtterance(msg);
-      u.lang = lang;
-      u.rate = 0.92;
-      u.pitch = 1.1;
-      window.speechSynthesis.speak(u);
-      if (bilingualMode && lang === 'en-IN') {
-        const hiU = new SpeechSynthesisUtterance('बहुत बढ़िया! आपको एक स्टार मिला!');
-        hiU.lang = 'hi-IN';
-        hiU.rate = 0.92;
-        window.speechSynthesis.speak(hiU);
-      }
+  /**
+   * Gives a star once per activity per day. Repeat taps on the same thing still get praise,
+   * but no extra star, so the star count means something to parents.
+   */
+  const awardStar = (msg: string, lang: 'en-IN' | 'hi-IN' = 'en-IN', key?: string) => {
+    const earned = progress.awardStar(`${mode}:${key ?? msg}`);
+    if (earned) {
+      playSuccessChime();
+      setMissionBanner(`🎉 ${msg} (+1 ⭐ Star!)`);
+    } else {
+      playPop();
+      setMissionBanner(`👍 ${msg} (You already earned this star today — try a new activity!)`);
+    }
+    speakText(msg, { lang });
+    if (earned && bilingualMode && lang === 'en-IN') {
+      speakText('बहुत बढ़िया! आपको एक स्टार मिला!', { lang: 'hi-IN', queue: true });
     }
   };
 
@@ -1431,7 +1457,14 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4" data-class1-lab>
+      {currentSubjectGroup === 'hindi' && !hasHindiVoice && (
+        <div className="p-3 rounded-xl bg-amber-500/15 border border-amber-400/60 text-xs text-amber-100">
+          🔈 This device has no Hindi voice, so Hindi letters may be read wrongly or not at all. A grown-up can add
+          one: on Android, Settings → Text-to-speech → install Hindi; on Windows, Settings → Time &amp; language →
+          Speech → add Hindi; on iPhone/iPad and Mac, Hindi is usually built in.
+        </div>
+      )}
       {/* Top Kid-Friendly Voice Narration & Star Reward Header */}
       <div className="flex flex-wrap items-center justify-between gap-2 p-3 rounded-2xl bg-gradient-to-r from-cyan-950/60 via-slate-900 to-emerald-950/60 border border-cyan-500/30 shadow-md">
         <div className="flex items-center gap-3">
@@ -1577,7 +1610,7 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
 
           <button
             type="button"
-            onClick={() => setVoiceEnabled((v) => !v)}
+            onClick={() => progress.setVoice(!voiceEnabled)}
             className={`flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-xs font-bold border ${
               voiceEnabled
                 ? 'bg-emerald-500/20 border-emerald-400 text-emerald-200'
@@ -1623,7 +1656,7 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
               <input
                 type="text"
                 value={childName}
-                onChange={(e) => setChildName(e.target.value)}
+                onChange={(e) => progress.renameProfile(profile.id, e.target.value)}
                 placeholder="Type Child's Name..."
                 className="w-full text-center px-3 py-1.5 rounded-lg bg-slate-900 border border-amber-400/60 text-base font-extrabold text-amber-200 focus:outline-none"
               />
@@ -1736,6 +1769,7 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
                       const nextIdx = (arcadeMissionIdx + 1) % ARCADE_MISSIONS.length;
                       setArcadeMissionIdx(nextIdx);
                     } else {
+                      setArcadeStreak(0);
                       speak('Good try! Listen carefully and tap another option!', true);
                     }
                   }}
@@ -1934,28 +1968,7 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
             </div>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5">
-            {[
-              { subj: '📐 Math (12 Labs)', skill: 'Numbers 1–100, T|O, Money, Clock, Fractions', badge: 'Numeracy Star 🌟' },
-              { subj: '📖 English (6 Labs)', skill: 'Phonics, Digraphs, Nouns, Pronouns, Mridang', badge: 'Reading Whiz 📚' },
-              { subj: '🇮🇳 Hindi (3 Labs)', skill: 'स्वर, व्यंजन, मात्रा, बारहखड़ी, शब्द रेल', badge: 'सारंगी सितारा 🪔' },
-              { subj: '🌱 EVS & GK (9 Labs)', skill: 'Senses, Plants, Animals, Houses, Water, India', badge: 'Nature Explorer 🌍' },
-              { subj: '💻 Computer (2 Labs)', skill: 'CPU/Monitor/Mouse, Keyboard, Kid Paint', badge: 'Tech Champ 🖥️' },
-              { subj: '🧠 Arts & Olympiad (2)', skill: 'Color Mixing, Sargam, Logical Reasoning', badge: 'Brain Gym Hero 🏆' },
-            ].map((item) => (
-              <div
-                key={item.subj}
-                className="p-3 rounded-xl bg-[#090D16] border border-violet-500/30 space-y-1.5"
-              >
-                <div className="text-xs font-extrabold text-white">{item.subj}</div>
-                <div className="text-[10px] text-slate-400 leading-snug">{item.skill}</div>
-                <div className="w-full h-1.5 rounded-full bg-slate-800 overflow-hidden">
-                  <div className="h-full bg-emerald-400 w-full" />
-                </div>
-                <div className="text-[10px] font-mono font-bold text-amber-300">{item.badge}</div>
-              </div>
-            ))}
-          </div>
+          <ProgressReport board={board} compact />
         </div>
       )}
 
@@ -1980,10 +1993,7 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
                   type="button"
                   onClick={() => {
                     const firstInGroup = MODE_CATALOG.find((m) => m.subject === subj.id);
-                    if (firstInGroup) {
-                      setMode(firstInGroup.id);
-                      setMissionBanner(null);
-                    }
+                    if (firstInGroup) goToMode(firstInGroup.id);
                   }}
                   className={`px-3 py-1.5 rounded-xl text-xs font-extrabold transition-all ${
                     activeSubj
@@ -2010,10 +2020,7 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
               <button
                 key={m.id}
                 type="button"
-                onClick={() => {
-                  setMode(m.id);
-                  setMissionBanner(null);
-                }}
+                onClick={() => goToMode(m.id)}
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
                   active
                     ? 'bg-cyan-500/25 text-cyan-200 border-2 border-cyan-400 shadow-sm'

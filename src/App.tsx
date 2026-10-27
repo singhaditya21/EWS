@@ -8,6 +8,7 @@ import {
 import { Navbar } from './components/layout/Navbar';
 import { CurriculumSidebar } from './components/layout/CurriculumSidebar';
 import { LabWorkspace } from './components/layout/LabWorkspace';
+import { progress, useActiveProfile } from './class1/progressStore';
 
 export const App: React.FC = () => {
   const [activeTrack, setActiveTrack] = useState<EducationTrack>('school');
@@ -19,28 +20,9 @@ export const App: React.FC = () => {
   );
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const [kidFocusMode, setKidFocusMode] = useState(false);
-  const [completedChapterIds, setCompletedChapterIds] = useState<string[]>(() => {
-    try {
-      const saved = localStorage.getItem('omnilearn_completed_chapters');
-      return saved ? JSON.parse(saved) : [];
-    } catch {
-      return [];
-    }
-  });
-
-  const handleToggleComplete = (chapterId: string) => {
-    setCompletedChapterIds((prev) => {
-      const next = prev.includes(chapterId)
-        ? prev.filter((id) => id !== chapterId)
-        : [...prev, chapterId];
-      try {
-        localStorage.setItem('omnilearn_completed_chapters', JSON.stringify(next));
-      } catch {
-        // Ignore storage errors
-      }
-      return next;
-    });
-  };
+  // Completed lessons belong to the active child profile and are saved on this device.
+  const completedChapterIds = useActiveProfile().completedChapterIds;
+  const handleToggleComplete = (chapterId: string) => progress.toggleComplete(chapterId);
 
   const handleSelectTrack = (track: EducationTrack) => {
     setActiveTrack(track);

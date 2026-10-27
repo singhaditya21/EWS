@@ -32,3 +32,18 @@
 input[type="range"] {
   accent-color: #06B6D4;
 }
+
+/* Teacher projector mode: the lab viewport fills the screen with larger content. */
+[data-projector]:fullscreen {
+  overflow-y: auto;
+  padding: 24px;
+  background: #090d16;
+  zoom: 1.2;
+}
+
+/* Bigger tap targets in the Class 1 lab on touch screens (phones and tablets). */
+@media (pointer: coarse) {
+  [data-class1-lab] button {
+    min-height: 44px;
+  }
+}

@@ -11,6 +11,13 @@ import {
   CheckCircle2,
   Layers,
 } from 'lucide-react';
+import {
+  BOARD_STATUS_LABEL,
+  STATUS_BADGE_STYLE,
+  class1Label,
+  placementFor,
+  sortForBoard,
+} from '../../class1/boardMap';
 
 interface CurriculumSidebarProps {
   chapters: CurriculumChapter[];
@@ -42,7 +49,7 @@ export const CurriculumSidebar: React.FC<CurriculumSidebarProps> = ({
   }, [activeTrack, activeClassLevel]);
 
   const trackChapters = useMemo(() => {
-    return chapters.filter((ch) => {
+    const filtered = chapters.filter((ch) => {
       if (ch.track !== activeTrack) return false;
       if (activeTrack === 'school') {
         if (ch.board !== 'BOTH' && ch.board !== activeBoard) return false;
@@ -52,6 +59,7 @@ export const CurriculumSidebar: React.FC<CurriculumSidebarProps> = ({
       }
       return true;
     });
+    return activeTrack === 'school' ? sortForBoard(filtered, activeBoard) : filtered;
   }, [chapters, activeTrack, activeBoard, activeClassLevel]);
 
   const availableSubjects = useMemo(() => {
@@ -207,6 +215,7 @@ export const CurriculumSidebar: React.FC<CurriculumSidebarProps> = ({
               {items.map((ch) => {
                 const isSelected = selectedChapter.id === ch.id;
                 const isDone = completedChapterIds.includes(ch.id);
+                const placement = activeTrack === 'school' ? placementFor(ch.id, activeBoard) : undefined;
                 return (
                   <button
                     key={ch.id}
@@ -224,8 +233,16 @@ export const CurriculumSidebar: React.FC<CurriculumSidebarProps> = ({
                     <div className="space-y-1 min-w-0">
                       <div className="flex items-center gap-1.5">
                         <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-slate-900 text-slate-300 border border-slate-800">
-                          {ch.chapterNumber}
+                          {class1Label(ch.id, activeBoard) ?? ch.chapterNumber}
                         </span>
+                        {placement && placement.status !== 'core' && (
+                          <span
+                            className={`text-[9px] font-mono px-1.5 rounded border ${STATUS_BADGE_STYLE[placement.status]}`}
+                            title={`${activeBoard}: ${BOARD_STATUS_LABEL[placement.status]}`}
+                          >
+                            {BOARD_STATUS_LABEL[placement.status]}
+                          </span>
+                        )}
                         {isDone && (
                           <span className="text-[9px] font-mono px-1.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
                             ✓ Done

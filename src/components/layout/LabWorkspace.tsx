@@ -1,29 +1,27 @@
-import React, { useState, useEffect } from 'react';
+import React, { Suspense, lazy, useState, useEffect } from 'react';
 import {
   CurriculumChapter,
   SchoolBoard,
 } from '../../types/curriculum.types';
 import { FormulaCard } from '../engine/FormulaCard';
 import { InteractiveQuiz } from '../assessment/InteractiveQuiz';
-import { AnatomyCADInspector } from '../engine/AnatomyCADInspector';
 import { MagicTracingSlate } from '../engine/MagicTracingSlate';
 import { playFanfare, playPop } from '../../utils/soundEffects';
-
-// Import all Flagship Simulations
-import { Class1InteractiveLab } from '../../simulations/school/Class1InteractiveLab';
-import { PrimaryMathSolarLab } from '../../simulations/school/PrimaryMathSolarLab';
-import { MiddleMachinesMatter } from '../../simulations/school/MiddleMachinesMatter';
-import { OpticsRayBench } from '../../simulations/school/OpticsRayBench';
-import { ProjectileKinematics } from '../../simulations/school/ProjectileKinematics';
-import { MolecularVSEPR3D } from '../../simulations/school/MolecularVSEPR3D';
-import { CalculusVisualizer } from '../../simulations/school/CalculusVisualizer';
-import { FourStrokeEngine } from '../../simulations/engineering/FourStrokeEngine';
-import { RLCCircuitPhasor } from '../../simulations/engineering/RLCCircuitPhasor';
-import { BeamStressDeflection } from '../../simulations/engineering/BeamStressDeflection';
-import { CPUPipelinePathfinder } from '../../simulations/engineering/CPUPipelinePathfinder';
-import { CardiacECGSimulator } from '../../simulations/medical/CardiacECGSimulator';
-import { DNAReplication3D } from '../../simulations/medical/DNAReplication3D';
-import { ActionPotentialNerve } from '../../simulations/medical/ActionPotentialNerve';
+import { speakText } from '../../utils/speech';
+import {
+  BOARD_STATUS_LABEL,
+  CLASS1_BOARD_MAP,
+  STATUS_BADGE_STYLE,
+  class1Label,
+  sortForBoard,
+} from '../../class1/boardMap';
+import { useProgress } from '../../class1/progressStore';
+import { Class1Toolbar } from '../../class1/components/Class1Toolbar';
+import { PracticeSession } from '../../class1/components/PracticeSession';
+import { ProgressReport } from '../../class1/components/ProgressReport';
+import { ParentPanel } from '../../class1/components/ParentPanel';
+import { TeacherPanel } from '../../class1/components/TeacherPanel';
+import { SyllabusMap } from '../../class1/components/SyllabusMap';
 
 import {
   BookOpen,
@@ -42,6 +40,28 @@ import {
   Printer,
 } from 'lucide-react';
 
+// Simulations load on demand: a Class 1 child should not download the 3D engineering and medical labs.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type AnyComponent = React.ComponentType<any>;
+const named = <K extends string>(load: () => Promise<Record<K, AnyComponent>>, name: K) =>
+  lazy(() => load().then((m) => ({ default: m[name] })));
+const Class1InteractiveLab = named(() => import('../../simulations/school/Class1InteractiveLab'), 'Class1InteractiveLab');
+const PrimaryMathSolarLab = named(() => import('../../simulations/school/PrimaryMathSolarLab'), 'PrimaryMathSolarLab');
+const MiddleMachinesMatter = named(() => import('../../simulations/school/MiddleMachinesMatter'), 'MiddleMachinesMatter');
+const OpticsRayBench = named(() => import('../../simulations/school/OpticsRayBench'), 'OpticsRayBench');
+const ProjectileKinematics = named(() => import('../../simulations/school/ProjectileKinematics'), 'ProjectileKinematics');
+const MolecularVSEPR3D = named(() => import('../../simulations/school/MolecularVSEPR3D'), 'MolecularVSEPR3D');
+const CalculusVisualizer = named(() => import('../../simulations/school/CalculusVisualizer'), 'CalculusVisualizer');
+const FourStrokeEngine = named(() => import('../../simulations/engineering/FourStrokeEngine'), 'FourStrokeEngine');
+const RLCCircuitPhasor = named(() => import('../../simulations/engineering/RLCCircuitPhasor'), 'RLCCircuitPhasor');
+const BeamStressDeflection = named(() => import('../../simulations/engineering/BeamStressDeflection'), 'BeamStressDeflection');
+const CPUPipelinePathfinder = named(() => import('../../simulations/engineering/CPUPipelinePathfinder'), 'CPUPipelinePathfinder');
+const CardiacECGSimulator = named(() => import('../../simulations/medical/CardiacECGSimulator'), 'CardiacECGSimulator');
+const DNAReplication3D = named(() => import('../../simulations/medical/DNAReplication3D'), 'DNAReplication3D');
+const ActionPotentialNerve = named(() => import('../../simulations/medical/ActionPotentialNerve'), 'ActionPotentialNerve');
+const AnatomyCADInspector = named(() => import('../engine/AnatomyCADInspector'), 'AnatomyCADInspector');
+
+
 interface LabWorkspaceProps {
   chapter: CurriculumChapter;
   activeBoard: SchoolBoard;
@@ -51,7 +71,16 @@ interface LabWorkspaceProps {
   onToggleComplete?: (chapterId: string) => void;
 }
 
-type ViewportTab = 'simulation' | 'cad3d' | 'sandbox' | 'tracing' | 'guide';
+type ViewportTab =
+  | 'simulation'
+  | 'cad3d'
+  | 'sandbox'
+  | 'tracing'
+  | 'guide'
+  | 'practice'
+  | 'progress'
+  | 'parent'
+  | 'teacher';
 type DockTab = 'theory' | 'quiz' | 'syllabus';
 
 export const LabWorkspace: React.FC<LabWorkspaceProps> = ({
@@ -70,12 +99,18 @@ export const LabWorkspace: React.FC<LabWorkspaceProps> = ({
   const [sandboxB, setSandboxB] = useState(5);
   const [sandboxC, setSandboxC] = useState(9.8);
 
+  const role = useProgress().prefs.role;
+  const viewportRef = React.useRef<HTMLDivElement>(null);
+  const enterProjector = () => {
+    setViewportTab('simulation');
+    viewportRef.current?.requestFullscreen?.().catch(() => undefined);
+  };
   const isPrimaryWing =
     chapter.track === 'school' && Boolean(chapter.classLevel && chapter.classLevel <= 5);
   const isCompleted = completedChapterIds.includes(chapter.id);
 
   // Compute Previous / Next Lesson within the same Class or Track
-  const peerChapters = chapters.filter((ch) => {
+  const peerChapters = sortForBoard(chapters, activeBoard).filter((ch) => {
     if (ch.track !== chapter.track) return false;
     if (chapter.track === 'school') {
       if (ch.board !== 'BOTH' && ch.board !== activeBoard) return false;
@@ -90,14 +125,17 @@ export const LabWorkspace: React.FC<LabWorkspaceProps> = ({
       ? peerChapters[currentIdx + 1]
       : null;
 
-  const speakNote = (text: string) => {
-    if (typeof window === 'undefined' || !('speechSynthesis' in window)) return;
-    window.speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(text);
-    u.rate = 0.92;
-    u.pitch = 1.08;
-    window.speechSynthesis.speak(u);
+  const speakNote = (text: string) => speakText(text, { force: true });
+
+  // Inside the Class 1 lab, picking another activity opens that activity's chapter,
+  // so the theory, quiz and "Mark Done" always match what the child is playing.
+  const handleClass1ModeChange = (mode: string) => {
+    const target = chapters.find(
+      (c) => c.simulationId === 'Class1InteractiveLab' && c.defaultSimulationMode === mode
+    );
+    if (target && onSelectChapter) onSelectChapter(target);
   };
+  const class1Meta = CLASS1_BOARD_MAP[chapter.id];
 
   useEffect(() => {
     setViewportTab('simulation');
@@ -110,6 +148,8 @@ export const LabWorkspace: React.FC<LabWorkspaceProps> = ({
           <Class1InteractiveLab
             key={chapter.id}
             initialMode={chapter.defaultSimulationMode}
+            board={activeBoard}
+            onModeChange={handleClass1ModeChange}
           />
         );
       case 'PrimaryMathSolarLab':
@@ -190,8 +230,24 @@ export const LabWorkspace: React.FC<LabWorkspaceProps> = ({
                 {chapter.streamCategory} • {chapter.subject}
               </span>
               <span className="px-2.5 py-0.5 rounded-full text-xs font-mono bg-[#090D16] text-slate-300 border border-slate-800">
-                {chapter.chapterNumber}
+                {class1Label(chapter.id, activeBoard) ?? chapter.chapterNumber}
               </span>
+              {class1Meta && (
+                <span
+                  className={`px-2.5 py-0.5 rounded-full text-[11px] font-mono font-bold border ${STATUS_BADGE_STYLE[class1Meta[activeBoard].status]}`}
+                  title="How this chapter fits the selected board's Class 1 syllabus"
+                >
+                  {activeBoard}: {BOARD_STATUS_LABEL[class1Meta[activeBoard].status]}
+                </span>
+              )}
+              {class1Meta && (
+                <span
+                  className="px-2.5 py-0.5 rounded-full text-[11px] font-mono bg-slate-900 text-slate-400 border border-slate-800"
+                  title="Content is checked by a practising Class 1 teacher before it is marked reviewed"
+                >
+                  {class1Meta.review.status === 'reviewed' ? '✓ Teacher reviewed' : 'Teacher review pending'}
+                </span>
+              )}
               {chapter.wing && (
                 <span className="px-2.5 py-0.5 rounded-full text-[11px] font-mono bg-slate-900 text-slate-400 border border-slate-800">
                   {chapter.wing}
@@ -238,6 +294,50 @@ export const LabWorkspace: React.FC<LabWorkspaceProps> = ({
                     ✏️ Magic Tracing Slate
                   </button>
 
+                  {class1Meta ? (
+                    <>
+                      <button
+                        type="button"
+                        onClick={() => setViewportTab('practice')}
+                        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-extrabold transition-all ${
+                          viewportTab === 'practice' ? 'bg-emerald-400 text-slate-950 shadow-sm' : 'text-slate-300 hover:text-white'
+                        }`}
+                      >
+                        ⭐ Practice
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setViewportTab('progress')}
+                        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-extrabold transition-all ${
+                          viewportTab === 'progress' ? 'bg-violet-400 text-slate-950 shadow-sm' : 'text-slate-300 hover:text-white'
+                        }`}
+                      >
+                        📊 Progress
+                      </button>
+                      {role !== 'teacher' && (
+                      <button
+                        type="button"
+                        onClick={() => setViewportTab('parent')}
+                        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-extrabold transition-all ${
+                          viewportTab === 'parent' ? 'bg-emerald-400 text-slate-950 shadow-sm' : 'text-slate-300 hover:text-white'
+                        }`}
+                      >
+                        👨‍👩‍👧 Parents
+                      </button>
+                      )}
+                      {role !== 'parent' && (
+                      <button
+                        type="button"
+                        onClick={() => setViewportTab('teacher')}
+                        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-extrabold transition-all ${
+                          viewportTab === 'teacher' ? 'bg-amber-400 text-slate-950 shadow-sm' : 'text-slate-300 hover:text-white'
+                        }`}
+                      >
+                        🏫 Teachers
+                      </button>
+                      )}
+                    </>
+                  ) : (
                   <button
                     type="button"
                     onClick={() => setViewportTab('guide')}
@@ -250,6 +350,7 @@ export const LabWorkspace: React.FC<LabWorkspaceProps> = ({
                     <Users className="w-3.5 h-3.5" />
                     👨‍👩‍👧 Parent & Teacher Guide
                   </button>
+                  )}
                 </>
               ) : (
                 <>
@@ -330,6 +431,12 @@ export const LabWorkspace: React.FC<LabWorkspaceProps> = ({
           </div>
         </div>
 
+        {class1Meta && (
+          <div className="pt-2 border-t border-slate-800/80">
+            <Class1Toolbar />
+          </div>
+        )}
+
         {/* Dual-Board Syllabus Alignment Bar */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5 pt-2 border-t border-slate-800/80 text-xs">
           <div
@@ -367,10 +474,26 @@ export const LabWorkspace: React.FC<LabWorkspaceProps> = ({
       {/* 70% / 30% Split-Screen Interactive Laboratory Grid */}
       <div className="grid grid-cols-1 xl:grid-cols-12 gap-4 items-start">
         {/* Left 70% (8 of 12 cols on xl): Real-Time 2D / 3D Simulation Viewport */}
-        <div className="xl:col-span-8 space-y-4">
-          {viewportTab === 'simulation' && renderActiveSimulation()}
+        <div className="xl:col-span-8 space-y-4" ref={viewportRef} data-projector>
+          {viewportTab === 'simulation' && (
+            <Suspense fallback={<LabLoading />}>{renderActiveSimulation()}</Suspense>
+          )}
 
           {viewportTab === 'tracing' && <MagicTracingSlate />}
+
+          {class1Meta && viewportTab === 'practice' && <PracticeSession chapterId={chapter.id} />}
+          {class1Meta && viewportTab === 'progress' && (
+            <div className="rounded-2xl bg-[#111827] border border-[#1F2937] p-4 sm:p-5 space-y-5">
+              <ProgressReport board={activeBoard} />
+              <SyllabusMap board={activeBoard} chapters={chapters} onSelectChapter={onSelectChapter} />
+            </div>
+          )}
+          {class1Meta && viewportTab === 'parent' && (
+            <ParentPanel chapter={chapter} chapters={chapters} board={activeBoard} onSelectChapter={onSelectChapter} />
+          )}
+          {class1Meta && viewportTab === 'teacher' && (
+            <TeacherPanel chapter={chapter} board={activeBoard} onProjector={enterProjector} />
+          )}
 
           {viewportTab === 'guide' && (
             <div className="rounded-2xl bg-[#111827] border border-[#1F2937] p-5 space-y-4">
@@ -507,6 +630,7 @@ export const LabWorkspace: React.FC<LabWorkspaceProps> = ({
           )}
 
           {viewportTab === 'cad3d' && (
+            <Suspense fallback={<LabLoading />}>
             <AnatomyCADInspector
               initialPreset={
                 chapter.cadPresetId ||
@@ -517,6 +641,7 @@ export const LabWorkspace: React.FC<LabWorkspaceProps> = ({
                   : 'cell-ultrastructure')
               }
             />
+            </Suspense>
           )}
 
           {viewportTab === 'sandbox' && (
@@ -788,6 +913,8 @@ export const LabWorkspace: React.FC<LabWorkspaceProps> = ({
               onMarkComplete={
                 onToggleComplete ? () => onToggleComplete(chapter.id) : undefined
               }
+              chapterId={chapter.id}
+              skillId={class1Meta?.skills.length === 1 ? class1Meta.skills[0] : undefined}
             />
           )}
         </div>
@@ -795,3 +922,9 @@ export const LabWorkspace: React.FC<LabWorkspaceProps> = ({
     </main>
   );
 };
+
+const LabLoading: React.FC = () => (
+  <div className="rounded-2xl bg-[#111827] border border-[#1F2937] p-10 text-center text-sm text-slate-300">
+    Loading the lab…
+  </div>
+);

@@ -2,12 +2,18 @@ import React, { useState, useEffect } from 'react';
 import { QuizQuestion } from '../../types/curriculum.types';
 import { CheckCircle2, XCircle, HelpCircle, Award, RotateCcw, Volume2, Trophy } from 'lucide-react';
 import { playPop, playSuccessChime, playFanfare } from '../../utils/soundEffects';
+import { speakText } from '../../utils/speech';
+import { progress } from '../../class1/progressStore';
 
 interface InteractiveQuizProps {
   questions: QuizQuestion[];
   chapterTitle: string;
   isCompleted?: boolean;
   onMarkComplete?: () => void;
+  /** When set, each question's first attempt is saved to the child's progress. */
+  chapterId?: string;
+  /** Skill the first attempt counts toward (only when the chapter teaches a single skill). */
+  skillId?: string;
 }
 
 export const InteractiveQuiz: React.FC<InteractiveQuizProps> = ({
@@ -15,6 +21,8 @@ export const InteractiveQuiz: React.FC<InteractiveQuizProps> = ({
   chapterTitle,
   isCompleted = false,
   onMarkComplete,
+  chapterId,
+  skillId,
 }) => {
   const [selectedAnswers, setSelectedAnswers] = useState<Record<string, number>>({});
   const [submitted, setSubmitted] = useState<Record<string, boolean>>({});
@@ -24,21 +32,16 @@ export const InteractiveQuiz: React.FC<InteractiveQuizProps> = ({
     setSubmitted({});
   }, [chapterTitle, questions]);
 
-  const speakText = (text: string) => {
-    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
-      window.speechSynthesis.cancel();
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.rate = 0.92;
-      utterance.pitch = 1.05;
-      window.speechSynthesis.speak(utterance);
-    }
-  };
+  // Read-aloud taps are explicit, so they speak even when automatic voice is off.
+  // Hindi questions are detected and read with a Hindi voice.
+  const readAloud = (text: string) => speakText(text, { force: true });
 
   const handleSelect = (q: QuizQuestion, optionIdx: number) => {
     // Only the first attempt counts; use Reset to try the quiz again.
     if (submitted[q.id]) return;
     setSelectedAnswers((prev) => ({ ...prev, [q.id]: optionIdx }));
     setSubmitted((prev) => ({ ...prev, [q.id]: true }));
+    if (chapterId) progress.recordQuizAttempt(q.id, chapterId, optionIdx === q.correctIndex, skillId);
     if (optionIdx === q.correctIndex) {
       playSuccessChime();
     } else {
@@ -138,8 +141,10 @@ export const InteractiveQuiz: React.FC<InteractiveQuizProps> = ({
                 <button
                   type="button"
                   onClick={() =>
-                    speakText(
-                      `${q.question}. Option A: ${q.options[0]}. Option B: ${q.options[1]}. Option C: ${q.options[2]}. Option D: ${q.options[3]}.`
+                    readAloud(
+                      `${q.question}. ${q.options
+                        .map((o, i) => `Option ${String.fromCharCode(65 + i)}: ${o}.`)
+                        .join(' ')}`
                     )
                   }
                   title="Read question aloud"
@@ -219,7 +224,7 @@ export const InteractiveQuiz: React.FC<InteractiveQuizProps> = ({
                 <button
                   type="button"
                   onClick={() =>
-                    speakText(`${isCorrect ? 'Correct!' : 'Let us learn:'} ${q.explanation}`)
+                    readAloud(`${isCorrect ? 'Correct!' : 'Let us learn:'} ${q.explanation}`)
                   }
                   className="p-1 rounded bg-slate-800/80 text-cyan-300 hover:text-white shrink-0"
                   title="Listen to explanation"

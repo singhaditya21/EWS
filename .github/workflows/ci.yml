@@ -1,0 +1,31 @@
+name: CI
+
+# The live site is published from the gh-pages branch with `npm run deploy`.
+# This workflow only checks that every push builds and passes the content checks.
+on:
+  push:
+    branches: ['main']
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Content checks, type-check and build
+        run: npm run build

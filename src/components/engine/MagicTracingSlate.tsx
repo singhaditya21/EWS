@@ -1,4 +1,5 @@
 import React, { useRef, useState, useEffect, useCallback } from 'react';
+import { speakText } from '../../utils/speech';
 import { Eraser, Volume2, Sparkles, CheckCircle2, Palette } from 'lucide-react';
 
 type TraceCategory = 'numbers' | 'english' | 'hindi' | 'ginti_shabd' | 'shapes';
@@ -94,16 +95,8 @@ export const MagicTracingSlate: React.FC = () => {
   const items = TRACE_ITEMS[category];
   const activeItem = items[itemIdx] || items[0];
 
-  const speakItem = (item: TraceItem) => {
-    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
-      window.speechSynthesis.cancel();
-      const u = new SpeechSynthesisUtterance(`${item.title}. ${item.word}`);
-      if (item.lang) u.lang = item.lang;
-      u.rate = 0.88;
-      u.pitch = 1.08;
-      window.speechSynthesis.speak(u);
-    }
-  };
+  const speakItem = (item: TraceItem) =>
+    speakText(`${item.title}. ${item.word}`, { force: true, lang: item.lang === 'hi-IN' ? 'hi-IN' : undefined, rate: 0.88 });
 
   const drawGuideTemplate = useCallback(() => {
     const canvas = canvasRef.current;
@@ -323,7 +316,7 @@ export const MagicTracingSlate: React.FC = () => {
           onTouchStart={startDraw}
           onTouchMove={moveDraw}
           onTouchEnd={stopDraw}
-          className="w-full h-[300px] block cursor-crosshair touch-none"
+          className="w-full aspect-[760/320] block cursor-crosshair touch-none"
         />
       </div>
 

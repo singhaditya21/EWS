@@ -324,7 +324,7 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
     summary:
       'Read o’clock and half-past times on an interactive Analog Clock and combine Indian Rupee coins and notes (₹1, ₹2, ₹5, ₹10, ₹20, ₹50) in a Piggy Bank.',
     syllabusAlignment: {
-      cbseChapter: 'NCERT Joyful Mathematics 1 — Ch 10: How do I Spend my Day? & Ch 12: How Much Can We Spend?',
+      cbseChapter: 'NCERT Joyful Mathematics 1 — Ch 10: How do I Spend my Day? (parts of the day; clock reading is an extension) & Ch 12: How Much Can We Spend?',
       icseChapter: 'CISCE Class 1 Mathematics — Time & Money (Indian Coins and Notes)',
       examRelevance: 'Everyday Practical Numeracy (Time & Currency)',
       differenceNote:
@@ -466,7 +466,7 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
       {
         id: 'c1m8-q1',
         question: 'What comes next in the pattern: ⭐, ⭐, 🌙, ⭐, ⭐, 🌙, ⭐, ⭐, ___?',
-        options: ['', '', '', ''],
+        options: ['⭐', '🌙', '☀️', '🍎'],
         correctIndex: 1,
         explanation: 'The pattern follows the A-A-B rule (Two Stars, One Moon), so after two stars comes a Moon (🌙).',
         boardTag: 'NCERT Class 1 Ch 9',
@@ -934,7 +934,7 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
     summary:
       'Learn Hindi Swar (अ से अः) and Vyanjan (क, ख, ग, घ, च, छ, ज, झ) with colorful pictures, English meanings, and native Hindi voice pronunciation!',
     syllabusAlignment: {
-      cbseChapter: 'NCERT सारंगी 1 (Sarangi) — वर्णमाला: स्वर और व्यंजन',
+      cbseChapter: 'NCERT सारंगी 1 (Sarangi) — letters learnt through its 19 story/poem lessons (incl. अक्षर गीत)',
       icseChapter: 'CISCE कक्षा 1 हिंदी — वर्णमाला (स्वर अ–अः, व्यंजन क–ज्ञ)',
       examRelevance: 'Foundational Bilingual Literacy (NEP 2020 Class 1)',
       differenceNote:
@@ -1609,7 +1609,7 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
     summary:
       'Snap Devanagari letters together on the Hindi Word Train to form 2-letter (घर, जल, फल), 3-letter (कमल, मटर, बतख), and 4-letter (अजगर, शरबत, थरमस) words and read complete Hindi sentences!',
     syllabusAlignment: {
-      cbseChapter: 'NCERT सारंगी 1 (Sarangi) — बिना मात्रा वाले दो, तीन व चार अक्षर के शब्द',
+      cbseChapter: 'NCERT सारंगी 1 (Sarangi) — reading simple words across its story/poem lessons',
       icseChapter: 'CISCE कक्षा 1 हिंदी — शब्द रचना (दो, तीन व चार अक्षर के शब्द)',
       examRelevance: 'Core CBSE & ICSE Class 1 Hindi Reading Fluency',
       differenceNote:
@@ -1849,7 +1849,7 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
     summary:
       'Practice the 12-sound Barahkhadi strip (क, का, कि, की, कु, कू, के, कै, को, कौ, कं, कः) and master Class 1 Hindi Grammar: विलोम शब्द (दिन-रात, बड़ा-छोटा) and एक–अनेक (तारा-तारे, किताब-किताबें)!',
     syllabusAlignment: {
-      cbseChapter: 'NCERT सारंगी 1 (Sarangi) — मात्राएँ / बारहखड़ी अभ्यास, विलोम व एक–अनेक (गतिविधियाँ)',
+      cbseChapter: 'NCERT सारंगी 1 (Sarangi) — matras and word play inside its story/poem lessons (no separate grammar chapter)',
       icseChapter: 'CISCE कक्षा 1 हिंदी व्याकरण — बारहखड़ी, विलोम शब्द और वचन (एक–अनेक)',
       examRelevance: 'Core CBSE & ICSE Class 1 Hindi Grammar',
       differenceNote:
