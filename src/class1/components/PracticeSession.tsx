@@ -5,8 +5,12 @@ import { SKILL_BY_ID } from '../skills';
 import { dueSkillIds, progress, today, useActiveProfile } from '../progressStore';
 import { speakText } from '../../utils/speech';
 import { playPop, playSuccessChime, playFanfare } from '../../utils/soundEffects';
+import { usePlan, planAtLeast } from '../../platform/entitlements';
+import { PackInfo, fetchPack, packsForChapter, samplePack } from '../../platform/packs';
+import { PLANS } from '../../platform/plans';
+import { UpgradeNotice } from '../../platform/components/UpgradeNotice';
 
-type PracticeKind = 'lesson' | 'review';
+type PracticeKind = 'lesson' | 'review' | 'pack';
 const ROUND_SIZE = 6;
 
 /** Skills to review today: due ones first, then shaky ones, then skills from finished lessons. */
@@ -32,7 +36,13 @@ const buildRound = (skills: string[]): BankQuestion[] => {
  */
 export const PracticeSession: React.FC<{ chapterId: string }> = ({ chapterId }) => {
   const profile = useActiveProfile();
+  const { plan, limits } = usePlan();
   const [kind, setKind] = useState<PracticeKind>('lesson');
+  const [packRound, setPackRound] = useState<BankQuestion[] | null>(null);
+  const [packTitle, setPackTitle] = useState<string | null>(null);
+  const [packError, setPackError] = useState<string | null>(null);
+  const [counted, setCounted] = useState(false);
+  const [blocked, setBlocked] = useState(false);
   const [roundKey, setRoundKey] = useState(0);
   const lessonSkills = CLASS1_BOARD_MAP[chapterId]?.skills ?? [];
   const reviewList = useMemo(() => reviewSkills(profile), [profile]);
@@ -40,13 +50,16 @@ export const PracticeSession: React.FC<{ chapterId: string }> = ({ chapterId }) 
 
   // A new round is drawn only when the child starts one, not on every progress update.
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const round = useMemo(() => buildRound(skills), [kind, roundKey, chapterId]);
+  const drawn = useMemo(() => buildRound(skills), [kind, roundKey, chapterId]);
+  const round = kind === 'pack' && packRound ? packRound : drawn;
   const [idx, setIdx] = useState(0);
   const [picked, setPicked] = useState<number | null>(null);
   const [score, setScore] = useState(0);
 
   const restart = (next: PracticeKind) => {
     setKind(next);
+    setCounted(false);
+    setBlocked(false);
     setRoundKey((k) => k + 1);
     setIdx(0);
     setPicked(null);
@@ -56,8 +69,28 @@ export const PracticeSession: React.FC<{ chapterId: string }> = ({ chapterId }) 
   const q = round[idx];
   const finished = round.length > 0 && idx >= round.length;
 
+  const openPack = async (pack: PackInfo | 'sample') => {
+    setPackError(null);
+    try {
+      const qs = pack === 'sample' ? samplePack() : await fetchPack(pack);
+      setPackRound(qs);
+      setPackTitle(pack === 'sample' ? 'Olympiad sample' : pack.title);
+      restart('pack');
+    } catch (e) {
+      setPackError((e as Error).message);
+    }
+  };
+
   const choose = (i: number) => {
     if (!q || picked !== null) return;
+    // The first answer of a round counts as starting it (Free has a daily round limit).
+    if (!counted) {
+      if (!progress.tryStartPracticeRound(limits.practiceRoundsPerDay)) {
+        setBlocked(true);
+        return;
+      }
+      setCounted(true);
+    }
     setPicked(i);
     const ok = i === q.answer;
     progress.recordSkillResult(q.skillId, ok, chapterId);
@@ -89,7 +122,9 @@ export const PracticeSession: React.FC<{ chapterId: string }> = ({ chapterId }) 
           <p className="text-xs text-slate-400">
             {kind === 'lesson'
               ? `Questions on: ${lessonSkills.map((s) => SKILL_BY_ID[s]?.label).join(', ')}`
-              : 'Today’s review mixes skills that are due, skills that need more practice, and finished lessons.'}
+              : kind === 'review'
+              ? 'Today’s review mixes skills that are due, skills that need more practice, and finished lessons.'
+              : 'A practice pack.'}
           </p>
         </div>
         <div className="flex gap-1.5">
@@ -108,6 +143,17 @@ export const PracticeSession: React.FC<{ chapterId: string }> = ({ chapterId }) 
         </div>
       </div>
 
+      {kind === 'pack' && packTitle && <p className="text-sm font-bold text-violet-200">📦 {packTitle}</p>}
+
+      {blocked && (
+        <div className="space-y-2">
+          <p className="p-4 rounded-xl bg-[#090D16] border border-amber-500/40 text-sm text-amber-100">
+            That’s {limits.practiceRoundsPerDay} practice rounds today — well done! Come back tomorrow, or play the lesson again.
+          </p>
+          <UpgradeNotice feature="Unlimited practice" plan="family" compact />
+        </div>
+      )}
+
       {round.length === 0 && (
         <p className="p-4 rounded-xl bg-[#090D16] border border-slate-800 text-sm text-slate-300">
           {kind === 'review'
@@ -116,7 +162,7 @@ export const PracticeSession: React.FC<{ chapterId: string }> = ({ chapterId }) 
         </p>
       )}
 
-      {q && !finished && (
+      {q && !finished && !blocked && (
         <div className="space-y-4">
           <div className="flex items-center justify-between text-xs text-slate-400">
             <span>
@@ -200,6 +246,39 @@ export const PracticeSession: React.FC<{ chapterId: string }> = ({ chapterId }) 
           </button>
         </div>
       )}
+
+      <div className="pt-3 border-t border-slate-800 space-y-2">
+        <div className="text-xs font-bold uppercase text-slate-400">Practice packs</div>
+        <div className="flex flex-wrap gap-2">
+          {limits.olympiadPacks === 'sample' && (
+            <button type="button" onClick={() => void openPack('sample')} className="px-3 py-2 rounded-xl bg-[#090D16] border border-slate-700 text-xs font-bold text-slate-200">
+              🧠 Olympiad sample (free)
+            </button>
+          )}
+          {packsForChapter(chapterId).map((pack) =>
+            planAtLeast(plan, pack.minPlan) ? (
+              <button
+                key={pack.key}
+                type="button"
+                onClick={() => void openPack(pack)}
+                className="px-3 py-2 rounded-xl bg-violet-500/20 border border-violet-400/50 text-xs font-bold text-violet-100"
+              >
+                📦 {pack.title}
+              </button>
+            ) : (
+              <span key={pack.key} className="px-3 py-2 rounded-xl bg-[#090D16] border border-slate-800 text-xs text-slate-400">
+                🔒 {pack.title} ({PLANS[pack.minPlan].name})
+              </span>
+            )
+          )}
+        </div>
+        {packError && <p className="text-xs text-rose-300">{packError}</p>}
+        {limits.practiceRoundsPerDay !== Infinity && (
+          <p className="text-[11px] text-slate-500">
+            Free plan: {progress.practiceRoundsToday()} of {limits.practiceRoundsPerDay} practice rounds used today.
+          </p>
+        )}
+      </div>
     </div>
   );
 };

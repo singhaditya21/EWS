@@ -1,0 +1,99 @@
+# Supabase CLI config for OmniLearn. Used by `supabase start` (local) and as the source of
+# truth for function settings on `supabase functions deploy`. Hosted auth settings (providers,
+# templates, redirect URLs) are set in the dashboard; see supabase/README.md.
+project_id = "omnilearn"
+
+[api]
+enabled = true
+port = 54321
+schemas = ["public", "graphql_public"]
+extra_search_path = ["public", "extensions"]
+max_rows = 1000
+
+[db]
+port = 54322
+shadow_port = 54320
+# Match your hosted project's Postgres major version (Dashboard -> Settings -> Infrastructure).
+major_version = 17
+
+[db.seed]
+enabled = true
+sql_paths = ["./seed.sql"]
+
+[auth]
+enabled = true
+site_url = "http://localhost:5173"
+# Add the production origin here (and in Dashboard -> Authentication -> URL Configuration):
+# additional_redirect_urls = ["http://localhost:5173", "https://YOUR-PRODUCTION-DOMAIN"]
+additional_redirect_urls = ["http://localhost:5173"]
+jwt_expiry = 3600
+enable_refresh_token_rotation = true
+enable_signup = true
+enable_anonymous_sign_ins = false
+
+# Email one-time code (the app calls signInWithOtp + verifyOtp type "email").
+[auth.email]
+enable_signup = true
+double_confirm_changes = true
+enable_confirmations = false
+otp_length = 6
+otp_expiry = 600
+max_frequency = "60s"
+
+# Both templates must contain {{ .Token }} so the email carries the 6-digit code.
+[auth.email.template.magic_link]
+subject = "Your OmniLearn sign-in code"
+content_path = "./supabase/templates/magic_link.html"
+
+[auth.email.template.confirmation]
+subject = "Your OmniLearn sign-in code"
+content_path = "./supabase/templates/magic_link.html"
+
+# Phone (SMS one-time code). Needs an SMS provider on the hosted project (Twilio, MSG91, ...).
+[auth.sms]
+enable_signup = true
+enable_confirmations = false
+template = "Your OmniLearn code is {{ .Code }}. It expires in 10 minutes."
+max_frequency = "60s"
+
+# Local testing without a real SMS provider: fixed codes for test numbers.
+# [auth.sms.test_otp]
+# 919999900000 = "123456"
+
+# Example provider block (keep secrets in env, never in this file):
+# [auth.sms.twilio]
+# enabled = true
+# account_sid = "ACxxxxxxxx"
+# message_service_sid = "MGxxxxxxxx"
+# auth_token = "env(SUPABASE_AUTH_SMS_TWILIO_AUTH_TOKEN)"
+
+[edge_runtime]
+enabled = true
+policy = "per_worker"
+deno_version = 2
+
+# Functions called with a user's JWT: the gateway checks it, and the function re-checks.
+[functions.razorpay-subscribe]
+verify_jwt = true
+
+[functions.razorpay-cancel]
+verify_jwt = true
+
+[functions.delete-account]
+verify_jwt = true
+
+# Functions with their own auth (Razorpay signature, cron secret, class code, student token).
+[functions.razorpay-webhook]
+verify_jwt = false
+
+[functions.weekly-summary]
+verify_jwt = false
+
+[functions.class-roster]
+verify_jwt = false
+
+[functions.student-session]
+verify_jwt = false
+
+[functions.student-progress]
+verify_jwt = false

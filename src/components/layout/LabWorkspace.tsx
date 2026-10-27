@@ -433,7 +433,7 @@ export const LabWorkspace: React.FC<LabWorkspaceProps> = ({
 
         {class1Meta && (
           <div className="pt-2 border-t border-slate-800/80">
-            <Class1Toolbar />
+            <Class1Toolbar chapters={chapters} onSelectChapter={onSelectChapter} />
           </div>
         )}
 

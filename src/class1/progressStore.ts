@@ -37,6 +37,10 @@ export interface ProfileData {
   skills: Record<string, SkillRecord>;
   observations: Record<string, { level: ObservationLevel; note?: string; at: string }>;
   activity: ActivityEntry[];
+  /** Practice rounds started per day (YYYY-MM-DD), for the free plan's daily limit. */
+  practiceLog?: Record<string, number>;
+  /** Last local change (ISO), used to decide which copy wins when syncing with an account. */
+  updatedAt?: string;
 }
 
 interface StoreState {
@@ -115,7 +119,8 @@ const commit = (next: StoreState) => {
 
 const updateActive = (fn: (p: ProfileData) => ProfileData) => {
   const p = state.profiles[state.activeProfileId];
-  commit({ ...state, profiles: { ...state.profiles, [p.id]: fn(p) } });
+  const next = { ...fn(p), updatedAt: new Date().toISOString() };
+  commit({ ...state, profiles: { ...state.profiles, [p.id]: next } });
 };
 
 const log = (p: ProfileData, entry: Omit<ActivityEntry, 'at'>): ActivityEntry[] =>
@@ -160,6 +165,40 @@ export const progress = {
     const activeProfileId = id === state.activeProfileId ? Object.keys(profiles)[0] : state.activeProfileId;
     commit({ ...state, profiles, activeProfileId });
   },
+
+  /**
+   * Adds or replaces a whole profile (an account child or a school student's saved progress).
+   * Does not bump updatedAt, so syncing back the same data doesn't loop.
+   */
+  upsertProfile(p: ProfileData, activate = false) {
+    commit({
+      ...state,
+      activeProfileId: activate ? p.id : state.activeProfileId,
+      profiles: { ...state.profiles, [p.id]: p },
+    });
+  },
+  /** Removes a profile without the "keep at least one" rule (used when leaving student mode). */
+  removeProfile(id: string, fallbackId?: string) {
+    if (!state.profiles[id]) return;
+    const profiles = { ...state.profiles };
+    delete profiles[id];
+    if (Object.keys(profiles).length === 0) {
+      const p = emptyProfile('My Child');
+      profiles[p.id] = p;
+    }
+    const activeProfileId =
+      state.activeProfileId === id ? (fallbackId && profiles[fallbackId] ? fallbackId : Object.keys(profiles)[0]) : state.activeProfileId;
+    commit({ ...state, profiles, activeProfileId });
+  },
+  /** Starts a practice round if today's limit allows it. Returns false when the limit is reached. */
+  tryStartPracticeRound(limitPerDay: number): boolean {
+    const p = progress.active();
+    const used = p.practiceLog?.[today()] ?? 0;
+    if (used >= limitPerDay) return false;
+    updateActive((cur) => ({ ...cur, practiceLog: { [today()]: used + 1 } }));
+    return true;
+  },
+  practiceRoundsToday: () => progress.active().practiceLog?.[today()] ?? 0,
 
   setVoice(on: boolean) {
     setSpeechEnabled(on);
@@ -236,6 +275,9 @@ export const progress = {
     }));
   },
 };
+
+export const subscribeProgress = subscribe;
+export const newProfile = emptyProfile;
 
 export const useProgress = () => useSyncExternalStore(subscribe, () => state, () => state);
 export const useActiveProfile = () => {

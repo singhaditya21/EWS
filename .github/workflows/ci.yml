@@ -29,3 +29,6 @@ jobs:
 
       - name: Content checks, type-check and build
         run: npm run build
+
+      - name: Database access-rule tests
+        run: npm run test:db

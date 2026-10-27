@@ -41,6 +41,18 @@ Content checks run before every build (`npm run check:content`): they fail on wr
 
 ---
 
+## 💎 Accounts, plans and classrooms (Phase 5)
+
+Free stays free: every Class 1 chapter, lab and quiz works without an account. Paid plans — **Family**, **Family Plus** and **Classroom** (with a per-student **School** licence) — add more children, sync across devices, unlimited practice, deeper reports, practice packs and teacher tools. Plans and limits: `src/platform/plans.ts`.
+
+- **Who signs in:** parents and teachers (one-time code by phone or email). Children never create accounts — at home they use a parent's device; at school they enter a class code, tap their name and their 3 secret pictures.
+- **Backend:** Supabase (Postgres with row-level security, Edge Functions) in `supabase/`; contract in `supabase/CONTRACT.md`; payments through Razorpay subscriptions (UPI AutoPay, cards).
+- **Off until configured:** without `VITE_SUPABASE_URL` / `VITE_SUPABASE_ANON_KEY` the site runs exactly as before (device-only, nothing locked). See `.env.example`.
+- **Tests:** `npm run test:db` runs the database migration in an in-memory Postgres and checks plan limits, row-level security, school seats and deletes (also in CI).
+- **Launch checklist:** `docs/LAUNCH.md` — Supabase, Razorpay KYC and plans, Cloudflare Pages + private repo, legal review of the draft policy in `src/platform/legal.ts`.
+
+---
+
 ## 🏗️ Repository Architecture
 
 ```text

@@ -11,7 +11,7 @@ interface SheetQuestion {
   answer: number;
 }
 
-const esc = (t: string) =>
+export const esc = (t: string) =>
   t.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
 const STYLE = `
@@ -33,7 +33,7 @@ const STYLE = `
 `;
 
 /** Prints through a hidden frame, so pop-up blockers can't stop it. */
-const printInFrame = (title: string, body: string) => {
+export const printInFrame = (title: string, body: string) => {
   document.getElementById('worksheet-print-frame')?.remove();
   const frame = document.createElement('iframe');
   frame.id = 'worksheet-print-frame';

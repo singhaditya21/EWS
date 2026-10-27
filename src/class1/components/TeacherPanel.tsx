@@ -6,6 +6,8 @@ import { SKILL_BY_ID } from '../skills';
 import { ObservationLevel, progress, useActiveProfile } from '../progressStore';
 import { LEVEL_DESCRIPTOR, LEVEL_LABEL } from '../progressModel';
 import { printWorksheet } from '../worksheet';
+import { usePlan } from '../../platform/entitlements';
+import { UpgradeNotice } from '../../platform/components/UpgradeNotice';
 
 const Section: React.FC<{ title: string; children: React.ReactNode }> = ({ title, children }) => (
   <div className="p-3.5 rounded-xl bg-[#090D16] border border-slate-800 space-y-1.5">
@@ -22,6 +24,8 @@ export const TeacherPanel: React.FC<{
   const plan = CLASS1_LESSON_PLANS[chapter.id];
   const meta = CLASS1_BOARD_MAP[chapter.id];
   const profile = useActiveProfile();
+  const { limits } = usePlan();
+  const icseSheets = limits.worksheetBoards.includes('ICSE');
   const saved = profile.observations[chapter.id];
   const [note, setNote] = useState(saved?.note ?? '');
 
@@ -36,13 +40,15 @@ export const TeacherPanel: React.FC<{
           </p>
         </div>
         <div className="flex flex-wrap gap-1.5">
-          <button
-            type="button"
-            onClick={onProjector}
-            className="px-3 py-2 rounded-xl bg-cyan-500 text-slate-950 text-xs font-extrabold"
-          >
-            📽️ Projector mode
-          </button>
+          {limits.teacherTools && (
+            <button
+              type="button"
+              onClick={onProjector}
+              className="px-3 py-2 rounded-xl bg-cyan-500 text-slate-950 text-xs font-extrabold"
+            >
+              📽️ Projector mode
+            </button>
+          )}
           <button
             type="button"
             onClick={() => printWorksheet('CBSE', chapter)}
@@ -54,15 +60,20 @@ export const TeacherPanel: React.FC<{
           </button>
           <button
             type="button"
+            disabled={!icseSheets}
+            title={icseSheets ? undefined : 'ICSE tests are part of paid plans'}
             onClick={() => printWorksheet('ICSE', chapter)}
             className={`px-3 py-2 rounded-xl text-xs font-extrabold border ${
               board === 'ICSE' ? 'bg-amber-400 text-slate-950 border-white' : 'bg-[#090D16] text-slate-300 border-slate-700'
             }`}
           >
-            🖨️ ICSE practice test + key
+            {icseSheets ? '' : '🔒 '}🖨️ ICSE practice test + key
           </button>
         </div>
       </div>
+      {!limits.teacherTools && (
+        <UpgradeNotice feature="Projector mode, observations and class tools" plan="classroom" compact />
+      )}
 
       {plan ? (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
@@ -83,6 +94,7 @@ export const TeacherPanel: React.FC<{
         <p className="text-sm text-slate-300">No lesson plan for this chapter yet.</p>
       )}
 
+      {limits.teacherTools && (
       <div className="p-3.5 rounded-xl bg-[#090D16] border border-violet-500/40 space-y-2">
         <div className="text-[11px] font-bold uppercase tracking-wider text-violet-300">
           Observation for {profile.name} (goes into the progress report)
@@ -118,6 +130,7 @@ export const TeacherPanel: React.FC<{
           </p>
         )}
       </div>
+      )}
     </div>
   );
 };

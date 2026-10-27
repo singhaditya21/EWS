@@ -4,6 +4,9 @@ import { useActiveProfile } from '../progressStore';
 import { LEVEL_DESCRIPTOR, LEVEL_LABEL, SkillLevel, percent, summarise } from '../progressModel';
 import { SUBJECT_LABELS } from '../skills';
 import { CURRICULUM_DATA } from '../../data/curriculum';
+import { CLASS1_BOARD_MAP } from '../boardMap';
+import { usePlan } from '../../platform/entitlements';
+import { UpgradeNotice } from '../../platform/components/UpgradeNotice';
 
 const LEVEL_STYLE: Record<SkillLevel, string> = {
   'not-started': 'bg-slate-800 text-slate-400 border-slate-700',
@@ -19,7 +22,23 @@ const LEVEL_STYLE: Record<SkillLevel, string> = {
  */
 export const ProgressReport: React.FC<{ board: SchoolBoard; compact?: boolean }> = ({ board, compact }) => {
   const profile = useActiveProfile();
+  const { limits } = usePlan();
+  const depth = limits.reports;
   const subjects = summarise(profile, board);
+  // Advice: the shakiest skills first, each with a lesson to revisit.
+  const advice =
+    depth === 'full_with_advice'
+      ? subjects
+          .flatMap((sub) => sub.skills)
+          .filter((k) => k.level === 'beginning' || k.level === 'developing')
+          .sort((a, b) => (a.level === 'beginning' ? -1 : 0) - (b.level === 'beginning' ? -1 : 0))
+          .slice(0, 4)
+          .map((k) => {
+            const chapterId = Object.keys(CLASS1_BOARD_MAP).find((id) => CLASS1_BOARD_MAP[id].skills.includes(k.id));
+            const chapter = CURRICULUM_DATA.find((c) => c.id === chapterId);
+            return { skill: k.label, chapter: chapter?.title };
+          })
+      : [];
   const anything = Object.keys(profile.skills).length + Object.keys(profile.quizFirstAttempts).length > 0;
 
   return (
@@ -79,6 +98,7 @@ export const ProgressReport: React.FC<{ board: SchoolBoard; compact?: boolean }>
                   <div className="h-full bg-emerald-400" style={{ width: `${done}%` }} />
                 </div>
               </div>
+              {depth !== 'basic' && (
               <div className="flex flex-wrap gap-1">
                 {s.skills.map((k) => (
                   <span
@@ -90,12 +110,27 @@ export const ProgressReport: React.FC<{ board: SchoolBoard; compact?: boolean }>
                   </span>
                 ))}
               </div>
+              )}
             </div>
           );
         })}
       </div>
 
-      {!compact && Object.keys(profile.observations).length > 0 && (
+      {depth === 'basic' && !compact && <UpgradeNotice feature="The skill-by-skill report" plan="family" compact />}
+
+      {advice.length > 0 && !compact && (
+        <div className="p-3 rounded-xl bg-[#090D16] border border-emerald-500/40 space-y-1">
+          <div className="text-[11px] font-bold uppercase text-emerald-300">What to practise next</div>
+          {advice.map((a) => (
+            <p key={a.skill} className="text-xs text-slate-200">
+              • <strong>{a.skill}</strong>
+              {a.chapter ? ` — replay “${a.chapter}” and do a Practice round.` : ''}
+            </p>
+          ))}
+        </div>
+      )}
+
+      {depth !== 'basic' && !compact && Object.keys(profile.observations).length > 0 && (
         <div className="p-3 rounded-xl bg-[#090D16] border border-violet-500/40 space-y-1.5">
           <div className="text-[11px] font-bold uppercase text-violet-300">Teacher / parent observations</div>
           {Object.entries(profile.observations).map(([chapterId, o]) => (
@@ -108,6 +143,7 @@ export const ProgressReport: React.FC<{ board: SchoolBoard; compact?: boolean }>
         </div>
       )}
 
+      {depth !== 'basic' && (
       <div className="flex flex-wrap gap-1.5 text-[10px]">
         {(Object.keys(LEVEL_LABEL) as SkillLevel[]).map((l) => (
           <span key={l} className={`px-1.5 py-0.5 rounded-md border ${LEVEL_STYLE[l]}`}>
@@ -115,6 +151,7 @@ export const ProgressReport: React.FC<{ board: SchoolBoard; compact?: boolean }>
           </span>
         ))}
       </div>
+      )}
     </div>
   );
 };

@@ -11,6 +11,7 @@ import { cancelSpeech, speakText, useHasVoice } from '../../utils/speech';
 import { progress, useProgress } from '../../class1/progressStore';
 import { ProgressReport } from '../../class1/components/ProgressReport';
 import { SchoolBoard } from '../../types/curriculum.types';
+import { MIC_NOTICE } from '../../platform/legal';
 import {
   Calculator,
   Shapes,
@@ -1796,6 +1797,7 @@ export const Class1InteractiveLab: React.FC<{
                 <p className="text-xs text-rose-200">
                   Pick a word, listen to how it sounds, and tap the Microphone to say it aloud!
                 </p>
+                <p className="text-[11px] text-slate-400 mt-1">For grown-ups: {MIC_NOTICE}</p>
               </div>
             </div>
             <button

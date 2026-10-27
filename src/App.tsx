@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { CURRICULUM_DATA } from './data/curriculum';
 import {
   CurriculumChapter,
@@ -9,6 +9,16 @@ import { Navbar } from './components/layout/Navbar';
 import { CurriculumSidebar } from './components/layout/CurriculumSidebar';
 import { LabWorkspace } from './components/layout/LabWorkspace';
 import { progress, useActiveProfile } from './class1/progressStore';
+import { useRoute } from './platform/nav';
+import { initSession } from './platform/session';
+import { startSync } from './platform/sync';
+import { useStudentSession } from './platform/student';
+import { PlansPage } from './platform/components/PlansPage';
+import { AccountPage } from './platform/components/AccountPage';
+import { ClassroomPage } from './platform/components/ClassroomPage';
+import { InvitePage, SchoolPage } from './platform/components/SchoolPage';
+import { StudentLoginPage } from './platform/components/StudentLoginPage';
+import { LegalPage } from './platform/components/LegalPage';
 
 export const App: React.FC = () => {
   const [activeTrack, setActiveTrack] = useState<EducationTrack>('school');
@@ -22,6 +32,25 @@ export const App: React.FC = () => {
   const [kidFocusMode, setKidFocusMode] = useState(false);
   // Completed lessons belong to the active child profile and are saved on this device.
   const completedChapterIds = useActiveProfile().completedChapterIds;
+  const route = useRoute();
+
+  useEffect(() => {
+    startSync();
+    void initSession();
+  }, []);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [route.page]);
+
+  // A child signed in at school learns in their class's board, in Class 1.
+  const student = useStudentSession();
+  useEffect(() => {
+    if (!student) return;
+    setActiveTrack('school');
+    setActiveBoard(student.board);
+    setActiveClassLevel(1);
+  }, [student]);
   const handleToggleComplete = (chapterId: string) => progress.toggleComplete(chapterId);
 
   const handleSelectTrack = (track: EducationTrack) => {
@@ -103,28 +132,40 @@ export const App: React.FC = () => {
         onToggleKidFocusMode={handleToggleKidFocusMode}
       />
 
-      <div className="flex-1 flex min-h-0">
-        <CurriculumSidebar
-          chapters={CURRICULUM_DATA}
-          activeTrack={activeTrack}
-          activeBoard={activeBoard}
-          activeClassLevel={activeClassLevel}
-          selectedChapter={selectedChapter}
-          onSelectChapter={handleSelectChapter}
-          completedChapterIds={completedChapterIds}
-          mobileOpen={mobileSidebarOpen}
-          onCloseMobile={() => setMobileSidebarOpen(false)}
-        />
+      {route.page ? (
+        <div className="flex-1 flex min-h-0">
+          {route.page === 'plans' && <PlansPage />}
+          {route.page === 'account' && <AccountPage />}
+          {route.page === 'classroom' && <ClassroomPage />}
+          {route.page === 'school' && <SchoolPage />}
+          {route.page === 'invite' && <InvitePage token={route.arg} />}
+          {route.page === 'student' && <StudentLoginPage initialCode={route.query.get('code')} />}
+          {(route.page === 'privacy' || route.page === 'terms') && <LegalPage kind={route.page} />}
+        </div>
+      ) : (
+        <div className="flex-1 flex min-h-0">
+          <CurriculumSidebar
+            chapters={CURRICULUM_DATA}
+            activeTrack={activeTrack}
+            activeBoard={activeBoard}
+            activeClassLevel={activeClassLevel}
+            selectedChapter={selectedChapter}
+            onSelectChapter={handleSelectChapter}
+            completedChapterIds={completedChapterIds}
+            mobileOpen={mobileSidebarOpen}
+            onCloseMobile={() => setMobileSidebarOpen(false)}
+          />
 
-        <LabWorkspace
-          chapter={selectedChapter}
-          activeBoard={activeBoard}
-          chapters={CURRICULUM_DATA}
-          onSelectChapter={handleSelectChapter}
-          completedChapterIds={completedChapterIds}
-          onToggleComplete={handleToggleComplete}
-        />
-      </div>
+          <LabWorkspace
+            chapter={selectedChapter}
+            activeBoard={activeBoard}
+            chapters={CURRICULUM_DATA}
+            onSelectChapter={handleSelectChapter}
+            completedChapterIds={completedChapterIds}
+            onToggleComplete={handleToggleComplete}
+          />
+        </div>
+      )}
     </div>
   );
 };
