@@ -35,6 +35,8 @@ export const InteractiveQuiz: React.FC<InteractiveQuizProps> = ({
   };
 
   const handleSelect = (q: QuizQuestion, optionIdx: number) => {
+    // Only the first attempt counts; use Reset to try the quiz again.
+    if (submitted[q.id]) return;
     setSelectedAnswers((prev) => ({ ...prev, [q.id]: optionIdx }));
     setSubmitted((prev) => ({ ...prev, [q.id]: true }));
     if (optionIdx === q.correctIndex) {
@@ -177,7 +179,8 @@ export const InteractiveQuiz: React.FC<InteractiveQuizProps> = ({
                     key={optIdx}
                     type="button"
                     onClick={() => handleSelect(q, optIdx)}
-                    className={`w-full text-left px-3 py-2 rounded-lg border text-xs transition-all flex items-center justify-between gap-2 ${btnStyle}`}
+                    disabled={isAnswered}
+                    className={`w-full text-left px-3 py-2 rounded-lg border text-xs transition-all flex items-center justify-between gap-2 disabled:cursor-default ${btnStyle}`}
                   >
                     <span>
                       <strong className="font-mono mr-2 opacity-75">

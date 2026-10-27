@@ -19,8 +19,8 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
     summary:
       'Master Class 1 spatial pre-number words by moving the Furry Cat ON/UNDER the table, INSIDE/OUTSIDE the box, and NEAR/FAR from the tree.',
     syllabusAlignment: {
-      cbseChapter: 'NCERT Class 1 Joyful Mathematics — Ch 1: Finding the Furry Cat! (Pre-Number Concepts)',
-      icseChapter: 'CISCE Class 1 Mathematics — Theme 1: Pre-Number Concepts (Inside-Outside, On-Under, Near-Far, Bigger-Smaller)',
+      cbseChapter: 'NCERT Joyful Mathematics 1 — Ch 1: Finding the Furry Cat!',
+      icseChapter: 'CISCE Class 1 Mathematics — Pre-Number Concepts (Inside/Outside, On/Under, Near/Far, Big/Small)',
       examRelevance: 'Class 1 Spatial & Pre-Mathematical Readiness',
       differenceNote:
         'Both CBSE NCERT Ch 1 and ICSE start Class 1 with spatial vocabulary before introducing number symbols.',
@@ -73,17 +73,17 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
     wing: 'Primary (Class 1–5)',
     streamCategory: 'Class 1',
     subject: 'Mathematics',
-    chapterNumber: 'Class 1 • Math Ch 1',
+    chapterNumber: 'Class 1 • Math Ch 2',
     simulationId: 'Class1InteractiveLab',
     defaultSimulationMode: 'number-line-tenframe',
     summary:
       'Count objects using interactive 10-frames, explore Before/After/Between numbers from 1 to 20, and compare quantities with the Hungry Crocodile (<, >, =) mouth.',
     syllabusAlignment: {
-      cbseChapter: 'NCERT Class 1 Joyful Mathematics — Ch 1 (Finding the Furry Cat!), Ch 3 (Mango Treat: Numbers 1–9) & Ch 4 (Making 10)',
-      icseChapter: 'CISCE Class 1 Mathematics — Theme 1: Numbers 1 to 20, Before/After/Between & Comparison (<, >, =)',
+      cbseChapter: 'NCERT Joyful Mathematics 1 — Ch 3: Mango Treat & Ch 4: Making 10',
+      icseChapter: 'CISCE Class 1 Mathematics — Numbers 1 to 20, Before/After/Between & Comparison (<, >, =)',
       examRelevance: 'NIPUN Bharat Foundational Numeracy & CISCE Class 1 Core',
       differenceNote:
-        'CBSE NCERT emphasizes ten-frame subitizing ("Making 10"), while ICSE formally introduces inequality symbols (<, >, =) and ordinal numbers (1st to 10th) in early Class 1.',
+        'CBSE NCERT emphasises ten-frame subitising ("Making 10"), while many ICSE-school textbooks also introduce the symbols <, > and = in Class 1.',
     },
     keyFormulas: [
       {
@@ -133,14 +133,14 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
     wing: 'Primary (Class 1–5)',
     streamCategory: 'Class 1',
     subject: 'Mathematics',
-    chapterNumber: 'Class 1 • Math Ch 2',
+    chapterNumber: 'Class 1 • Math Ch 3',
     simulationId: 'Class1InteractiveLab',
     defaultSimulationMode: 'addition-subtraction',
     summary:
       'Learn single-digit and teen addition ("putting together") and subtraction ("taking away") by hopping a frog forward and backward along a 0–20 number line.',
     syllabusAlignment: {
-      cbseChapter: 'NCERT Class 1 Joyful Mathematics — Ch 5 (How Many? Addition & Subtraction of Single-Digit Numbers) & Ch 6 (Vegetable Farm: Up to 20)',
-      icseChapter: 'CISCE Class 1 Mathematics — Theme 2: Number Operations (Addition and Subtraction up to 20 on the Number Line)',
+      cbseChapter: 'NCERT Joyful Mathematics 1 — Ch 5: How Many? & Ch 6: Vegetable Farm',
+      icseChapter: 'CISCE Class 1 Mathematics — Addition & Subtraction up to 20',
       examRelevance: 'Class 1 Arithmetic Operations Mastery',
       differenceNote:
         'Both CBSE and ICSE teach addition as forward jumps on the number line and subtraction as backward jumps, plus zero properties (n + 0 = n, n - 0 = n).',
@@ -193,14 +193,14 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
     wing: 'Primary (Class 1–5)',
     streamCategory: 'Class 1',
     subject: 'Mathematics',
-    chapterNumber: 'Class 1 • Math Ch 3',
+    chapterNumber: 'Class 1 • Math Ch 4',
     simulationId: 'Class1InteractiveLab',
     defaultSimulationMode: 'tens-ones-abacus',
     summary:
       'Build two-digit numbers from 1 to 99 using Tens and Ones rods on a Spike Abacus and practice rhythmic skip counting by 2s, 5s, and 10s.',
     syllabusAlignment: {
-      cbseChapter: 'NCERT Class 1 Joyful Mathematics — Ch 8 (Fun with Numbers: 21 to 99) & Ch 10 (How Do I Spend My Day / Skip Counting)',
-      icseChapter: 'CISCE Class 1 Mathematics — Theme 1 & 2: Numbers up to 100, Place Value (Tens & Ones Abacus) & Skip Counting',
+      cbseChapter: 'NCERT Joyful Mathematics 1 — Ch 8: Fun with Numbers',
+      icseChapter: 'CISCE Class 1 Mathematics — Numbers up to 100, Place Value (Tens & Ones) & Skip Counting',
       examRelevance: 'Foundational Place-Value & Multiplication Readiness',
       differenceNote:
         'ICSE introduces 2-digit expanded form (46 = 40 + 6) and skip counting grids in Class 1; CBSE emphasizes bundling 10 sticks into 1 Ten.',
@@ -253,14 +253,14 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
     wing: 'Primary (Class 1–5)',
     streamCategory: 'Class 1',
     subject: 'Mathematics',
-    chapterNumber: 'Class 1 • Math Ch 4',
+    chapterNumber: 'Class 1 • Math Ch 5',
     simulationId: 'Class1InteractiveLab',
     defaultSimulationMode: 'shapes-roll-slide',
     summary:
       'Test Spheres (Balls), Cubes (Boxes), Cylinders (Drums), and Cones (Caps) on an interactive inclined ramp to discover which shapes Roll, Slide, or both!',
     syllabusAlignment: {
-      cbseChapter: 'NCERT Class 1 Joyful Mathematics — Ch 2: What is Long? What is Round? & Ch 9: Utsav (Patterns)',
-      icseChapter: 'CISCE Class 1 Mathematics — Theme 3: Geometry (2D Flat & 3D Solid Shapes, Rolling & Sliding) & Theme 5: Patterns',
+      cbseChapter: 'NCERT Joyful Mathematics 1 — Ch 2: What is Long? What is Round? & Ch 9: Utsav',
+      icseChapter: 'CISCE Class 1 Mathematics — 2D & 3D Shapes, Rolling & Sliding, Patterns',
       examRelevance: 'Class 1 Spatial Geometry & Pattern Recognition',
       differenceNote:
         'Both CBSE and ICSE test real-life 3D object classification (Ball = Sphere, Dice = Cube, Pencil cell = Cylinder, Birthday cap = Cone) and rolling vs. sliding.',
@@ -281,7 +281,7 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
       {
         id: 'c1m4-q1',
         question: 'Which of these objects will ONLY ROLL and cannot slide on a flat face?',
-        options: ['Chalk Box (Cube)', 'Football / Orange (Sphere)', 'Matchbox (Cuboid)', 'Book'],
+        options: ['Chalk Box (Cube)', 'Football / Orange (Sphere)', 'Matchbox (Cuboid)', 'Book (Cuboid)'],
         correctIndex: 1,
         explanation: 'A sphere has only a curved surface and no flat faces, so it only rolls.',
         boardTag: 'CBSE & ICSE Class 1',
@@ -301,7 +301,7 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
       },
       {
         id: 'c1m4-q3',
-        question: 'How many corners (vertices) and equal sides does a flat 2D Triangle have?',
+        question: 'How many sides and corners (vertices) does a flat 2D Triangle have?',
         options: ['4 sides, 4 corners', '3 sides, 3 corners', '0 sides, 0 corners', '6 sides, 6 corners'],
         correctIndex: 1,
         explanation: 'A triangle is a closed 2D shape with 3 straight sides and 3 corners.',
@@ -318,14 +318,14 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
     wing: 'Primary (Class 1–5)',
     streamCategory: 'Class 1',
     subject: 'Mathematics',
-    chapterNumber: 'Class 1 • Math Ch 5',
+    chapterNumber: 'Class 1 • Math Ch 6',
     simulationId: 'Class1InteractiveLab',
     defaultSimulationMode: 'clock-money',
     summary:
       'Read o’clock and half-past times on an interactive Analog Clock and combine Indian Rupee coins and notes (₹1, ₹2, ₹5, ₹10, ₹20, ₹50) in a Piggy Bank.',
     syllabusAlignment: {
-      cbseChapter: 'NCERT Class 1 Joyful Mathematics — Ch 7 (Lina’s Family: Length/Weight), Ch 10 (Time) & Ch 12 (How Much Can We Spend? Money)',
-      icseChapter: 'CISCE Class 1 Mathematics — Theme 4: Measurement (Handspan, Weight, Capacity, Time on Clock & Indian Money)',
+      cbseChapter: 'NCERT Joyful Mathematics 1 — Ch 10: How do I Spend my Day? & Ch 12: How Much Can We Spend?',
+      icseChapter: 'CISCE Class 1 Mathematics — Time & Money (Indian Coins and Notes)',
       examRelevance: 'Everyday Practical Numeracy (Time & Currency)',
       differenceNote:
         'ICSE Class 1 teaches both o’clock (:00) and half-past (:30) clock hands alongside Indian Rupee (₹) coin addition.',
@@ -346,7 +346,7 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
       {
         id: 'c1m5-q1',
         question: 'On a clock face, if the long minute hand is at 12 and the short hour hand is at 7, what time is it?',
-        options: ['12 o’clock', '7 o’clock (7:00)', 'Half past 7 (7:30)', '5 o’clock'],
+        options: ['12 o’clock (12:00)', '7 o’clock (7:00)', 'Half past 7 (7:30)', '5 o’clock (5:00)'],
         correctIndex: 1,
         explanation: 'When the minute hand points to 12, the hour hand tells the exact o’clock hour (7 o’clock).',
         boardTag: 'CBSE & ICSE Class 1',
@@ -378,14 +378,14 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
     wing: 'Primary (Class 1–5)',
     streamCategory: 'Class 1',
     subject: 'Mathematics',
-    chapterNumber: 'Class 1 • Math Ch 6',
+    chapterNumber: 'Class 1 • Math Ch 7',
     simulationId: 'Class1InteractiveLab',
     defaultSimulationMode: 'measurement-balance',
     summary:
       'Measure tables in Handspans, compare Heavier vs. Lighter on a 2-Pan Beam Balance, and pour water from a Jug into Glasses to explore Capacity.',
     syllabusAlignment: {
-      cbseChapter: 'NCERT Class 1 Joyful Mathematics — Ch 7: Lina’s Family (Length, Weight & Capacity)',
-      icseChapter: 'CISCE Class 1 Mathematics — Theme 4: Measurement (Non-Standard Length, Mass & Capacity)',
+      cbseChapter: 'NCERT Joyful Mathematics 1 — Ch 7: Lina’s Family',
+      icseChapter: 'CISCE Class 1 Mathematics — Measurement (Non-Standard Length, Mass & Capacity)',
       examRelevance: 'Class 1 Measurement & Physical Comparison',
       differenceNote:
         'Both boards use non-standard units (Handspan, Footspan, Cubit, Pace, Pan Balance blocks, and Cups/Glasses) in Class 1 before standard cm/kg/L in Class 2–3.',
@@ -438,14 +438,14 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
     wing: 'Primary (Class 1–5)',
     streamCategory: 'Class 1',
     subject: 'Mathematics',
-    chapterNumber: 'Class 1 • Math Ch 7',
+    chapterNumber: 'Class 1 • Math Ch 8',
     simulationId: 'Class1InteractiveLab',
     defaultSimulationMode: 'patterns-pictograph',
     summary:
       'Complete festive shape, fruit, and number patterns (ABAB, AAB, ABC, +2) and build an interactive Toy Pictograph to find Most and Least.',
     syllabusAlignment: {
-      cbseChapter: 'NCERT Class 1 Joyful Mathematics — Ch 9 (Utsav: Patterns) & Ch 13 (So Many Toys: Data Handling)',
-      icseChapter: 'CISCE Class 1 Mathematics — Theme 5 (Patterns in Shapes & Numbers) & Theme 6 (Data Handling Pictographs)',
+      cbseChapter: 'NCERT Joyful Mathematics 1 — Ch 9: Utsav & Ch 13: So Many Toys',
+      icseChapter: 'CISCE Class 1 Mathematics — Patterns & Data Handling (Pictographs)',
       examRelevance: 'Logical Sequencing & Visual Data Interpretation',
       differenceNote:
         'Covers both repeating visual patterns and counting/grouping objects into a picture chart.',
@@ -466,7 +466,7 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
       {
         id: 'c1m8-q1',
         question: 'What comes next in the pattern: ⭐, ⭐, 🌙, ⭐, ⭐, 🌙, ⭐, ⭐, ___?',
-        options: ['⭐', '🌙', '☀️', '🍎'],
+        options: ['', '', '', ''],
         correctIndex: 1,
         explanation: 'The pattern follows the A-A-B rule (Two Stars, One Moon), so after two stars comes a Moon (🌙).',
         boardTag: 'NCERT Class 1 Ch 9',
@@ -498,14 +498,14 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
     wing: 'Primary (Class 1–5)',
     streamCategory: 'Class 1',
     subject: 'Mathematics',
-    chapterNumber: 'Class 1 • Math Ch 6',
+    chapterNumber: 'Class 1 • Math Ch 9',
     simulationId: 'Class1InteractiveLab',
     defaultSimulationMode: 'spatial-ordinals-data',
     summary:
       'Learn Ordinal Positions (1st First to 10th Tenth) in a race, count Equal Groups by Repeated Addition (4 groups of 3 = 12), and organize data.',
     syllabusAlignment: {
-      cbseChapter: 'NCERT Class 1 Joyful Mathematics — Ch 11 (How Many Times? Repeated Addition) & Ch 13 (So Many Toys: Data Handling)',
-      icseChapter: 'CISCE Class 1 Mathematics — Theme 1 (Ordinal Numbers 1st to 10th), Theme 2 (Introduction to Multiplication as Repeated Addition) & Theme 6 (Data Handling)',
+      cbseChapter: 'NCERT Joyful Mathematics 1 — Ch 11: How Many Times? & Ch 13: So Many Toys',
+      icseChapter: 'CISCE Class 1 Mathematics — Ordinal Numbers, Equal Groups & Data Handling',
       examRelevance: 'Class 1 Multiplication Readiness & Logical Ordering',
       differenceNote:
         'ICSE explicitly tests spelling and symbols of Ordinal Numbers (1st First to 10th Tenth) in Class 1, while CBSE Ch 11 introduces equal groups ("How Many Times?").',
@@ -558,14 +558,14 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
     wing: 'Primary (Class 1–5)',
     streamCategory: 'Class 1',
     subject: 'English',
-    chapterNumber: 'Class 1 • Eng Ch 1',
+    chapterNumber: 'Class 1 • English Ch 1',
     simulationId: 'Class1InteractiveLab',
     defaultSimulationMode: 'eng-phonics-vowels',
     summary:
       'Build 3-letter CVC words (CAT, HEN, PIG, DOG, SUN, BUS) with spoken audio pronunciation and learn when to use "An" (before A, E, I, O, U) vs. "A".',
     syllabusAlignment: {
-      cbseChapter: 'NCERT Class 1 English (Mridang) — Unit 1 & 2: Alphabet Sounds, Vowels (a, e, i, o, u) & CVC Words',
-      icseChapter: 'CISCE Class 1 English Language — Vowels & Consonants, Phonic Word Families & Articles (Use of A and An)',
+      cbseChapter: 'NCERT Mridang 1 — letter sounds practised across Units 1–4 (no separate phonics chapter)',
+      icseChapter: 'CISCE Class 1 English — Vowels & Consonants, Phonics & Articles (A / An)',
       examRelevance: 'Foundational English Literacy & Phonics (NIPUN Bharat / CISCE)',
       differenceNote:
         'ICSE Class 1 English formally introduces the article rule ("An" before vowel sounds A, E, I, O, U and "A" before consonant sounds) alongside 3-letter phonics.',
@@ -594,7 +594,7 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
       {
         id: 'c1en1-q2',
         question: 'Which word correctly takes "An" before it?',
-        options: ['___ Ball', '___ Cat', '___ Elephant 🐘', '___ Book'],
+        options: ['___ Ball', '___ Cat', '___ Elephant', '___ Book'],
         correctIndex: 2,
         explanation: 'Elephant begins with the vowel E, so we say "An Elephant".',
         boardTag: 'ICSE Class 1 English',
@@ -618,14 +618,14 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
     wing: 'Primary (Class 1–5)',
     streamCategory: 'Class 1',
     subject: 'English',
-    chapterNumber: 'Class 1 • Eng Ch 2',
+    chapterNumber: 'Class 1 • English Ch 2',
     simulationId: 'Class1InteractiveLab',
     defaultSimulationMode: 'eng-grammar-opposites',
     summary:
       'Match everyday Opposites (Hot ↔ Cold, Big ↔ Small, Day ↔ Night), explore Action Words (Reading, Running, Swimming), and turn One into Many.',
     syllabusAlignment: {
-      cbseChapter: 'NCERT Class 1 English (Mridang) — Action Songs, Describing Words, Opposites & Naming Words',
-      icseChapter: 'CISCE Class 1 English Grammar — Naming Words (Nouns), Doing Words (Verbs), Singular/Plural (One & Many) & Opposites',
+      cbseChapter: 'NCERT Mridang 1 — language activities across Units 1–4 (action words, opposites, one/many)',
+      icseChapter: 'CISCE Class 1 English Grammar — Doing Words, Opposites & Singular/Plural',
       examRelevance: 'Class 1 Vocabulary & Grammar Foundations',
       differenceNote:
         'Both CBSE and ICSE teach action verbs through picture stories and test common opposite pairs and -s/-es plurals.',
@@ -646,7 +646,7 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
       {
         id: 'c1en2-q1',
         question: 'What is the opposite word of "HOT 🔥"?',
-        options: ['Warm', 'Cold 🧊', 'Big', 'Fast'],
+        options: ['Warm', 'Cold', 'Big', 'Fast'],
         correctIndex: 1,
         explanation: 'The opposite of Hot is Cold.',
         boardTag: 'CBSE & ICSE Class 1',
@@ -654,7 +654,7 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
       {
         id: 'c1en2-q2',
         question: 'In the sentence "Riya is READING a storybook", which word is the Action Word (Doing Word)?',
-        options: ['Riya', 'Storybook', 'Reading 📖', 'A'],
+        options: ['Riya', 'Storybook', 'Reading', 'A'],
         correctIndex: 2,
         explanation: '"Reading" tells us the action Riya is doing.',
         boardTag: 'ICSE Class 1 Grammar',
@@ -662,7 +662,7 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
       {
         id: 'c1en2-q3',
         question: 'One Star ⭐ becomes Many ___?',
-        options: ['Star', 'Stars ⭐⭐⭐', 'Staring', 'Sky'],
+        options: ['Star', 'Stars', 'Staring', 'Sky'],
         correctIndex: 1,
         explanation: 'Adding -s to Star gives the plural "Stars".',
         boardTag: 'Class 1 One & Many',
@@ -684,8 +684,8 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
     summary:
       'Discover how our 5 Sense Organs (Eyes, Ears, Nose, Tongue, and Skin) help us see, hear, smell, taste, and feel the world around us.',
     syllabusAlignment: {
-      cbseChapter: 'CBSE Class 1 Integrated EVS / NCERT — About Me, Parts of My Body, 5 Sense Organs & Keeping Clean',
-      icseChapter: 'CISCE Class 1 Environmental Studies (EVS) — Theme 1 & 2: About Me, My Body, Sense Organs & Personal Cleanliness',
+      cbseChapter: 'No separate EVS textbook in CBSE Class 1 (NCF-FS) — theme met through NCERT Mridang 1 Unit 1: My Family and Me',
+      icseChapter: 'CISCE Class 1 EVS — My Body, Sense Organs & Cleanliness',
       examRelevance: 'Class 1 EVS Core & Health Awareness',
       differenceNote:
         'Both CBSE and ICSE emphasize matching each of the 5 sense organs to its function and daily hygiene habits (brushing twice daily, washing hands).',
@@ -709,7 +709,7 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
         options: ['Eyes', 'Ears', 'Skin', 'Nose'],
         correctIndex: 2,
         explanation: 'Our skin has touch and temperature receptors that feel hot, cold, rough, and smooth.',
-        boardTag: 'CBSE & ICSE Class 1 EVS',
+        boardTag: 'Class 1 EVS',
       },
       {
         id: 'c1e1-q2',
@@ -744,8 +744,8 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
     summary:
       'Give a seed water and warm sunlight to watch its Roots, Stem, Leaves, and Flowers grow, and learn how Living Things differ from Non-Living Things.',
     syllabusAlignment: {
-      cbseChapter: 'CBSE Class 1 EVS — Living & Non-Living Things, Green World (Plants Around Us) & Animals Around Us',
-      icseChapter: 'CISCE Class 1 EVS / Science — Theme 5 & 6: Living and Non-Living Things, Parts of a Plant (Root, Stem, Leaf, Flower)',
+      cbseChapter: 'No separate EVS textbook in CBSE Class 1 (NCF-FS) — theme met through NCERT Mridang 1 Unit 2: Life Around Us',
+      icseChapter: 'CISCE Class 1 EVS — Living & Non-Living Things, Plants Around Us',
       examRelevance: 'Class 1 Life Science & Nature Exploration',
       differenceNote:
         'ICSE Class 1 Science introduces Big Plants (Trees), Small Bushy Plants (Shrubs), Very Small Weak Plants (Herbs), Climbers, and Creepers.',
@@ -804,8 +804,8 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
     summary:
       'Explore Wild, Domestic, Pet, and Aquatic (Water) animals, their homes, and practice Red-Yellow-Green Traffic Signal & Zebra Crossing safety rules.',
     syllabusAlignment: {
-      cbseChapter: 'CBSE Class 1 EVS — Animals Around Us, Food & Shelter, Keeping Safe on the Road',
-      icseChapter: 'CISCE Class 1 EVS — Theme 6 (Animals: Wild, Domestic & Pets), Theme 4 (Food & Shelter) & Theme 9 (Safety Rules)',
+      cbseChapter: 'No separate EVS textbook in CBSE Class 1 (NCF-FS) — theme met through NCERT Mridang 1 Unit 2: Life Around Us (A Farm) & Unit 3: Food',
+      icseChapter: 'CISCE Class 1 EVS — Animals & Their Homes, Food & Road Safety',
       examRelevance: 'Class 1 EVS General Awareness & Safety Education',
       differenceNote:
         'Covers animal habitats/shelters (Lion in Den, Cow in Shed, Dog in Kennel, Horse in Stable) and 3-color traffic signals.',
@@ -829,7 +829,7 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
         options: ['Lion', 'Cow', 'Shark', 'Crocodile'],
         correctIndex: 1,
         explanation: 'The cow is a domestic farm animal kept in a shed that gives us nutritious milk.',
-        boardTag: 'CBSE & ICSE Class 1 EVS',
+        boardTag: 'Class 1 EVS',
       },
       {
         id: 'c1e4-q2',
@@ -863,14 +863,14 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
     wing: 'Primary (Class 1–5)',
     streamCategory: 'Class 1',
     subject: 'EVS & Science',
-    chapterNumber: 'Class 1 • EVS Ch 3',
+    chapterNumber: 'Class 1 • EVS Ch 4',
     simulationId: 'Class1InteractiveLab',
     defaultSimulationMode: 'evs-seasons-sky',
     summary:
       'Switch between Summer, Monsoon Rain, Winter, and Spring, and toggle Day vs. Night Sky to explore the Sun, Moon, Stars, and seasonal clothing.',
     syllabusAlignment: {
-      cbseChapter: 'CBSE Class 1 EVS — Clothes We Wear, Weather & Seasons, Water & Up in the Sky',
-      icseChapter: 'CISCE Class 1 EVS — Theme 3 (Clothes We Wear), Theme 7 (Water & Air) & Theme 11 (Weather, Seasons & Sky)',
+      cbseChapter: 'No separate EVS textbook in CBSE Class 1 (NCF-FS) — theme met through NCERT Mridang 1 Unit 4: Seasons (The Four Seasons)',
+      icseChapter: 'CISCE Class 1 EVS — Clothes, Weather & Seasons, Water and the Sky',
       examRelevance: 'Class 1 Environmental & Seasonal Awareness',
       differenceNote:
         'Both boards link seasonal weather (Hot Summer, Wet Monsoon, Cold Winter) to fabric choices (Cotton, Raincoat, Woolen) and sky observations (Sun vs. Moon/Stars).',
@@ -921,21 +921,21 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
   },
   {
     id: 'cls1-hindi-varnamala',
-    title: 'Hindi Ch 1: हिंदी वर्णमाला — स्वर (अ से अः) और व्यंजन (क से कमल)',
+    title: 'हिंदी वर्णमाला — स्वर (अ से अः) और व्यंजन (क से कमल)',
     track: 'school',
     board: 'BOTH',
     classLevel: 1,
     wing: 'Primary (Class 1–5)',
     streamCategory: 'Class 1',
     subject: 'Hindi (हिंदी)',
-    chapterNumber: 'Hindi Ch 1',
+    chapterNumber: 'Class 1 • Hindi Ch 1',
     simulationId: 'Class1InteractiveLab',
     defaultSimulationMode: 'hindi-varnamala',
     summary:
       'Learn Hindi Swar (अ से अः) and Vyanjan (क, ख, ग, घ, च, छ, ज, झ) with colorful pictures, English meanings, and native Hindi voice pronunciation!',
     syllabusAlignment: {
-      cbseChapter: 'NCERT Class 1 Hindi (Sarangi / सारंगी) — वर्णमाला (स्वर और व्यंजन) एवं बिना मात्रा के शब्द',
-      icseChapter: 'CISCE Class 1 Hindi — वर्णमाला (स्वर अ–अः, व्यंजन क–ज्ञ) और दो/तीन अक्षर वाले शब्द',
+      cbseChapter: 'NCERT सारंगी 1 (Sarangi) — वर्णमाला: स्वर और व्यंजन',
+      icseChapter: 'CISCE कक्षा 1 हिंदी — वर्णमाला (स्वर अ–अः, व्यंजन क–ज्ञ)',
       examRelevance: 'Foundational Bilingual Literacy (NEP 2020 Class 1)',
       differenceNote:
         'NCERT Sarangi introduces Hindi letters through stories, family conversations, and picture association, while ICSE Class 1 Hindi systematically covers Swar (अ–अः), Vyanjan groups, and 2/3-letter words like घर, जल, कमल.',
@@ -964,7 +964,7 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
       {
         id: 'c1h1-q2',
         question: '“क + म + ल” को जोड़ने पर कौन-सा शब्द बनता है?',
-        options: ['कलम', 'कमल (Lotus 🪷)', 'गमला', 'मछली'],
+        options: ['कलम', 'कमल', 'गमला', 'मछली'],
         correctIndex: 1,
         explanation: 'क + म + ल = कमल (Lotus, our National Flower)!',
         boardTag: 'Class 1 Hindi',
@@ -981,21 +981,21 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
   },
   {
     id: 'cls1-evs-india-manners',
-    title: 'EVS Ch 5: Our Country India (National Symbols) & 5 Golden Magic Words',
+    title: 'Our Country India (National Symbols) & 5 Golden Magic Words',
     track: 'school',
     board: 'BOTH',
     classLevel: 1,
     wing: 'Primary (Class 1–5)',
     streamCategory: 'Class 1',
     subject: 'EVS & Science',
-    chapterNumber: 'EVS Ch 5',
+    chapterNumber: 'Class 1 • EVS Ch 5',
     simulationId: 'Class1InteractiveLab',
     defaultSimulationMode: 'evs-india-manners',
     summary:
       'Discover India’s proud National Symbols (Tiranga Flag, Peacock, Royal Bengal Tiger, Lotus, Mango) and practice the 5 Golden Magic Words of Good Manners!',
     syllabusAlignment: {
-      cbseChapter: 'NCERT Class 1 Holistic EVS / GK — Our Country India, Festivals & Good Manners',
-      icseChapter: 'CISCE Class 1 EVS — Our Nation & Good Habits / Polite Words at Home and School',
+      cbseChapter: 'No separate EVS textbook in CBSE Class 1 (NCF-FS) — theme met through school GK & value-education activities',
+      icseChapter: 'CISCE Class 1 EVS — Our Country & Good Manners',
       examRelevance: 'Citizenship, Values & Social Awareness (Class 1)',
       differenceNote:
         'Both CBSE and ICSE teach National Symbols alongside polite social behavior (Please, Thank You, Sorry, Excuse Me, Welcome).',
@@ -1016,7 +1016,7 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
       {
         id: 'c1e5-q1',
         question: 'Which beautiful bird is the National Bird of India that dances in the rain?',
-        options: ['Crow', 'Peacock 🦚', 'Sparrow', 'Pigeon'],
+        options: ['Crow', 'Peacock', 'Sparrow', 'Pigeon'],
         correctIndex: 1,
         explanation: 'The colorful Indian Peacock is the National Bird of India!',
         boardTag: 'CBSE & ICSE Class 1 GK/EVS',
@@ -1024,7 +1024,7 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
       {
         id: 'c1e5-q2',
         question: 'What Golden Magic Word should you say when someone helps you or gives you a gift?',
-        options: ['Sorry', 'Thank You 😊', 'Go away', 'Hurry up'],
+        options: ['Sorry', 'Thank You', 'Go away', 'Hurry up'],
         correctIndex: 1,
         explanation: 'We always say “Thank You” with a smile when someone helps us or shares with us.',
         boardTag: 'Class 1 Good Manners',
@@ -1046,24 +1046,24 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
   },
   {
     id: 'cls1-comp-smart-machine',
-    title: 'Computer Ch 1: Computer — A Smart Machine & Its Parts',
+    title: 'Computer — A Smart Machine & Its Parts',
     track: 'school',
     board: 'BOTH',
     classLevel: 1,
     wing: 'Primary (Class 1–5)',
     streamCategory: 'Class 1',
     subject: 'Computer Studies',
-    chapterNumber: 'Comp Ch 1',
+    chapterNumber: 'Class 1 • Computer Ch 1',
     simulationId: 'Class1InteractiveLab',
     defaultSimulationMode: 'computer-smart-machine',
     summary:
       'Distinguish Natural Things from Man-Made Machines and explore the 6 main parts of a Computer: Monitor, CPU, Keyboard, Mouse, Speakers, and Printer!',
     syllabusAlignment: {
-      cbseChapter: 'CBSE Class 1 Digital Literacy — Introduction to Computers & Smart Machines',
-      icseChapter: 'CISCE Class 1 Computer Studies — Ch 1: Computer—A Machine & Ch 2: Parts of a Computer',
+      cbseChapter: 'Not prescribed by NCERT for Class 1 — school-level digital literacy',
+      icseChapter: 'CISCE Class 1 Computer Studies — The Computer as a Machine & Its Parts',
       examRelevance: 'ICSE Mandatory Class 1 Subject & CBSE Foundational Digital Literacy',
       differenceNote:
-        'ICSE prescribes a dedicated Computer Studies syllabus from Class 1 covering Natural vs. Man-Made Things, CPU as the brain, Keyboard keys, and Computer Room Manners.',
+        'ICSE schools usually teach Computer Studies as a subject from Class 1 (CPU as the brain, keyboard, mouse, lab manners); CBSE has no Class 1 computer textbook.',
     },
     keyFormulas: [
       {
@@ -1081,23 +1081,23 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
       {
         id: 'c1comp-q1',
         question: 'Which part of the computer is called the BRAIN of the computer?',
-        options: ['Mouse 🖱️', 'CPU 🧠', 'Speaker 🔊', 'Mousepad'],
+        options: ['Mouse', 'CPU', 'Speaker', 'Mousepad'],
         correctIndex: 1,
         explanation: 'The CPU (Central Processing Unit) thinks and controls all other parts of the computer.',
-        boardTag: 'ICSE & CBSE Class 1 Computer',
+        boardTag: 'ICSE Class 1 Computer',
       },
       {
         id: 'c1comp-q2',
         question: 'Which of the following is a NATURAL thing (not a man-made machine)?',
-        options: ['Computer 💻', 'Green Tree 🌳', 'Toy Car 🚗', 'Ceiling Fan'],
+        options: ['Computer', 'Green Tree', 'Toy Car', 'Ceiling Fan'],
         correctIndex: 1,
         explanation: 'A green tree grows in nature, while computers, cars, and fans are man-made machines.',
-        boardTag: 'ICSE Class 1 Computer Ch 1',
+        boardTag: 'ICSE Class 1 Computer',
       },
       {
         id: 'c1comp-q3',
         question: 'Which part of a computer has many buttons (keys) used to type letters (A–Z) and numbers (0–9)?',
-        options: ['Monitor 🖥️', 'Keyboard ⌨️', 'Speakers 🔊', 'Wires'],
+        options: ['Monitor', 'Keyboard', 'Speakers', 'Wires'],
         correctIndex: 1,
         explanation: 'The Keyboard has Alphabet keys, Number keys, and a long Spacebar key for typing.',
         boardTag: 'Class 1 Computer Studies',
@@ -1106,21 +1106,21 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
   },
   {
     id: 'cls1-eng-mridang-stories',
-    title: 'English Ch 3: NCERT Mridang Poems, Stories & Greetings Theatre',
+    title: 'NCERT Mridang Poems, Stories & Greetings Theatre',
     track: 'school',
     board: 'BOTH',
     classLevel: 1,
     wing: 'Primary (Class 1–5)',
     streamCategory: 'Class 1',
     subject: 'English',
-    chapterNumber: 'Eng Ch 3',
+    chapterNumber: 'Class 1 • English Ch 3',
     simulationId: 'Class1InteractiveLab',
     defaultSimulationMode: 'eng-mridang-stories',
     summary:
       'Sing and read along with NCERT Class 1 Mridang units: Two Little Hands, Polite Greetings (Good Morning to Good Night), The Cap-Seller & the Monkeys, and Anandi’s Rainbow!',
     syllabusAlignment: {
-      cbseChapter: 'NCERT Class 1 English (Mridang) — Units 1 to 4: Two Little Hands, Greetings, The Cap-Seller & the Monkeys, Anandi’s Rainbow',
-      icseChapter: 'CISCE Class 1 English Literature & Oral Comprehension — Rhymes, Moral Stories & Daily Greetings',
+      cbseChapter: 'NCERT Mridang 1 — Unit 1: Two Little Hands & Greetings; Unit 2: The Cap-Seller and the Monkeys; Unit 4: Anandi’s Rainbow',
+      icseChapter: 'CISCE Class 1 English Literature — Rhymes, Stories & Greetings (school-chosen reader)',
       examRelevance: 'Foundational Reading Comprehension & Oral Fluency (Class 1)',
       differenceNote:
         'Both CBSE Mridang and ICSE English Literature build listening comprehension, moral reasoning, and expressive reading through stories and action rhymes.',
@@ -1141,7 +1141,7 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
       {
         id: 'c1mri-q1',
         question: 'What polite greeting do we say when we wake up in the morning?',
-        options: ['Good Night', 'Good Morning 🌅', 'Goodbye', 'Good Evening'],
+        options: ['Good Night', 'Good Morning', 'Goodbye', 'Good Evening'],
         correctIndex: 1,
         explanation: 'When the sun rises in the morning, we greet elders and teachers with “Good Morning!”',
         boardTag: 'NCERT Mridang Unit 1',
@@ -1162,7 +1162,7 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
       {
         id: 'c1mri-q3',
         question: 'In “Anandi’s Rainbow”, how many colors are there in a Rainbow (VIBGYOR)?',
-        options: ['3 colors', '7 colors 🌈', '2 colors', '10 colors'],
+        options: ['3 colors', '7 colors', '2 colors', '10 colors'],
         correctIndex: 1,
         explanation: 'A rainbow has 7 colors: Violet, Indigo, Blue, Green, Yellow, Orange, and Red!',
         boardTag: 'NCERT Mridang Unit 4',
@@ -1171,21 +1171,21 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
   },
   {
     id: 'cls1-evs-helpers-transport',
-    title: 'EVS Ch 6: People Who Help Us (Community Helpers) & Means of Transport',
+    title: 'People Who Help Us (Community Helpers) & Means of Transport',
     track: 'school',
     board: 'BOTH',
     classLevel: 1,
     wing: 'Primary (Class 1–5)',
     streamCategory: 'Class 1',
     subject: 'EVS & Science',
-    chapterNumber: 'EVS Ch 6',
+    chapterNumber: 'Class 1 • EVS Ch 6',
     simulationId: 'Class1InteractiveLab',
     defaultSimulationMode: 'evs-helpers-transport',
     summary:
       'Meet our Community Helpers (Doctor, Teacher, Firefighter, Postman, Farmer, Police Officer) and explore Land, Water, and Air Means of Transport!',
     syllabusAlignment: {
-      cbseChapter: 'NCERT Class 1 Holistic EVS — Our Neighbourhood, People Who Help Us & Going Places',
-      icseChapter: 'CISCE Class 1 EVS — People Who Help Us, Our Neighbourhood & Means of Transport',
+      cbseChapter: 'No separate EVS textbook in CBSE Class 1 (NCF-FS) — theme met through school EVS/GK activities',
+      icseChapter: 'CISCE Class 1 EVS — People Who Help Us, Neighbourhood & Means of Transport',
       examRelevance: 'Core CBSE & ICSE Class 1 EVS',
       differenceNote:
         'ICSE Class 1 EVS explicitly tests matching Community Helpers with their workplaces (Hospital, School, Fire Station, Post Office) and classifying vehicles into Land, Water, and Air transport.',
@@ -1206,23 +1206,23 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
       {
         id: 'c1hlp-q1',
         question: 'Who grows food grains, fruits, and vegetables for us in the fields?',
-        options: ['Postman 📮', 'Farmer 👨‍🌾', 'Pilot', 'Tailor'],
+        options: ['Postman', 'Farmer', 'Pilot', 'Tailor'],
         correctIndex: 1,
         explanation: 'A Farmer works hard in the fields to grow crops, fruits, and vegetables for everyone.',
-        boardTag: 'CBSE & ICSE Class 1 EVS',
+        boardTag: 'Class 1 EVS',
       },
       {
         id: 'c1hlp-q2',
-        question: 'Which of these is the FASTEST means of Air Transport?',
-        options: ['Bicycle 🚲', 'Aeroplane ✈️', 'Bullock Cart', 'Rowing Boat 🚣'],
+        question: 'Which of these travels by AIR (flies in the sky)?',
+        options: ['Bicycle', 'Aeroplane', 'Bullock Cart', 'Rowing Boat'],
         correctIndex: 1,
-        explanation: 'An Aeroplane flies in the sky and is the fastest way to travel long distances.',
+        explanation: 'An Aeroplane is Air Transport — it flies in the sky! A Bicycle and Bullock Cart are Land Transport, and a Rowing Boat is Water Transport.',
         boardTag: 'ICSE Class 1 EVS',
       },
       {
         id: 'c1hlp-q3',
         question: 'Where does a Doctor work to treat sick people?',
-        options: ['Post Office', 'Hospital / Clinic 🏥', 'Railway Station', 'Bakery'],
+        options: ['Post Office', 'Hospital / Clinic', 'Railway Station', 'Bakery'],
         correctIndex: 1,
         explanation: 'Doctors and nurses care for patients in a Hospital or Clinic.',
         boardTag: 'Class 1 EVS',
@@ -1231,21 +1231,21 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
   },
   {
     id: 'cls1-arts-colors-music',
-    title: 'Joyful Arts Ch 1: Primary & Secondary Color Mixing + Musical Sargam Xylophone',
+    title: 'Primary & Secondary Color Mixing + Musical Sargam Xylophone',
     track: 'school',
     board: 'BOTH',
     classLevel: 1,
     wing: 'Primary (Class 1–5)',
     streamCategory: 'Class 1',
-    subject: 'Joyful Arts & Music',
-    chapterNumber: 'Arts Ch 1',
+    subject: 'Arts, Music & Logic',
+    chapterNumber: 'Class 1 • Arts Ch 1',
     simulationId: 'Class1InteractiveLab',
     defaultSimulationMode: 'arts-colors-music',
     summary:
       'Mix Primary Colors (Red, Blue, Yellow) to create Secondary Colors (Orange, Green, Purple) and play real musical notes on the 8-Key Rainbow Sargam Xylophone!',
     syllabusAlignment: {
-      cbseChapter: 'NCF-FS 2023 Jadui Pitara & NCERT Class 1 Arts — Color Mixing & Musical Rhythm (Sa Re Ga Ma)',
-      icseChapter: 'CISCE Class 1 Art & Craft / Music — Primary & Secondary Colors and Musical Notes',
+      cbseChapter: 'NCF-FS Art Education (no textbook) — colour play & music, supported by Jadui Pitara',
+      icseChapter: 'CISCE Class 1 Art & Music — Primary & Secondary Colours, Musical Notes',
       examRelevance: 'NEP 2020 Holistic Aesthetic & Cultural Development (Class 1)',
       differenceNote:
         'Both NCF-FS (Jadui Pitara) and CISCE integrate visual arts (color mixing) and musical pitch exploration into Class 1 foundational learning.',
@@ -1266,7 +1266,7 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
       {
         id: 'c1art-q1',
         question: 'Which new color do you get when you mix BLUE 🔵 and YELLOW 🟡 paint together?',
-        options: ['Green 🟢', 'Pink', 'Black', 'White'],
+        options: ['Green', 'Pink', 'Black', 'White'],
         correctIndex: 0,
         explanation: 'Blue + Yellow mixes together to make fresh leaf Green!',
         boardTag: 'CBSE & ICSE Class 1 Arts',
@@ -1274,7 +1274,7 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
       {
         id: 'c1art-q2',
         question: 'Which new color do you get when you mix RED 🔴 and YELLOW 🟡 paint together?',
-        options: ['Blue', 'Orange 🟠', 'Purple', 'Grey'],
+        options: ['Blue', 'Orange', 'Purple', 'Grey'],
         correctIndex: 1,
         explanation: 'Red + Yellow makes bright Orange!',
         boardTag: 'Class 1 Color Mixing',
@@ -1282,7 +1282,7 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
       {
         id: 'c1art-q3',
         question: 'What are the first four musical notes of the Indian Sargam scale?',
-        options: ['Sa, Re, Ga, Ma 🎵', 'A, B, C, D', 'One, Two, Three, Four', 'Red, Blue, Green, Yellow'],
+        options: ['Sa, Re, Ga, Ma', 'A, B, C, D', 'One, Two, Three, Four', 'Red, Blue, Green, Yellow'],
         correctIndex: 0,
         explanation: 'The Sargam scale starts with Sa, Re, Ga, Ma, Pa, Dha, Ni!',
         boardTag: 'NCF-FS Joyful Music',
@@ -1291,21 +1291,21 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
   },
   {
     id: 'cls1-math-vertical-staircase',
-    title: 'Math Ch 10: Vertical Tens | Ones Column Sums, Ascending/Descending Stairs & Even/Odd',
+    title: 'Vertical Tens | Ones Column Sums, Ascending/Descending Stairs & Even/Odd',
     track: 'school',
     board: 'BOTH',
     classLevel: 1,
     wing: 'Primary (Class 1–5)',
     streamCategory: 'Class 1',
     subject: 'Mathematics',
-    chapterNumber: 'Math Ch 10',
+    chapterNumber: 'Class 1 • Math Ch 10',
     simulationId: 'Class1InteractiveLab',
     defaultSimulationMode: 'math-vertical-staircase',
     summary:
       'Solve 2-digit vertical Tens & Ones (T | O) column addition and subtraction sums, climb Ascending (Smallest→Greatest) & Descending stairs, and pair shoes for Even vs. Odd!',
     syllabusAlignment: {
-      cbseChapter: 'NCERT Class 1 Joyful Mathematics — Ch 8: Fun with Numbers (2-Digit Operations & Ordering)',
-      icseChapter: 'CISCE Class 1 Mathematics — Vertical Addition/Subtraction (2-Digit), Ascending/Descending Order & Even/Odd',
+      cbseChapter: 'Extension beyond NCERT Joyful Mathematics 1 — builds on Ch 8: Fun with Numbers',
+      icseChapter: 'CISCE Class 1 Mathematics — Column Addition/Subtraction, Ascending/Descending Order & Even/Odd',
       examRelevance: 'Core CBSE & ICSE Class 1 Written Notebook & Exam Skill',
       differenceNote:
         'ICSE Class 1 tests vertical T | O column sums, Ascending/Descending staircase ordering, and pairing objects into 2s to identify Even vs. Odd numbers.',
@@ -1334,7 +1334,7 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
       {
         id: 'c1m10-q2',
         question: 'Which of these lists is in ASCENDING ORDER (Smallest to Greatest)?',
-        options: ['79, 54, 25, 12', '12, 25, 38, 54, 79 ⬆️', '54, 12, 79, 25', '38, 12, 25'],
+        options: ['79, 54, 25, 12', '12, 25, 38, 54, 79', '54, 12, 79, 25', '38, 12, 25'],
         correctIndex: 1,
         explanation: '12, 25, 38, 54, 79 goes from the smallest number up to the greatest number.',
         boardTag: 'ICSE Class 1 Math',
@@ -1342,7 +1342,7 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
       {
         id: 'c1m10-q3',
         question: 'If 6 shoes can be grouped into 3 exact pairs of 2 with zero shoes left alone, is 6 Even or Odd?',
-        options: ['Even 👟👟', 'Odd', 'Zero', 'Negative'],
+        options: ['Even', 'Odd', 'Zero', 'Negative'],
         correctIndex: 0,
         explanation: 'Numbers that make exact pairs of 2 with none left over (2, 4, 6, 8, 10) are Even numbers!',
         boardTag: 'Class 1 Math',
@@ -1351,21 +1351,21 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
   },
   {
     id: 'cls1-eng-nouns-this-that',
-    title: 'English Ch 4: Naming Words (Nouns: Person, Place, Animal, Thing) & This/That/These/Those',
+    title: 'Naming Words (Nouns: Person, Place, Animal, Thing) & This/That/These/Those',
     track: 'school',
     board: 'BOTH',
     classLevel: 1,
     wing: 'Primary (Class 1–5)',
     streamCategory: 'Class 1',
     subject: 'English',
-    chapterNumber: 'Eng Ch 4',
+    chapterNumber: 'Class 1 • English Ch 4',
     simulationId: 'Class1InteractiveLab',
     defaultSimulationMode: 'eng-nouns-this-that',
     summary:
       'Sort Naming Words (Nouns) into the 4 Baskets (Person, Place, Animal, Thing) and practice pointing with This, That, These, and Those!',
     syllabusAlignment: {
-      cbseChapter: 'NCERT Class 1 English (Mridang) — Naming Words & Pointing Sentences (This/That)',
-      icseChapter: 'CISCE Class 1 English Language — Ch 2: Naming Words (Nouns) & Ch 6: This, That, These, Those',
+      cbseChapter: 'NCERT Mridang 1 — naming and pointing words in activities across Units 1–4',
+      icseChapter: 'CISCE Class 1 English Grammar — Naming Words (Nouns) & This/That/These/Those',
       examRelevance: 'Core CBSE & ICSE Class 1 Grammar',
       differenceNote:
         'ICSE Class 1 English Grammar tests classifying Nouns into Person, Place, Animal, and Thing and choosing between This/That (singular) and These/Those (plural).',
@@ -1386,7 +1386,7 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
       {
         id: 'c1en4-q1',
         question: 'In which Noun basket does the naming word “DOCTOR 👩‍⚕️” belong?',
-        options: ['Place 🏫', 'Person 👧', 'Thing ⚽', 'Animal 🐶'],
+        options: ['Place', 'Person', 'Thing', 'Animal'],
         correctIndex: 1,
         explanation: 'A Doctor is a Person!',
         boardTag: 'CBSE & ICSE Class 1 English',
@@ -1394,7 +1394,7 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
       {
         id: 'c1en4-q2',
         question: 'Which word do we use to point to ONE tree that is FAR away from us?',
-        options: ['This', 'That 👉🌳', 'These', 'Am'],
+        options: ['This', 'That', 'These', 'Am'],
         correctIndex: 1,
         explanation: 'We use “That” for a single person, animal, or thing that is far away (“That is a tall tree”).',
         boardTag: 'ICSE Class 1 Grammar',
@@ -1402,7 +1402,7 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
       {
         id: 'c1en4-q3',
         question: 'Which word do we use for MANY apples that are right NEAR us in our hand?',
-        options: ['That', 'These 🍎🍎🍎', 'This', 'He'],
+        options: ['That', 'These', 'This', 'He'],
         correctIndex: 1,
         explanation: 'We use “These” for more than one object near us (“These are sweet apples”).',
         boardTag: 'Class 1 English',
@@ -1411,21 +1411,21 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
   },
   {
     id: 'cls1-evs-houses-food',
-    title: 'EVS Ch 7: Houses We Live In (Kutcha/Pucca), Rooms in a Home & Healthy Food Plate',
+    title: 'Houses We Live In (Kutcha/Pucca), Rooms in a Home & Healthy Food Plate',
     track: 'school',
     board: 'BOTH',
     classLevel: 1,
     wing: 'Primary (Class 1–5)',
     streamCategory: 'Class 1',
     subject: 'EVS & Science',
-    chapterNumber: 'EVS Ch 7',
+    chapterNumber: 'Class 1 • EVS Ch 7',
     simulationId: 'Class1InteractiveLab',
     defaultSimulationMode: 'evs-houses-food',
     summary:
       'Compare Kutcha (mud/straw) and Pucca (brick/cement) houses, Igloos, Houseboats, and Tents, explore rooms in a home, and build a Healthy Everyday Food Plate!',
     syllabusAlignment: {
-      cbseChapter: 'NCERT Class 1 Mridang Unit 3 (The Food We Eat) & Holistic EVS — My Home and Shelter',
-      icseChapter: 'CISCE Class 1 EVS — Ch 5: Food We Eat & Ch 7: Shelter / Types of Houses',
+      cbseChapter: 'No separate EVS textbook in CBSE Class 1 (NCF-FS) — theme met through NCERT Mridang 1 Unit 3: Food (The Food We Eat)',
+      icseChapter: 'CISCE Class 1 EVS — Food We Eat & Houses / Shelter',
       examRelevance: 'Core CBSE & ICSE Class 1 EVS',
       differenceNote:
         'ICSE Class 1 EVS specifically compares Kutcha vs. Pucca house building materials, special houses (Igloo, Houseboat, Tent), and Healthy vs. Junk food habits.',
@@ -1448,18 +1448,18 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
         question: 'What materials are used to build a strong PUCCA house in towns and cities?',
         options: [
           'Mud and dry leaves only',
-          'Bricks, cement, steel, and wood 🏢',
+          'Bricks, cement, steel, and wood',
           'Paper and cardboard',
           'Snow blocks only',
         ],
         correctIndex: 1,
         explanation: 'A Pucca house is built with strong bricks, cement, iron/steel rods, and wood.',
-        boardTag: 'ICSE & CBSE Class 1 EVS',
+        boardTag: 'Class 1 EVS',
       },
       {
         id: 'c1ev7-q2',
         question: 'In which room of our house does our family cook healthy meals?',
-        options: ['Bathroom 🚿', 'Kitchen 🍳', 'Bedroom 🛏️', 'Garden'],
+        options: ['Bathroom', 'Kitchen', 'Bedroom', 'Garden'],
         correctIndex: 1,
         explanation: 'Food is cooked in the Kitchen!',
         boardTag: 'Class 1 EVS',
@@ -1467,7 +1467,7 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
       {
         id: 'c1ev7-q3',
         question: 'Which of these is a HEALTHY everyday food that makes our bones and teeth strong?',
-        options: ['Fizzy soda drink 🥤', 'Fresh Milk, Fruits & Dal-Roti 🥛🍎', 'Oily fried chips packet 🍟', 'Candies only'],
+        options: ['Fizzy soda drink', 'Fresh Milk, Fruits & Dal-Roti', 'Oily fried chips packet', 'Candies only'],
         correctIndex: 1,
         explanation: 'Milk, fresh fruits, vegetables, and dal-roti help us grow strong and healthy.',
         boardTag: 'NCERT Mridang Unit 3 & ICSE EVS',
@@ -1483,14 +1483,14 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
     wing: 'Primary (Class 1–5)',
     streamCategory: 'Class 1',
     subject: 'Mathematics',
-    chapterNumber: 'Math Ch 11',
+    chapterNumber: 'Class 1 • Math Ch 11',
     simulationId: 'Class1InteractiveLab',
     defaultSimulationMode: 'math-ordinals-fractions',
     summary:
       'Cheer for animals in the 1st-to-10th Ordinal Number Race, find numbers just Before, Between, and After, and slice a pizza into equal Halves (1/2) and Quarters (1/4)!',
     syllabusAlignment: {
-      cbseChapter: 'NCERT Class 1 Joyful Mathematics — Ordinal Positions & Equal Sharing Foundations',
-      icseChapter: 'CISCE Class 1 Mathematics — Ordinal Numbers (1st to 10th), Before/After/Between & Equal Parts',
+      cbseChapter: 'Extension beyond NCERT Joyful Mathematics 1 — ordinal positions & equal sharing (no separate chapter)',
+      icseChapter: 'CISCE Class 1 Mathematics — Ordinal Numbers, Before/After/Between & Halves (Equal Sharing)',
       examRelevance: 'Core ICSE Class 1 Math & SOF International Mathematics Olympiad (IMO)',
       differenceNote:
         'ICSE Class 1 and Math Olympiads test spelling of Ordinal Numbers (First to Tenth) and equal sharing into halves and quarters.',
@@ -1511,7 +1511,7 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
       {
         id: 'c1m11-q1',
         question: 'In a running race, what is the ordinal word for the runner in 3rd place?',
-        options: ['First (1st)', 'Second (2nd)', 'Third (3rd) 🥉', 'Fifth (5th)'],
+        options: ['First (1st)', 'Second (2nd)', 'Third (3rd)', 'Fifth (5th)'],
         correctIndex: 2,
         explanation: '3rd place is called THIRD!',
         boardTag: 'ICSE & Olympiad Class 1 Math',
@@ -1519,7 +1519,7 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
       {
         id: 'c1m11-q2',
         question: 'Which number comes right BETWEEN 18 and 20?',
-        options: ['17', '19 🌟', '21', '16'],
+        options: ['17', '19', '21', '16'],
         correctIndex: 1,
         explanation: 'Counting in order: 18, 19, 20. So 19 is between 18 and 20!',
         boardTag: 'CBSE & ICSE Class 1 Math',
@@ -1527,7 +1527,7 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
       {
         id: 'c1m11-q3',
         question: 'If you cut 1 whole pizza into 2 EQUAL parts to share with your best friend, what is each part called?',
-        options: ['One Whole', 'One-Half (1/2) 🍕', 'Ten pieces', 'Unequal piece'],
+        options: ['One Whole', 'One-Half (1/2)', 'Ten pieces', 'Unequal piece'],
         correctIndex: 1,
         explanation: 'Each of the 2 equal parts of a whole is called One-Half (1/2).',
         boardTag: 'Class 1 Equal Sharing',
@@ -1542,15 +1542,15 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
     classLevel: 1,
     wing: 'Primary (Class 1–5)',
     streamCategory: 'Class 1',
-    subject: 'English Language & Literature',
-    chapterNumber: 'English Ch 5',
+    subject: 'English',
+    chapterNumber: 'Class 1 • English Ch 5',
     simulationId: 'Class1InteractiveLab',
     defaultSimulationMode: 'eng-pronouns-adjectives',
     summary:
       'Replace Naming Words with Pronouns (He, She, It, We, They) and use colorful Describing Words (Adjectives like Red, Tall, Hot, Cold, Happy) to build vivid sentences!',
     syllabusAlignment: {
-      cbseChapter: 'NCERT Class 1 English (Mridang) — He/She/It Sentences & Describing Things Around Us',
-      icseChapter: 'CISCE Class 1 English Grammar — Pronouns (Words in Place of Nouns) & Adjectives (Describing Words)',
+      cbseChapter: 'NCERT Mridang 1 — he/she/it sentences & describing words in activities',
+      icseChapter: 'CISCE Class 1 English Grammar — Pronouns & Describing Words (Adjectives)',
       examRelevance: 'Core ICSE Class 1 English Grammar & IEO Olympiad',
       differenceNote:
         'ICSE Class 1 English Grammar formally introduces Pronouns (He, She, It, We, They) and Adjectives (size, color, number, quality) with sentence substitution.',
@@ -1571,7 +1571,7 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
       {
         id: 'c1e5-q1',
         question: 'Which Pronoun do we use in place of "Riya" (a girl) in: "Riya is reading a book"?',
-        options: ['He', 'She 👧', 'It', 'They'],
+        options: ['He', 'She', 'It', 'They'],
         correctIndex: 1,
         explanation: 'Riya is a girl, so we use the Pronoun SHE: "She is reading a book."',
         boardTag: 'ICSE & CBSE Class 1 English',
@@ -1579,7 +1579,7 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
       {
         id: 'c1e5-q2',
         question: 'Which word is the DESCRIBING WORD (Adjective) in: "I ate a SWEET mango"?',
-        options: ['I', 'ate', 'SWEET 🥭', 'mango'],
+        options: ['I', 'ate', 'SWEET', 'mango'],
         correctIndex: 2,
         explanation: 'SWEET describes how the mango tastes, so SWEET is the Describing Word (Adjective)!',
         boardTag: 'ICSE Class 1 Grammar',
@@ -1587,7 +1587,7 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
       {
         id: 'c1e5-q3',
         question: 'Which Pronoun do we use for a non-living thing like "a red ball ⚽"?',
-        options: ['He', 'She', 'It ⚽', 'We'],
+        options: ['He', 'She', 'It', 'We'],
         correctIndex: 2,
         explanation: 'We use IT for one non-living thing, bird, or animal: "It is a red ball."',
         boardTag: 'Class 1 English Grammar',
@@ -1602,15 +1602,15 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
     classLevel: 1,
     wing: 'Primary (Class 1–5)',
     streamCategory: 'Class 1',
-    subject: 'Hindi (हिंदी — सारंगी)',
-    chapterNumber: 'Hindi Ch 4',
+    subject: 'Hindi (हिंदी)',
+    chapterNumber: 'Class 1 • Hindi Ch 2',
     simulationId: 'Class1InteractiveLab',
     defaultSimulationMode: 'hindi-shabd-train',
     summary:
       'Snap Devanagari letters together on the Hindi Word Train to form 2-letter (घर, जल, फल), 3-letter (कमल, मटर, बतख), and 4-letter (अजगर, शरबत, थरमस) words and read complete Hindi sentences!',
     syllabusAlignment: {
-      cbseChapter: 'NCERT Class 1 Hindi (सारंगी / Sarangi) — बिना मात्रा वाले दो, तीन और चार अक्षर के शब्द और वाक्य',
-      icseChapter: 'CISCE Class 1 Hindi — शब्द रचना (दो, तीन व चार अक्षरों का जोड़)',
+      cbseChapter: 'NCERT सारंगी 1 (Sarangi) — बिना मात्रा वाले दो, तीन व चार अक्षर के शब्द',
+      icseChapter: 'CISCE कक्षा 1 हिंदी — शब्द रचना (दो, तीन व चार अक्षर के शब्द)',
       examRelevance: 'Core CBSE & ICSE Class 1 Hindi Reading Fluency',
       differenceNote:
         'Joining 2, 3, and 4 consonant/vowel letters without matras is the essential bridge between Varnamala recognition and sentence reading.',
@@ -1631,7 +1631,7 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
       {
         id: 'c1h4-q1',
         question: '“क + म + ल” अक्षरों को जोड़ने से कौन-सा तीन अक्षर वाला शब्द बनता है?',
-        options: ['घर 🏠', 'कमल (Lotus) 🪷', 'मटर 🫛', 'जल 💧'],
+        options: ['घर', 'कमल', 'मटर', 'जल'],
         correctIndex: 1,
         explanation: 'क + म + ल को जोड़ने से “कमल” (Lotus) बनता है!',
         boardTag: 'CBSE & ICSE Class 1 Hindi',
@@ -1639,7 +1639,7 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
       {
         id: 'c1h4-q2',
         question: 'इनमें से कौन-सा चार अक्षर वाला शब्द है?',
-        options: ['फल 🍎', 'बस 🚌', 'अजगर (Python) 🐍', 'नल 🚰'],
+        options: ['फल', 'बस', 'अजगर', 'नल'],
         correctIndex: 2,
         explanation: 'अ + ज + ग + र = अजगर (४ अक्षर वाला शब्द)!',
         boardTag: 'Class 1 Hindi Shabd',
@@ -1647,7 +1647,7 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
       {
         id: 'c1h4-q3',
         question: '“घ + र” जोड़ने से क्या बनता है?',
-        options: ['घर (House) 🏠', 'जल 💧', 'शरबत 🍹', 'बतख 🦆'],
+        options: ['घर', 'जल', 'शरबत', 'बतख'],
         correctIndex: 0,
         explanation: 'घ + र = घर (House)!',
         boardTag: 'NCERT Sarangi Class 1',
@@ -1663,14 +1663,14 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
     wing: 'Primary (Class 1–5)',
     streamCategory: 'Class 1',
     subject: 'EVS & Science',
-    chapterNumber: 'EVS Ch 8',
+    chapterNumber: 'Class 1 • EVS Ch 8',
     simulationId: 'Class1InteractiveLab',
     defaultSimulationMode: 'evs-water-air-habits',
     summary:
       'Discover where water comes from (Rain, Rivers, Lakes) and how we use it, feel the power of moving air (Wind), and follow a healthy Morning-to-Night Class 1 daily routine!',
     syllabusAlignment: {
-      cbseChapter: 'NCERT Class 1 Holistic EVS & Vidya Pravesh — Water, Air & Healthy Daily Routine',
-      icseChapter: 'CISCE Class 1 EVS & Value Education — Air Around Us, Precious Water & Good Habits',
+      cbseChapter: 'No separate EVS textbook in CBSE Class 1 (NCF-FS) — theme met through Vidya Pravesh & daily-routine activities',
+      icseChapter: 'CISCE Class 1 EVS — Air, Water & Good Habits',
       examRelevance: 'Core CBSE & ICSE Class 1 EVS & Moral Science',
       differenceNote:
         'Combines ICSE Class 1 EVS chapters on Water and Air with daily hygiene and moral habits (brushing twice daily, saving water, washing hands).',
@@ -1691,15 +1691,15 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
       {
         id: 'c1ev8-q1',
         question: 'What is moving air called?',
-        options: ['Ice', 'Wind 🌬️', 'Soil', 'Stone'],
+        options: ['Ice', 'Wind', 'Soil', 'Stone'],
         correctIndex: 1,
         explanation: 'Moving air is called Wind! A gentle wind is a breeze.',
-        boardTag: 'ICSE & CBSE Class 1 EVS',
+        boardTag: 'Class 1 EVS',
       },
       {
         id: 'c1ev8-q2',
         question: 'What is the MAIN natural source of water that fills our rivers and lakes?',
-        options: ['Rain 🌧️', 'Cars', 'Plastic bottles', 'Balloons'],
+        options: ['Rain', 'Cars', 'Plastic bottles', 'Balloons'],
         correctIndex: 0,
         explanation: 'Rain is the main natural source of fresh water on Earth!',
         boardTag: 'Class 1 EVS',
@@ -1707,7 +1707,7 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
       {
         id: 'c1ev8-q3',
         question: 'How many times a day should we brush our teeth to keep them clean and strong?',
-        options: ['Never', 'Twice a day (Morning and Night) 🪥', 'Once a month', 'Only on Sundays'],
+        options: ['Never', 'Twice a day (Morning and Night)', 'Once a month', 'Only on Sundays'],
         correctIndex: 1,
         explanation: 'We should brush our teeth twice every day—once in the morning and once before sleeping at night!',
         boardTag: 'Class 1 Good Habits',
@@ -1723,17 +1723,17 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
     wing: 'Primary (Class 1–5)',
     streamCategory: 'Class 1',
     subject: 'Mathematics',
-    chapterNumber: 'Math Ch 12',
+    chapterNumber: 'Class 1 • Math Ch 12',
     simulationId: 'Class1InteractiveLab',
     defaultSimulationMode: 'math-word-problems-tables',
     summary:
       'Solve real-life Class 1 Addition and Subtraction Story Problems by spotting clue words ("altogether/total" vs. "left/flew away"), and sing along with Musical Multiplication Tables of 1, 2, 5, and 10!',
     syllabusAlignment: {
-      cbseChapter: 'NCERT Class 1 Joyful Mathematics — Story Sums & Repeated Addition Foundations',
-      icseChapter: 'CISCE Class 1 Mathematics — Word Problems on Addition/Subtraction & Multiplication Tables (1, 2, 5, 10)',
+      cbseChapter: 'NCERT Joyful Mathematics 1 — builds on Ch 5: How Many? & Ch 11: How Many Times? (tables are an extension)',
+      icseChapter: 'CISCE Class 1 Mathematics — Word Problems on Addition & Subtraction; Early Multiplication Tables (varies by school textbook)',
       examRelevance: 'Core CBSE & ICSE Class 1 Math & IMO Olympiad',
       differenceNote:
-        'ICSE Class 1 explicitly includes Multiplication Tables of 1, 2, 5, and 10 alongside clue-word-based story problem solving.',
+        'Many ICSE-school textbooks add early multiplication tables (1, 2, 5, 10) to Class 1; NCERT Joyful Mathematics stops at equal groups and repeated addition.',
     },
     keyFormulas: [
       {
@@ -1751,7 +1751,7 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
       {
         id: 'c1m12-q1',
         question: 'Riya has 8 red apples 🍎 and gets 5 more green apples 🍏. How many apples does she have ALTOGETHER?',
-        options: ['3 apples', '13 apples 🍎🍏', '10 apples', '15 apples'],
+        options: ['3 apples', '13 apples', '10 apples', '15 apples'],
         correctIndex: 1,
         explanation: '"Altogether" means we Add (+): 8 + 5 = 13 apples!',
         boardTag: 'CBSE & ICSE Class 1 Math',
@@ -1759,7 +1759,7 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
       {
         id: 'c1m12-q2',
         question: '12 birds were on a tree. 4 birds FLEW AWAY. How many birds are LEFT?',
-        options: ['16 birds', '8 birds 🐦', '6 birds', '4 birds'],
+        options: ['16 birds', '8 birds', '6 birds', '4 birds'],
         correctIndex: 1,
         explanation: '"Flew away / Left" means we Subtract (-): 12 - 4 = 8 birds!',
         boardTag: 'Class 1 Story Sums',
@@ -1767,7 +1767,7 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
       {
         id: 'c1m12-q3',
         question: 'In the Multiplication Table of 2, what is 2 × 6?',
-        options: ['8', '10', '12 🌟', '14'],
+        options: ['8', '10', '12', '14'],
         correctIndex: 2,
         explanation: '2 sixes are 12 (2 × 6 = 12)!',
         boardTag: 'ICSE Class 1 Tables',
@@ -1782,15 +1782,15 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
     classLevel: 1,
     wing: 'Primary (Class 1–5)',
     streamCategory: 'Class 1',
-    subject: 'English Language & Literature',
-    chapterNumber: 'English Ch 6',
+    subject: 'English',
+    chapterNumber: 'Class 1 • English Ch 6',
     simulationId: 'Class1InteractiveLab',
     defaultSimulationMode: 'eng-digraphs-sentences',
     summary:
       'Discover how two letters join to make one special Digraph sound (CH in Chair, SH in Ship, TH in Thumb, WH in Whale) and unscramble jumbled words using Capital Letters, Full Stops (.), and Question Marks (?)!',
     syllabusAlignment: {
-      cbseChapter: 'NCERT Class 1 English (Mridang) — Phonics Blends/Digraphs & Making Simple Sentences',
-      icseChapter: 'CISCE Class 1 English Grammar — Consonant Digraphs, Punctuation (Capital Letter, Full Stop, Question Mark) & Jumbled Sentences',
+      cbseChapter: 'NCERT Mridang 1 — reading & simple-sentence activities (digraphs are an extension)',
+      icseChapter: 'CISCE Class 1 English Grammar — Consonant Digraphs, Capital Letters, Full Stop/Question Mark & Jumbled Sentences',
       examRelevance: 'Core ICSE & CBSE Class 1 English Reading & IEO Olympiad',
       differenceNote:
         'ICSE Class 1 tests sentence punctuation (starting with a Capital letter and ending with a Full Stop or Question Mark) and word-order unscrambling.',
@@ -1811,7 +1811,7 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
       {
         id: 'c1e6-q1',
         question: 'Which two-letter Digraph starts the words "SHip 🚢", "SHell 🐚", and "SHoe 👟"?',
-        options: ['CH', 'SH 🌟', 'TH', 'WH'],
+        options: ['CH', 'SH', 'TH', 'WH'],
         correctIndex: 1,
         explanation: 'Ship, Shell, and Shoe all begin with the SH sound!',
         boardTag: 'Phonics Class 1',
@@ -1819,7 +1819,7 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
       {
         id: 'c1e6-q2',
         question: 'What punctuation mark do we put at the end of an ASKING sentence like "What is your name___"?',
-        options: ['Full Stop (.)', 'Question Mark (?) ❓', 'Comma (,)', 'Plus (+)'],
+        options: ['Full Stop (.)', 'Question Mark (?)', 'Comma (,)', 'Plus (+)'],
         correctIndex: 1,
         explanation: 'Every question ends with a Question Mark (?)!',
         boardTag: 'ICSE Class 1 Grammar',
@@ -1827,7 +1827,7 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
       {
         id: 'c1e6-q3',
         question: 'Unscramble the jumbled words: "blue. / is / The / sky"',
-        options: ['blue is The sky.', 'The sky is blue. ✅', 'sky The is blue.', 'is blue The sky.'],
+        options: ['blue is The sky.', 'The sky is blue.', 'sky The is blue.', 'is blue The sky.'],
         correctIndex: 1,
         explanation: 'Starting with Capital "The" and ending with "blue." gives: "The sky is blue."',
         boardTag: 'Class 1 Sentence Builder',
@@ -1842,15 +1842,15 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
     classLevel: 1,
     wing: 'Primary (Class 1–5)',
     streamCategory: 'Class 1',
-    subject: 'Hindi (हिंदी — सारंगी)',
-    chapterNumber: 'Hindi Ch 5',
+    subject: 'Hindi (हिंदी)',
+    chapterNumber: 'Class 1 • Hindi Ch 3',
     simulationId: 'Class1InteractiveLab',
     defaultSimulationMode: 'hindi-barahkhadi-vyakaran',
     summary:
       'Practice the 12-sound Barahkhadi strip (क, का, कि, की, कु, कू, के, कै, को, कौ, कं, कः) and master Class 1 Hindi Grammar: विलोम शब्द (दिन-रात, बड़ा-छोटा) and एक–अनेक (तारा-तारे, किताब-किताबें)!',
     syllabusAlignment: {
-      cbseChapter: 'NCERT Class 1 Hindi (सारंगी / Sarangi) — बारहखड़ी अभ्यास, उल्टे अर्थ वाले शब्द (विलोम) और एक-अनेक',
-      icseChapter: 'CISCE Class 1 Hindi Vyakaran — बारहखड़ी, विलोम शब्द (Antonyms) और वचन (Singular-Plural)',
+      cbseChapter: 'NCERT सारंगी 1 (Sarangi) — मात्राएँ / बारहखड़ी अभ्यास, विलोम व एक–अनेक (गतिविधियाँ)',
+      icseChapter: 'CISCE कक्षा 1 हिंदी व्याकरण — बारहखड़ी, विलोम शब्द और वचन (एक–अनेक)',
       examRelevance: 'Core CBSE & ICSE Class 1 Hindi Grammar',
       differenceNote:
         'Combines Barahkhadi pronunciation with foundational Hindi Vyakaran (Vilom Shabd and Ek-Anek Vachan).',
@@ -1871,7 +1871,7 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
       {
         id: 'c1h5-q1',
         question: '“दिन ☀️” शब्द का सही विलोम (उल्टा) शब्द क्या है?',
-        options: ['सुबह', 'रात 🌙', 'दोपहर', 'शाम'],
+        options: ['सुबह', 'रात', 'दोपहर', 'शाम'],
         correctIndex: 1,
         explanation: '“दिन” का विलोम शब्द “रात” होता है!',
         boardTag: 'CBSE & ICSE Class 1 Hindi',
@@ -1879,7 +1879,7 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
       {
         id: 'c1h5-q2',
         question: '“एक तारा ⭐” का बहुवचन (अनेक) क्या होगा?',
-        options: ['अनेक तारे ⭐⭐⭐', 'ताराओं', 'एक तारे', 'तारी'],
+        options: ['अनेक तारे', 'ताराओं', 'एक तारे', 'तारी'],
         correctIndex: 0,
         explanation: 'एक तारा → अनेक तारे!',
         boardTag: 'Class 1 Hindi Vyakaran',
@@ -1887,7 +1887,7 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
       {
         id: 'c1h5-q3',
         question: 'बारहखड़ी में “क, का, कि, की” के बाद कौन-सा अक्षर आता है?',
-        options: ['के', 'कु (छोटे उ की मात्रा) 🌟', 'को', 'कः'],
+        options: ['के', 'कु', 'को', 'कः'],
         correctIndex: 1,
         explanation: 'क, का, कि, की के बाद “कु” और “कू” आते हैं!',
         boardTag: 'Class 1 Barahkhadi',
@@ -1903,14 +1903,14 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
     wing: 'Primary (Class 1–5)',
     streamCategory: 'Class 1',
     subject: 'EVS & Science',
-    chapterNumber: 'EVS Ch 9',
+    chapterNumber: 'Class 1 • EVS Ch 9',
     simulationId: 'Class1InteractiveLab',
     defaultSimulationMode: 'evs-clothes-places-games',
     summary:
       'Learn where Cotton and Wool come from, explore important places in our neighbourhood (Hospital, Post Office, School, Fire Station, Park), and compare Indoor Games (Chess, Carrom, Ludo) with Outdoor Games (Football, Cricket)!',
     syllabusAlignment: {
-      cbseChapter: 'NCERT Class 1 Holistic EVS — Clothes We Wear, Our Neighbourhood & Games We Play',
-      icseChapter: 'CISCE Class 1 EVS — Ch 6: Clothes We Wear, Ch 9: Our Neighbourhood & Ch 11: Recreation (Indoor & Outdoor Games)',
+      cbseChapter: 'No separate EVS textbook in CBSE Class 1 (NCF-FS) — theme met through NCERT Mridang 1 Unit 4: Seasons & school activities',
+      icseChapter: 'CISCE Class 1 EVS — Clothes We Wear, Our Neighbourhood & Games We Play',
       examRelevance: 'Core CBSE & ICSE Class 1 EVS & General Knowledge',
       differenceNote:
         'ICSE Class 1 EVS links seasonal clothes to natural fibers (Cotton from cotton plants, Wool from sheep) and classifies neighbourhood services and games.',
@@ -1931,15 +1931,15 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
       {
         id: 'c1ev9-q1',
         question: 'From which animal do we get warm WOOL to knit winter sweaters 🧣?',
-        options: ['Dog 🐶', 'Sheep 🐑', 'Lion 🦁', 'Fish 🐟'],
+        options: ['Dog', 'Sheep', 'Lion', 'Fish'],
         correctIndex: 1,
         explanation: 'We get soft warm wool from the fleece of a Sheep!',
-        boardTag: 'ICSE & CBSE Class 1 EVS',
+        boardTag: 'Class 1 EVS',
       },
       {
         id: 'c1ev9-q2',
         question: 'Where do we go in our neighbourhood to buy stamps and post letters ✉️?',
-        options: ['Hospital 🏥', 'Post Office 🏤', 'Fire Station 🚒', 'Playground'],
+        options: ['Hospital', 'Post Office', 'Fire Station', 'Playground'],
         correctIndex: 1,
         explanation: 'We buy stamps, postcards, and send letters at the Post Office!',
         boardTag: 'Class 1 Neighbourhood',
@@ -1947,7 +1947,7 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
       {
         id: 'c1ev9-q3',
         question: 'Which of these is an OUTDOOR game played in a big playground?',
-        options: ['Ludo 🎲', 'Carrom', 'Chess ♟️', 'Football & Cricket ⚽🏏'],
+        options: ['Ludo', 'Carrom', 'Chess', 'Football & Cricket'],
         correctIndex: 3,
         explanation: 'Football and Cricket are Outdoor Games played in an open field or playground!',
         boardTag: 'Class 1 EVS Games',
@@ -1962,18 +1962,18 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
     classLevel: 1,
     wing: 'Primary (Class 1–5)',
     streamCategory: 'Class 1',
-    subject: 'Computer Studies & AI Foundations',
-    chapterNumber: 'Computer Ch 2',
+    subject: 'Computer Studies',
+    chapterNumber: 'Class 1 • Computer Ch 2',
     simulationId: 'Class1InteractiveLab',
     defaultSimulationMode: 'computer-paint-manners',
     summary:
       'Explore digital drawing tools in MS Paint / Tux Paint (Pencil, Fill with Color Bucket, Eraser, Shapes, Text) and practice safe, polite Computer Room Do’s and Don’ts!',
     syllabusAlignment: {
-      cbseChapter: 'NEP 2020 Class 1 Digital Creativity — Drawing on a Computer & Safe Tech Habits',
-      icseChapter: 'CISCE Class 1 Computer Studies — Ch 5: Fun with Paint / Tux Paint & Ch 6: Computer Lab Manners',
+      cbseChapter: 'Not prescribed by NCERT for Class 1 — school-level digital literacy',
+      icseChapter: 'CISCE Class 1 Computer Studies — Drawing with Paint & Computer Lab Manners',
       examRelevance: 'Core ICSE Class 1 Computer Studies & Cyber Olympiad',
       differenceNote:
-        'Completes the ICSE Class 1 Computer syllabus with Paint tool identification and electrical/ergonomic safety in the computer room.',
+        'Paint-tool drawing and lab safety are common in ICSE-school Class 1 Computer Studies; CBSE schools may cover them as optional digital literacy.',
     },
     keyFormulas: [
       {
@@ -1991,7 +1991,7 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
       {
         id: 'c1cp2-q1',
         question: 'Which tool in Paint is used to FILL an entire closed shape with color in one click?',
-        options: ['Eraser Tool 🧽', 'Fill with Color (Bucket) Tool 🪣', 'Text Tool', 'Keyboard'],
+        options: ['Eraser Tool', 'Bucket Tool', 'Text Tool', 'Pencil Tool'],
         correctIndex: 1,
         explanation: 'The Fill with Color (Bucket) tool fills any closed shape with color!',
         boardTag: 'ICSE Class 1 Computer',
@@ -2002,7 +2002,7 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
         options: [
           'Eating chips and spilling juice on the keyboard',
           'Pulling electric wires',
-          'Sitting straight and pressing keyboard keys gently ✅',
+          'Sitting straight and pressing keyboard keys gently',
           'Banging the monitor screen',
         ],
         correctIndex: 2,
@@ -2012,7 +2012,7 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
       {
         id: 'c1cp2-q3',
         question: 'Which Paint tool helps you rub out a mistake in your drawing?',
-        options: ['Eraser Tool 🧽', 'Bucket Tool 🪣', 'Circle Tool ◯', 'Speaker'],
+        options: ['Eraser Tool', 'Bucket Tool', 'Circle Tool', 'Speaker'],
         correctIndex: 0,
         explanation: 'The Eraser tool rubs out mistakes on the drawing canvas.',
         boardTag: 'Class 1 Paint',
@@ -2027,15 +2027,15 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
     classLevel: 1,
     wing: 'Primary (Class 1–5)',
     streamCategory: 'Class 1',
-    subject: 'Joyful Arts, Music & Logic',
-    chapterNumber: 'Olympiad Ch 1',
+    subject: 'Arts, Music & Logic',
+    chapterNumber: 'Class 1 • Arts Ch 2',
     simulationId: 'Class1InteractiveLab',
     defaultSimulationMode: 'olympiad-reasoning-gym',
     summary:
       'Sharpen young minds for Class 1 SOF IMO, NSO, IEO & IGKO Olympiads with interactive Odd One Out, Picture Analogies, Visual Shape Counting, and Number Pattern Detective puzzles!',
     syllabusAlignment: {
-      cbseChapter: 'NCERT Class 1 Vidya Pravesh & NCF-FS — Cognitive Puzzles, Classification & Pattern Reasoning',
-      icseChapter: 'CISCE Class 1 Mental Maths & SOF Olympiad (IMO/NSO/IEO) Section-1 Logical Reasoning',
+      cbseChapter: 'Enrichment — not part of the CBSE Class 1 syllabus (logical-reasoning practice)',
+      icseChapter: 'Enrichment — not part of the CISCE Class 1 syllabus (Olympiad-style reasoning)',
       examRelevance: 'SOF IMO / NSO / IEO / IGKO Class 1 Olympiad Prep',
       differenceNote:
         'Specifically designed for Section 1 (Logical Reasoning) of national and international Class 1 Olympiad examinations.',
@@ -2056,7 +2056,7 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
       {
         id: 'c1ol1-q1',
         question: 'Find the ODD ONE OUT among these four items: 🍎 Apple, 🍌 Banana, 🚗 Car, 🥭 Mango',
-        options: ['🍎 Apple', '🍌 Banana', '🚗 Car (Not a fruit!)', '🥭 Mango'],
+        options: ['Apple', 'Banana', 'Car', 'Mango'],
         correctIndex: 2,
         explanation: 'Apple, Banana, and Mango are fruits, whereas a Car is a vehicle!',
         boardTag: 'SOF Olympiad Class 1',
@@ -2064,7 +2064,7 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
       {
         id: 'c1ol1-q2',
         question: 'Complete the Analogy: Day ☀️ is to Sun as Night 🌙 is to ___?',
-        options: ['Moon & Stars 🌙⭐', 'Raincoat', 'School Bus', 'Breakfast'],
+        options: ['Moon & Stars', 'Raincoat', 'School Bus', 'Breakfast'],
         correctIndex: 0,
         explanation: 'We see the Sun during the Day, and we see the Moon and Stars at Night!',
         boardTag: 'Class 1 Logical Reasoning',
@@ -2072,7 +2072,7 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
       {
         id: 'c1ol1-q3',
         question: 'Find the missing number in the pattern: 10, 20, 30, ___, 50',
-        options: ['35', '40 🎯', '45', '60'],
+        options: ['35', '40', '45', '60'],
         correctIndex: 1,
         explanation: 'Counting in tens: 10, 20, 30, 40, 50!',
         boardTag: 'IMO Class 1 Prep',

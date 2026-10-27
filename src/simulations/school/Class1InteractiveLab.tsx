@@ -117,6 +117,9 @@ const MODE_CATALOG: {
   { id: 'olympiad-reasoning-gym', subject: 'arts', label: '2. Olympiad Brain Gym (Odd One Out & Analogies) 🧠', icon: Trophy },
 ];
 
+// The frog number line runs 0–20, so hops can't overshoot either end.
+const maxFrogHops = (start: number, op: 'add' | 'sub') => (op === 'add' ? 20 - start : start);
+
 const WORD_PROBLEM_STORIES = [
   {
     title: '🍎 Apples in the Basket (Addition +)',
@@ -126,8 +129,8 @@ const WORD_PROBLEM_STORIES = [
     b: 5,
     op: '+' as const,
     ans: 13,
-    iconsA: '🍎🍎🍎🍎🍎🍎🍎🍎',
-    iconsB: '🍏🍏🍏🍏🍏',
+    iconA: '🍎',
+    iconB: '🍏',
   },
   {
     title: '🐦 Birds on a Tree Branch (Subtraction -)',
@@ -137,8 +140,8 @@ const WORD_PROBLEM_STORIES = [
     b: 4,
     op: '-' as const,
     ans: 8,
-    iconsA: '🐦🐦🐦🐦🐦🐦🐦🐦',
-    iconsB: '❌🐦❌🐦❌🐦❌🐦',
+    iconA: '🐦',
+    iconB: '🐦',
   },
   {
     title: '🎈 Birthday Party Balloons (Addition +)',
@@ -148,8 +151,8 @@ const WORD_PROBLEM_STORIES = [
     b: 6,
     op: '+' as const,
     ans: 15,
-    iconsA: '🎈🎈🎈🎈🎈🎈🎈🎈🎈',
-    iconsB: '🎈🎈🎈🎈🎈🎈',
+    iconA: '🎈',
+    iconB: '🎈',
   },
   {
     title: '🍪 Cookies on a Plate (Subtraction -)',
@@ -159,15 +162,15 @@ const WORD_PROBLEM_STORIES = [
     b: 5,
     op: '-' as const,
     ans: 10,
-    iconsA: '🍪🍪🍪🍪🍪🍪🍪🍪🍪🍪',
-    iconsB: '❌🍪❌🍪❌🍪❌🍪❌🍪',
+    iconA: '🍪',
+    iconB: '🍪',
   },
 ];
 
 const DIGRAPH_CARDS = [
   { digraph: 'CH', sound: 'ch (च)', words: ['Chair 🪑', 'Cheese 🧀', 'Chick 🐥', 'Chalk 🖍️'], sentence: 'The little CHick sat on a CHair.' },
   { digraph: 'SH', sound: 'sh (श)', words: ['Ship 🚢', 'Shell 🐚', 'Shoe 👟', 'Sheep 🐑'], sentence: 'She found a pink SHell near the SHip.' },
-  { digraph: 'TH', sound: 'th (थ/द)', words: ['Thumb 👍', 'Three 3️⃣', 'Tree Think 💭', 'Bath 🛁'], sentence: 'I have THree rings on my THumb.' },
+  { digraph: 'TH', sound: 'th (थ/द)', words: ['Thumb 👍', 'Three 3️⃣', 'Think 💭', 'Bath 🛁'], sentence: 'I have THree rings on my THumb.' },
   { digraph: 'WH', sound: 'wh (व्ह)', words: ['Whale 🐋', 'Wheel 🛞', 'Whistle 🪈', 'White ⚪'], sentence: 'A big blue WHale swam in the sea.' },
 ];
 
@@ -257,28 +260,28 @@ const OLYMPIAD_PUZZLES = [
   {
     category: 'Odd One Out (Find the Different One)',
     question: 'Look at the 4 items below. Three belong to the same family, and ONE is different. Tap the Odd One Out!',
-    options: ['🍎 Apple', '🍌 Banana', '🚗 Red Car (Odd One!)', '🥭 Mango'],
+    options: ['🍎 Apple', '🍌 Banana', '🚗 Car', '🥭 Mango'],
     correct: 2,
     explanation: 'Apple, Banana, and Mango are FRUITS we eat, while a Car 🚗 is a vehicle!',
   },
   {
     category: 'Picture Analogy (Pair Matching)',
     question: 'Bird 🐦 lives in a Nest 🪺. In the same way, a Lion 🦁 lives in a ___?',
-    options: ['Kennel 🏠', 'Den 🪨🦁', 'Stable ', 'Aquarium 🐠'],
+    options: ['Kennel 🏠', 'Den 🪨', 'Stable 🐴', 'Aquarium 🐠'],
     correct: 1,
     explanation: 'A Bird lives in a Nest, and a Lion lives in a Den!',
   },
   {
     category: 'Shape Counting (Visual Geometry)',
     question: 'A toy snowman ⛄ is drawn using 1 small circle for the head, 1 big circle for the body, and 2 tiny circles for eyes. How many CIRCLES in total?',
-    options: ['2 Circles', '3 Circles', '4 Circles 🎯', '6 Circles'],
+    options: ['2 Circles', '3 Circles', '4 Circles', '6 Circles'],
     correct: 2,
     explanation: '1 (head) + 1 (body) + 2 (eyes) = 4 Circles in total!',
   },
   {
     category: 'Number Pattern Detective (IMO Olympiad)',
     question: 'Find the missing number in the jumping pattern: 5, 10, 15, ___, 25',
-    options: ['16', '20 🎯', '22', '30'],
+    options: ['16', '20', '22', '30'],
     correct: 1,
     explanation: 'We are skip counting by 5s: 5, 10, 15, 20, 25!',
   },
@@ -340,7 +343,7 @@ const PRONOUN_CARDS = [
 const ADJECTIVE_ITEMS = [
   { adj: 'RED & SWEET', noun: 'Apple 🍎', type: 'Color & Taste', sentence: 'This is a RED and SWEET apple.' },
   { adj: 'TALL', noun: 'Giraffe 🦒', type: 'Size / Height', sentence: 'The giraffe has a TALL neck.' },
-  { adj: 'HOT', noun: 'Milk Glass 🥛♨️', type: 'Touch / Feel', sentence: 'Grandma gave me WARM milk.' },
+  { adj: 'WARM', noun: 'Milk Glass 🥛♨️', type: 'Touch / Feel', sentence: 'Grandma gave me WARM milk.' },
   { adj: 'COLD', noun: 'Ice-Cream 🍦❄️', type: 'Touch / Feel', sentence: 'Ice-cream is COLD and yummy.' },
   { adj: 'THREE', noun: 'Balloons 🎈🎈🎈', type: 'Number (How Many)', sentence: 'I have THREE colorful balloons.' },
   { adj: 'HAPPY', noun: 'Puppy 🐶', type: 'Feeling', sentence: 'The HAPPY puppy wagged its tail.' },
@@ -457,7 +460,7 @@ const HEALTHY_VS_JUNK_FOODS = [
 const ARCADE_MISSIONS = [
   {
     prompt: '🔊 Number Bond Mission: Which number joins with 6 to make 10? (6 + ? = 10)',
-    options: ['2', '4 🎯', '7', '9'],
+    options: ['2', '4', '7', '9'],
     correct: 1,
     rewardMsg: 'Super! 6 plus 4 makes 10!',
   },
@@ -469,7 +472,7 @@ const ARCADE_MISSIONS = [
   },
   {
     prompt: '🔊 Hindi Varnamala Mission: “आ से ___” — Which sweet yellow fruit starts with आ?',
-    options: ['अनार 🍎', 'आम (Mango) 🥭', 'उल्लू 🦉', 'कमल 🪷'],
+    options: ['अनार', 'आम', 'उल्लू', 'कमल'],
     correct: 1,
     rewardMsg: 'शाबाश! आ से आम (Mango)!',
   },
@@ -584,7 +587,7 @@ const MRIDANG_STORIES = [
 const HINDI_MATRAS = [
   { matra: 'ा (आ की मात्रा)', base: 'क', result: 'का', word: 'काला / कार 🚗', speech: 'क में आ की मात्रा का, कार' },
   { matra: 'ि (छोटी इ की मात्रा)', base: 'क', result: 'कि', word: 'किताब 📖', speech: 'क में छोटी इ की मात्रा कि, किताब' },
-  { matra: 'ी (बड़ी ई की मात्रा)', base: 'म', result: 'मी', word: 'मीना / मछली 🐟', speech: 'म में बड़ी ई की मात्रा मी, मीना' },
+  { matra: 'ी (बड़ी ई की मात्रा)', base: 'म', result: 'मी', word: 'मीना 👧', speech: 'म में बड़ी ई की मात्रा मी, मीना' },
   { matra: 'ु (छोटा उ की मात्रा)', base: 'ग', result: 'गु', word: 'गुलाब 🌹', speech: 'ग में छोटा उ की मात्रा गु, गुलाब' },
   { matra: 'ू (बड़ा ऊ की मात्रा)', base: 'च', result: 'चू', word: 'चूहा 🐭', speech: 'च में बड़ा ऊ की मात्रा चू, चूहा' },
   { matra: 'े (ए की मात्रा)', base: 'र', result: 'रे', word: 'रेलगाड़ी 🚂', speech: 'र में ए की मात्रा रे, रेलगाड़ी' },
@@ -600,7 +603,7 @@ const HINDI_GINTI = [
   { num: '६', eng: 6, word: 'छह (Chhah)', icons: '⭐⭐⭐⭐⭐⭐' },
   { num: '७', eng: 7, word: 'सात (Saat)', icons: '🌈 (७ रंग)' },
   { num: '८', eng: 8, word: 'आठ (Aath)', icons: '🐙 (८ भुजाएँ)' },
-  { num: '९', eng: 9, word: 'नौ (Nau)', icons: '🪐 (९ ग्रह/अंक)' },
+  { num: '९', eng: 9, word: 'नौ (Nau)', icons: '⭐⭐⭐⭐⭐⭐⭐⭐⭐' },
   { num: '१०', eng: 10, word: 'दस (Das)', icons: '👐 (१० उँगलियाँ)' },
 ];
 
@@ -662,7 +665,7 @@ const XYLOPHONE_KEYS = [
 ];
 
 const HINDI_SWAR = [
-  { letter: 'अ', roman: 'a', word: 'अ से अनार', eng: 'Pomegranate', icon: '🍎', speech: 'अ से अनार' },
+  { letter: 'अ', roman: 'a', word: 'अ से अनानास', eng: 'Pineapple', icon: '🍍', speech: 'अ से अनानास' },
   { letter: 'आ', roman: 'aa', word: 'आ से आम', eng: 'Mango', icon: '🥭', speech: 'आ से आम' },
   { letter: 'इ', roman: 'i', word: 'इ से इमली', eng: 'Tamarind', icon: '🫘', speech: 'इ से इमली' },
   { letter: 'ई', roman: 'ee', word: 'ई से ईख', eng: 'Sugarcane', icon: '🎋', speech: 'ई से ईख' },
@@ -1039,6 +1042,8 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
   const [tableMultiplier, setTableMultiplier] = useState<1 | 2 | 5 | 10>(2);
   const [digraphIdx, setDigraphIdx] = useState(0);
   const [jumbledIdx, setJumbledIdx] = useState(0);
+  const [storyGuess, setStoryGuess] = useState<number | null>(null);
+  const [builtWords, setBuiltWords] = useState<number[]>([]);
   const [barahkhadiIdx, setBarahkhadiIdx] = useState(0);
   const [barahkhadiFormIdx, setBarahkhadiFormIdx] = useState(0);
   const [clothesSeasonIdx, setClothesSeasonIdx] = useState(0);
@@ -2317,8 +2322,10 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
               <button
                 type="button"
                 onClick={() => {
+                  const hops = Math.min(changeNum, maxFrogHops(startNum, 'add'));
                   setOperation('add');
-                  speak(`${startNum} plus ${changeNum} equals ${startNum + changeNum}`);
+                  setChangeNum(hops);
+                  speak(`${startNum} plus ${hops} equals ${startNum + hops}`);
                 }}
                 className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold ${
                   operation === 'add'
@@ -2331,8 +2338,10 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
               <button
                 type="button"
                 onClick={() => {
+                  const hops = Math.min(changeNum, maxFrogHops(startNum, 'sub'));
                   setOperation('sub');
-                  speak(`${startNum} minus ${changeNum} equals ${Math.max(0, startNum - changeNum)}`);
+                  setChangeNum(hops);
+                  speak(`${startNum} minus ${hops} equals ${startNum - hops}`);
                 }}
                 className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold ${
                   operation === 'sub'
@@ -2375,14 +2384,17 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
                 min: 1,
                 max: 14,
                 step: 1,
-                onChange: setStartNum,
+                onChange: (v: number) => {
+                  setStartNum(v);
+                  setChangeNum((c) => Math.min(c, maxFrogHops(v, operation)));
+                },
               },
               {
                 id: 'c',
                 label: 'Number of Frog Hops',
                 value: changeNum,
                 min: 0,
-                max: operation === 'add' ? 20 - startNum : startNum,
+                max: maxFrogHops(startNum, operation),
                 step: 1,
                 onChange: setChangeNum,
               },
@@ -5575,6 +5587,7 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
                   type="button"
                   onClick={() => {
                     setStoryProblemIdx(idx);
+                    setStoryGuess(null);
                     speak(wp.story);
                   }}
                   className={`px-2.5 py-1.5 rounded-xl text-xs font-extrabold border ${
@@ -5596,19 +5609,65 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
                   <div className="p-2.5 rounded-lg bg-amber-500/15 border border-amber-400/50 text-xs text-amber-200 font-bold">
                     🔍 Clue Word Detective: <span className="text-white">{st.clueWord}</span>
                   </div>
-                  <div className="p-3 rounded-xl bg-[#111827] border border-slate-800 flex flex-wrap items-center justify-between gap-3">
-                    <div className="text-lg tracking-widest">
-                      {st.iconsA} <span className="font-mono font-black text-cyan-400 mx-1">{st.op}</span> {st.iconsB}
+                  <div className="p-3 rounded-xl bg-[#111827] border border-slate-800 space-y-3">
+                    <div className="text-lg tracking-widest leading-relaxed">
+                      {st.op === '+' ? (
+                        <>
+                          {st.iconA.repeat(st.a)}{' '}
+                          <span className="font-mono font-black text-cyan-400 mx-1">+</span>{' '}
+                          {st.iconB.repeat(st.b)}
+                        </>
+                      ) : (
+                        <>
+                          {st.iconA.repeat(st.a - st.b)}
+                          <span className="opacity-25 grayscale">{st.iconB.repeat(st.b)}</span>
+                          <span className="ml-2 text-xs font-mono font-black text-rose-300 tracking-normal">
+                            ({st.b} taken away)
+                          </span>
+                        </>
+                      )}
                     </div>
-                    <button
-                      type="button"
-                      onClick={() =>
-                        awardStar(`${st.a} ${st.op === '+' ? 'plus' : 'minus'} ${st.b} equals ${st.ans}!`)
-                      }
-                      className="px-3.5 py-1.5 rounded-xl bg-emerald-400 text-slate-950 font-mono text-sm font-black"
-                    >
-                      {st.a} {st.op} {st.b} = {st.ans} 🔊
-                    </button>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className="text-xs font-bold text-slate-300">
+                        {st.a} {st.op} {st.b} = ?
+                      </span>
+                      {[st.ans - 1, st.ans, st.ans + 2]
+                        .sort((x, y) => ((x * 7 + st.a) % 5) - ((y * 7 + st.a) % 5))
+                        .map((choice) => {
+                          const picked = storyGuess === choice;
+                          const solved = storyGuess === st.ans;
+                          return (
+                            <button
+                              key={choice}
+                              type="button"
+                              disabled={solved}
+                              onClick={() => {
+                                setStoryGuess(choice);
+                                if (choice === st.ans) {
+                                  awardStar(`${st.a} ${st.op === '+' ? 'plus' : 'minus'} ${st.b} equals ${st.ans}!`);
+                                } else {
+                                  playPop();
+                                  speak('Not quite! Count the pictures again.');
+                                }
+                              }}
+                              className={`px-3.5 py-1.5 rounded-xl font-mono text-sm font-black border ${
+                                picked && choice === st.ans
+                                  ? 'bg-emerald-400 text-slate-950 border-white'
+                                  : picked
+                                  ? 'bg-rose-500/30 text-rose-200 border-rose-400'
+                                  : 'bg-[#090D16] text-slate-200 border-slate-700'
+                              }`}
+                            >
+                              {choice}
+                            </button>
+                          );
+                        })}
+                    </div>
+                    {storyGuess === st.ans && (
+                      <div className="text-sm font-mono font-black text-emerald-300">
+                        ✓ {st.a} {st.op} {st.b} = {st.ans}
+                      </div>
+                    )}
                   </div>
                 </div>
               );
@@ -5729,7 +5788,8 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
                   type="button"
                   onClick={() => {
                     setJumbledIdx(idx);
-                    speak(js.correct);
+                    setBuiltWords([]);
+                    speak('Tap the words in the right order to make a sentence!');
                   }}
                   className={`px-3 py-1.5 rounded-xl text-xs font-extrabold border ${
                     jumbledIdx === idx
@@ -5742,39 +5802,77 @@ export const Class1InteractiveLab: React.FC<{ initialMode?: string }> = ({
               ))}
             </div>
 
-            <div className="p-4 rounded-xl bg-[#090D16] border border-cyan-500/40 space-y-3">
-              <div className="text-xs text-slate-400">
-                Jumbled Words:{' '}
-                {JUMBLED_SENTENCES[jumbledIdx].jumbled.map((w) => (
-                  <span
-                    key={w}
-                    className="inline-block mx-1 px-2 py-0.5 rounded bg-slate-800 text-amber-300 font-mono font-bold"
+            {(() => {
+              const js = JUMBLED_SENTENCES[jumbledIdx];
+              const built = builtWords.map((i) => js.jumbled[i]).join(' ');
+              const isDone = builtWords.length === js.jumbled.length;
+              const isRight = isDone && built === js.correct;
+              return (
+                <div className="p-4 rounded-xl bg-[#090D16] border border-cyan-500/40 space-y-3">
+                  <div className="text-xs text-slate-400">
+                    Tap the jumbled words in the right order:
+                    <div className="mt-2 flex flex-wrap gap-2">
+                      {js.jumbled.map((w, i) => {
+                        const used = builtWords.includes(i);
+                        return (
+                          <button
+                            key={w}
+                            type="button"
+                            disabled={used || isDone}
+                            onClick={() => {
+                              playPop();
+                              const next = [...builtWords, i];
+                              setBuiltWords(next);
+                              if (next.length === js.jumbled.length) {
+                                const attempt = next.map((k) => js.jumbled[k]).join(' ');
+                                if (attempt === js.correct) {
+                                  awardStar(`${js.correct} ${js.rule}`);
+                                } else {
+                                  speak('Not quite! Tap Try Again and start with the capital letter word.');
+                                }
+                              }
+                            }}
+                            className={`px-3 py-2 rounded-lg font-mono text-sm font-bold border ${
+                              used
+                                ? 'bg-slate-900 text-slate-600 border-slate-800'
+                                : 'bg-slate-800 text-amber-300 border-amber-400/40 hover:bg-slate-700'
+                            }`}
+                          >
+                            {w}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                  <div
+                    className={`p-3 rounded-xl border flex flex-wrap items-center justify-between gap-2 ${
+                      isRight
+                        ? 'bg-emerald-950/30 border-emerald-500/50'
+                        : isDone
+                        ? 'bg-rose-950/30 border-rose-500/50'
+                        : 'bg-slate-900/60 border-slate-700'
+                    }`}
                   >
-                    {w}
-                  </span>
-                ))}
-              </div>
-              <div className="p-3 rounded-xl bg-emerald-950/30 border border-emerald-500/50 flex items-center justify-between">
-                <div>
-                  <div className="text-[10px] font-mono uppercase text-emerald-300">
-                    ✓ Correct Unscrambled Sentence
+                    <div>
+                      <div className="text-[10px] font-mono uppercase text-slate-400">
+                        {isRight ? '✓ Well done!' : isDone ? 'Not quite — try again!' : 'Your sentence'}
+                      </div>
+                      <div className="text-base font-black text-white min-h-[1.5rem]">{built || '…'}</div>
+                    </div>
+                    {builtWords.length > 0 && (
+                      <button
+                        type="button"
+                        onClick={() => setBuiltWords([])}
+                        className="px-3 py-1.5 rounded-xl bg-slate-700 text-white text-xs font-extrabold"
+                      >
+                        ↺ Try Again
+                      </button>
+                    )}
                   </div>
-                  <div className="text-base font-black text-white">
-                    {JUMBLED_SENTENCES[jumbledIdx].correct}
-                  </div>
+                  {isRight && <p className="text-xs text-cyan-200">{js.rule}</p>}
                 </div>
-                <button
-                  type="button"
-                  onClick={() =>
-                    awardStar(`${JUMBLED_SENTENCES[jumbledIdx].correct} ${JUMBLED_SENTENCES[jumbledIdx].rule}`)
-                  }
-                  className="px-3 py-1.5 rounded-xl bg-emerald-400 text-slate-950 text-xs font-extrabold"
-                >
-                  🔊 Read Rule
-                </button>
-              </div>
-              <p className="text-xs text-cyan-200">{JUMBLED_SENTENCES[jumbledIdx].rule}</p>
-            </div>
+              );
+            })()}
           </div>
         </div>
       )}

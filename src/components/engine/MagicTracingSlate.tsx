@@ -20,7 +20,7 @@ const TRACE_ITEMS: Record<TraceCategory, TraceItem[]> = {
     { char: '6', title: 'Number 6 (Six)', word: 'Six Faces of a Dice 🎲' },
     { char: '7', title: 'Number 7 (Seven)', word: 'Seven Colors in a Rainbow 🌈' },
     { char: '8', title: 'Number 8 (Eight)', word: 'Eight Arms of an Octopus 🐙' },
-    { char: '9', title: 'Number 9 (Nine)', word: 'Nine Planets / Beads 🪐' },
+    { char: '9', title: 'Number 9 (Nine)', word: 'Nine Balloons 🎈' },
     { char: '10', title: 'Number 10 (Ten)', word: 'Ten Toes / Full Ten-Frame 🔟' },
   ],
   english: [
@@ -38,7 +38,7 @@ const TRACE_ITEMS: Record<TraceCategory, TraceItem[]> = {
     { char: 'Z z', title: 'Letter Z', word: 'Z for Zebra 🦓' },
   ],
   hindi: [
-    { char: 'अ', title: 'स्वर अ (a)', word: 'अ से अनार (Pomegranate) 🍎', lang: 'hi-IN' },
+    { char: 'अ', title: 'स्वर अ (a)', word: 'अ से अनानास (Pineapple) 🍍', lang: 'hi-IN' },
     { char: 'आ', title: 'स्वर आ (aa)', word: 'आ से आम (Mango) 🥭', lang: 'hi-IN' },
     { char: 'इ', title: 'स्वर इ (i)', word: 'इ से इमली (Tamarind) 🌱', lang: 'hi-IN' },
     { char: 'ई', title: 'स्वर ई (ee)', word: 'ई से ईख (Sugarcane) 🎋', lang: 'hi-IN' },
