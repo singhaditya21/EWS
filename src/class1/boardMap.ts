@@ -1,5 +1,5 @@
 // Board overlays for the shared Class 1 core.
-// The 34 chapters are shared; this map says, for each board, whether a chapter is part of
+// The chapters are shared; this map says, for each board, whether a chapter is part of
 // that board's Class 1 syllabus, where it sits in that board's order, and which skills it teaches.
 import { SchoolBoard } from '../types/curriculum.types';
 
@@ -65,15 +65,22 @@ export const CLASS1_BOARD_MAP: Record<string, Class1ChapterMeta> = {
   // terms (nouns, pronouns, adjectives) are typical of ICSE-school grammar books, not Mridang.
   'cls1-eng-mridang-stories': meta(['e.listening'], ['core', 1], ['core', 6]),
   'cls1-eng-phonics-vowels': meta(['e.letters', 'e.cvc', 'e.article'], ['core', 2], ['core', 1]),
-  'cls1-eng-nouns-this-that': meta(['e.nouns', 'e.thisthat'], ['extension', 3], ['core', 2]),
-  'cls1-eng-grammar-opposites': meta(['e.opposites', 'e.verbs', 'e.plurals'], ['extension', 4], ['core', 3]),
-  'cls1-eng-pronouns-adjectives': meta(['e.pronouns', 'e.adjectives'], ['extension', 5], ['core', 4]),
-  'cls1-eng-digraphs-sentences': meta(['e.digraphs', 'e.sentences'], ['extension', 6], ['core', 5]),
+  'cls1-eng-picture-talk': meta(['e.picturetalk'], ['core', 3], ['extension', 7]),
+  'cls1-eng-farm-seasons': meta(['e.picturetalk', 'e.listening'], ['core', 4], ['extension', 8]),
+  'cls1-eng-nouns-this-that': meta(['e.nouns', 'e.thisthat'], ['extension', 5], ['core', 2]),
+  'cls1-eng-grammar-opposites': meta(['e.opposites', 'e.verbs', 'e.plurals'], ['extension', 6], ['core', 3]),
+  'cls1-eng-pronouns-adjectives': meta(['e.pronouns', 'e.adjectives'], ['extension', 7], ['core', 4]),
+  'cls1-eng-digraphs-sentences': meta(['e.digraphs', 'e.sentences'], ['extension', 8], ['core', 5]),
 
   // Hindi
   'cls1-hindi-varnamala': meta(['h.swar', 'h.vyanjan', 'h.ginti'], ['core', 1], ['core', 1]),
   'cls1-hindi-shabd-train': meta(['h.shabd'], ['core', 2], ['core', 2]),
   'cls1-hindi-barahkhadi-vyakaran': meta(['h.matra', 'h.vilom', 'h.vachan'], ['core', 3], ['core', 3]),
+  'cls1-hindi-parivar': meta(['h.padhna'], ['core', 4], ['extension', 4]),
+  'cls1-hindi-jeev-jagat': meta(['h.padhna'], ['core', 5], ['extension', 5]),
+  'cls1-hindi-khan-paan': meta(['h.padhna'], ['core', 6], ['extension', 6]),
+  'cls1-hindi-tyohar': meta(['h.padhna'], ['core', 7], ['extension', 7]),
+  'cls1-hindi-hari-bhari': meta(['h.padhna'], ['core', 8], ['extension', 8]),
 
   // EVS — CBSE has no Class 1 EVS textbook; these themes appear inside Mridang and school activities.
   'cls1-evs-body-senses': meta(['v.body', 'v.hygiene'], ['integrated', 1], ['core', 1]),

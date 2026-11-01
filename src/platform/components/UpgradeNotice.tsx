@@ -1,9 +1,11 @@
 import React from 'react';
+import { cloudConfigured } from '../config';
 import { openPage } from '../nav';
 import { PLANS, PlanId } from '../plans';
 
 /** Small, calm upsell shown where a paid feature would be. Never shown as a pop-up to a child. */
-export const UpgradeNotice: React.FC<{ feature: string; plan: PlanId; compact?: boolean }> = ({ feature, plan, compact }) => (
+export const UpgradeNotice: React.FC<{ feature: string; plan: PlanId; compact?: boolean }> = ({ feature, plan, compact }) =>
+  !cloudConfigured ? null : (
   <div
     className={`rounded-xl border border-violet-500/40 bg-violet-950/30 text-violet-100 ${
       compact ? 'px-3 py-2 text-xs' : 'p-4 text-sm'

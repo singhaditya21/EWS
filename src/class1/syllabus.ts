@@ -3,7 +3,8 @@
 // prescribe Class 1 textbooks and schools choose their own publishers.
 import { SchoolBoard } from '../types/curriculum.types';
 
-export type Coverage = 'full' | 'partial' | 'gap';
+/** themed = original activities on the unit's theme; the textbook's own text isn't reproduced. */
+export type Coverage = 'full' | 'themed' | 'partial' | 'gap';
 
 export interface SyllabusUnit {
   /** Chapter / topic name as the board or book names it. */
@@ -26,6 +27,8 @@ const u = (name: string, chapterIds: string[], coverage: Coverage = 'full', note
   coverage,
   note,
 });
+
+const THEMED = 'Original stories, poems or activities on this theme. The book’s own text isn’t reproduced, so use it alongside the textbook.';
 
 export const CBSE_BOOKS: SyllabusBook[] = [
   {
@@ -53,12 +56,12 @@ export const CBSE_BOOKS: SyllabusBook[] = [
     units: [
       u('Unit 1: Two Little Hands', ['cls1-eng-mridang-stories']),
       u('Unit 1: Greetings', ['cls1-eng-mridang-stories']),
-      u('Unit 2: Picture Time', ['cls1-eng-nouns-this-that'], 'partial', 'Picture reading with number songs; the app practises naming words but has no picture-reading activity yet.'),
+      u('Unit 2: Picture Time', ['cls1-eng-picture-talk'], 'themed', THEMED),
       u('Unit 2: The Cap-Seller and the Monkeys', ['cls1-eng-mridang-stories']),
-      u('Unit 2: A Farm', ['cls1-evs-animals-food-safety'], 'partial', 'A farm song and short reading; farm animals are covered in EVS, but there is no English farm song activity yet.'),
-      u('Unit 3: Fun with Pictures', [], 'gap', 'Picture talk and a fruit poem; not covered yet.'),
+      u('Unit 2: A Farm', ['cls1-eng-farm-seasons'], 'themed', THEMED),
+      u('Unit 3: Fun with Pictures', ['cls1-eng-picture-talk'], 'themed', THEMED),
       u('Unit 3: The Food We Eat', ['cls1-evs-houses-food']),
-      u('Unit 4: The Four Seasons', ['cls1-evs-seasons-sky'], 'partial', 'A seasons poem and picture-story sequencing; seasons are covered in EVS, but there is no English poem activity yet.'),
+      u('Unit 4: The Four Seasons', ['cls1-eng-farm-seasons'], 'themed', THEMED),
       u('Unit 4: Anandi’s Rainbow', ['cls1-eng-mridang-stories', 'cls1-arts-colors-music']),
     ],
   },
@@ -71,11 +74,11 @@ export const CBSE_BOOKS: SyllabusBook[] = [
         'cls1-hindi-shabd-train',
         'cls1-hindi-barahkhadi-vyakaran',
       ]),
-      u('इकाई 1 परिवार: मीना का परिवार, दादा-दादी, रीना का दिन, रानी भी', ['cls1-evs-body-senses'], 'partial', 'Family themes appear in EVS; the Sarangi stories themselves are not in the app yet.'),
-      u('इकाई 2 जीव-जगत: मिठाई, तीन साथी, वाह मेरे घोड़े!, ख़तरे में साँप', ['cls1-evs-animals-food-safety'], 'partial', 'Animals appear in EVS; the Hindi stories are not in the app yet.'),
-      u('इकाई 3 हमारा खान-पान: आलू की सड़क, झूलम-झूली, भुट्टे, फूली रोटी', ['cls1-evs-houses-food'], 'partial', 'Food appears in EVS; the Hindi stories are not in the app yet.'),
-      u('इकाई 4 त्योहार और मेले: मेला, बरखा और मेघा, होली, जन्मदिवस पर पेड़ लगाओ', [], 'gap', 'Not covered yet.'),
-      u('इकाई 5 हरी-भरी दुनिया: हवा, कितनी प्यारी है ये दुनिया, चाँद का बच्चा', ['cls1-evs-water-air-habits', 'cls1-evs-seasons-sky'], 'partial', 'Air and the night sky appear in EVS; the Hindi poems are not in the app yet.'),
+      u('इकाई 1 परिवार: मीना का परिवार, दादा-दादी, रीना का दिन, रानी भी', ['cls1-hindi-parivar'], 'themed', THEMED),
+      u('इकाई 2 जीव-जगत: मिठाई, तीन साथी, वाह मेरे घोड़े!, ख़तरे में साँप', ['cls1-hindi-jeev-jagat'], 'themed', THEMED),
+      u('इकाई 3 हमारा खान-पान: आलू की सड़क, झूलम-झूली, भुट्टे, फूली रोटी', ['cls1-hindi-khan-paan'], 'themed', THEMED),
+      u('इकाई 4 त्योहार और मेले: मेला, बरखा और मेघा, होली, जन्मदिवस पर पेड़ लगाओ', ['cls1-hindi-tyohar'], 'themed', THEMED),
+      u('इकाई 5 हरी-भरी दुनिया: हवा, कितनी प्यारी है ये दुनिया, चाँद का बच्चा', ['cls1-hindi-hari-bhari'], 'themed', THEMED),
     ],
   },
   {
@@ -126,7 +129,8 @@ export const ICSE_TOPICS: SyllabusBook[] = [
       u('Action words, opposites, one/many', ['cls1-eng-grammar-opposites']),
       u('Pronouns and describing words', ['cls1-eng-pronouns-adjectives']),
       u('Digraphs and sentences', ['cls1-eng-digraphs-sentences']),
-      u('Rhymes and stories (reader)', ['cls1-eng-mridang-stories'], 'partial', 'ICSE readers vary by school; the app uses general stories and rhymes.'),
+      u('Rhymes and stories (reader)', ['cls1-eng-mridang-stories', 'cls1-eng-farm-seasons'], 'partial', 'ICSE readers vary by school; the app uses general stories and rhymes.'),
+      u('Talking about pictures', ['cls1-eng-picture-talk']),
     ],
   },
   {
@@ -135,6 +139,7 @@ export const ICSE_TOPICS: SyllabusBook[] = [
       u('वर्णमाला', ['cls1-hindi-varnamala']),
       u('शब्द रचना', ['cls1-hindi-shabd-train']),
       u('मात्राएँ, विलोम, वचन', ['cls1-hindi-barahkhadi-vyakaran']),
+      u('छोटी कहानियाँ और कविताएँ', ['cls1-hindi-parivar', 'cls1-hindi-jeev-jagat', 'cls1-hindi-khan-paan', 'cls1-hindi-tyohar', 'cls1-hindi-hari-bhari']),
     ],
   },
   {

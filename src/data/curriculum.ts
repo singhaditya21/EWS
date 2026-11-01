@@ -1,4 +1,5 @@
 import { CurriculumChapter } from '../types/curriculum.types';
+import { CLASS1_READING_CHAPTERS } from './class1ReadingChapters';
 
 export const CURRICULUM_DATA: CurriculumChapter[] = [
   // ============================================================================
@@ -2079,6 +2080,7 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
       },
     ],
   },
+  ...CLASS1_READING_CHAPTERS,
   {
     id: 'cls2-evs-water-sky',
     title: 'Water, Weather & The Sky Above Us',

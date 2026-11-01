@@ -91,4 +91,16 @@ export const HINDI_QUESTIONS: BankQuestion[] = [
   { id: 'h.ginti-08', skillId: 'h.ginti', prompt: "'नौ' को अंक में कैसे लिखते हैं?", options: ['६', '८', '१०', '९'], answer: 3, explain: 'नौ = ९ (9)।' },
   { id: 'h.ginti-09', skillId: 'h.ginti', prompt: "'दो' से पहले कौन-सी गिनती आती है?", options: ['तीन', 'एक', 'चार', 'दस'], answer: 1, explain: 'एक, दो, तीन — दो से पहले एक आता है।' },
   { id: 'h.ginti-10', skillId: 'h.ginti', prompt: "'६' को हिंदी में क्या कहते हैं?", options: ['पाँच', 'सात', 'छह', 'नौ'], answer: 2, explain: '६ (6) = छह।' },
+
+  // h.padhna — reading short sentences
+  { id: 'h.padhna-01', skillId: 'h.padhna', prompt: 'राम ने आम खाया। राम ने क्या खाया?', options: ['केला', 'आम', 'सेब'], answer: 1, explain: 'वाक्य में लिखा है: राम ने आम खाया।' },
+  { id: 'h.padhna-02', skillId: 'h.padhna', prompt: 'मीरा बस में बैठी। मीरा किसमें बैठी?', options: ['बस में', 'रेल में', 'नाव में'], answer: 0, explain: 'वाक्य में लिखा है: मीरा बस में बैठी।' },
+  { id: 'h.padhna-03', skillId: 'h.padhna', prompt: 'गाय घास खाती है। गाय क्या खाती है?', options: ['चावल', 'दूध', 'घास'], answer: 2, explain: 'गाय घास खाती है।' },
+  { id: 'h.padhna-04', skillId: 'h.padhna', prompt: 'आज बारिश हो रही है। आज क्या हो रहा है?', options: ['बर्फ़ गिर रही है', 'बारिश हो रही है', 'तेज़ धूप है'], answer: 1, explain: 'वाक्य में लिखा है: आज बारिश हो रही है।' },
+  { id: 'h.padhna-05', skillId: 'h.padhna', prompt: 'अमन के पास लाल गेंद है। गेंद का रंग क्या है?', options: ['नीला', 'हरा', 'लाल'], answer: 2, explain: 'अमन की गेंद लाल है।' },
+  { id: 'h.padhna-06', skillId: 'h.padhna', prompt: 'चिड़िया पेड़ पर बैठी है। चिड़िया कहाँ बैठी है?', options: ['पेड़ पर', 'छत पर', 'घर में'], answer: 0, explain: 'चिड़िया पेड़ पर बैठी है।' },
+  { id: 'h.padhna-07', skillId: 'h.padhna', prompt: 'माँ ने रोटी बनाई। रोटी किसने बनाई?', options: ['पापा ने', 'दादा ने', 'माँ ने'], answer: 2, explain: 'माँ ने रोटी बनाई।' },
+  { id: 'h.padhna-08', skillId: 'h.padhna', prompt: 'कमल स्कूल जाता है। कमल कहाँ जाता है?', options: ['बाज़ार', 'स्कूल', 'मेला'], answer: 1, explain: 'कमल स्कूल जाता है।' },
+  { id: 'h.padhna-09', skillId: 'h.padhna', prompt: 'मछली पानी में रहती है। मछली कहाँ रहती है?', options: ['पानी में', 'पेड़ पर', 'बिल में'], answer: 0, explain: 'मछली पानी में रहती है।' },
+  { id: 'h.padhna-10', skillId: 'h.padhna', prompt: 'दीया जल रहा है। क्या जल रहा है?', options: ['नल', 'फूल', 'दीया'], answer: 2, explain: 'वाक्य में लिखा है: दीया जल रहा है।' },
 ];

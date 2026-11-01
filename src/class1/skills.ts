@@ -58,12 +58,14 @@ export const CLASS1_SKILLS: Class1Skill[] = [
   { id: 'e.digraphs', subject: 'english', label: 'ch, sh, th, wh sounds', fln: 'literacy' },
   { id: 'e.sentences', subject: 'english', label: 'Capital letters, full stop, question mark', fln: 'literacy' },
   { id: 'e.listening', subject: 'english', label: 'Listening to stories, poems and greetings', fln: 'literacy' },
+  { id: 'e.picturetalk', subject: 'english', label: 'Talking and reading about pictures', fln: 'literacy' },
 
   // Hindi
   { id: 'h.swar', subject: 'hindi', label: 'स्वर (vowels)', fln: 'literacy' },
   { id: 'h.vyanjan', subject: 'hindi', label: 'व्यंजन (consonants)', fln: 'literacy' },
   { id: 'h.shabd', subject: 'hindi', label: 'बिना मात्रा के शब्द (words without matras)', fln: 'literacy' },
   { id: 'h.matra', subject: 'hindi', label: 'मात्राएँ और बारहखड़ी', fln: 'literacy' },
+  { id: 'h.padhna', subject: 'hindi', label: 'छोटे वाक्य, कहानी और कविता पढ़ना', fln: 'literacy' },
   { id: 'h.vilom', subject: 'hindi', label: 'विलोम शब्द (opposites)' },
   { id: 'h.vachan', subject: 'hindi', label: 'एक–अनेक (one and many)' },
   { id: 'h.ginti', subject: 'hindi', label: 'हिंदी गिनती (numbers in Hindi)' },

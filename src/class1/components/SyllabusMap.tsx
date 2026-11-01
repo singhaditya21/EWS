@@ -5,10 +5,11 @@ import { useActiveProfile } from '../progressStore';
 
 const COVERAGE_STYLE: Record<Coverage, string> = {
   full: 'bg-emerald-500/15 text-emerald-200 border-emerald-500/40',
+  themed: 'bg-cyan-500/15 text-cyan-200 border-cyan-500/40',
   partial: 'bg-amber-500/15 text-amber-200 border-amber-500/40',
   gap: 'bg-rose-500/15 text-rose-200 border-rose-500/40',
 };
-const COVERAGE_LABEL: Record<Coverage, string> = { full: 'Covered', partial: 'Partly covered', gap: 'Not yet' };
+const COVERAGE_LABEL: Record<Coverage, string> = { full: 'Covered', themed: 'Theme covered', partial: 'Partly covered', gap: 'Not yet' };
 
 /** The board's Class 1 syllabus, with where the app covers each part and what is still missing. */
 export const SyllabusMap: React.FC<{
@@ -20,6 +21,7 @@ export const SyllabusMap: React.FC<{
   const done = useActiveProfile().completedChapterIds;
   const units = books.flatMap((b) => b.units);
   const full = units.filter((x) => x.coverage === 'full').length;
+  const themed = units.filter((x) => x.coverage === 'themed').length;
 
   return (
     <div className="space-y-3">
@@ -31,7 +33,7 @@ export const SyllabusMap: React.FC<{
           {board === 'CBSE'
             ? 'NCERT textbook chapters and where the app teaches each one.'
             : 'Typical ICSE-school Class 1 topics. CISCE does not prescribe Class 1 textbooks, so your school’s books may order these differently.'}{' '}
-          {full} of {units.length} fully covered.
+          {full} of {units.length} fully covered{themed ? `, ${themed} covered by theme` : ''}.
         </p>
       </div>
       {books.map((book) => (

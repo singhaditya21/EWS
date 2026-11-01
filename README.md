@@ -27,11 +27,11 @@
 
 ## 🧒 Class 1 (CBSE & ICSE)
 
-Class 1 is the most complete part of the app: 34 play-based chapters across Maths, English, Hindi, EVS, Computer Studies and Arts.
+Class 1 is the most complete part of the app: 41 play-based chapters across Maths, English, Hindi, EVS, Computer Studies and Arts.
 
 - **One shared core, two board views.** `src/class1/boardMap.ts` places every chapter in each board's sequence and marks it *Core*, *Integrated theme* (CBSE has no Class 1 EVS book), *Extension* or *Enrichment*. The sidebar, chapter labels and Prev/Next follow the selected board.
 - **Syllabus map.** `src/class1/syllabus.ts` lists NCERT Joyful Mathematics 1, Mridang 1 and Sarangi 1 chapters (CBSE) and typical ICSE topics (CISCE prescribes no Class 1 textbooks), showing what is covered, partly covered or still missing.
-- **Practice and review.** 65 skills (`src/class1/skills.ts`); maths questions are generated (`questionBank/math.ts`), other subjects use 459 reviewed questions. Only the first attempt counts, and skills come back for review on a spaced schedule.
+- **Practice and review.** 65 skills (`src/class1/skills.ts`); maths questions are generated (`questionBank/math.ts`), other subjects use written question banks. Only the first attempt counts, and skills come back for review on a spaced schedule.
 - **Progress on the device only.** Child profiles, stars (once per activity per day), quiz first attempts, skill levels and teacher observations live in `localStorage` (`src/class1/progressStore.ts`) — no accounts, no network.
 - **Board-appropriate reports and worksheets.** CBSE: descriptors with no marks (supports the teacher's Holistic Progress Card) and activity sheets with an "I can…" self-check. ICSE: first-attempt percentages and marked practice tests with an answer key.
 - **Parent and teacher views.** Lesson plans for every chapter (`src/class1/lessonPlans.ts`), projector mode, observations, a weekly parent summary and 10-minute home activities.
@@ -41,15 +41,13 @@ Content checks run before every build (`npm run check:content`): they fail on wr
 
 ---
 
-## 💎 Accounts, plans and classrooms (Phase 5)
+## 🚀 Hosting
 
-Free stays free: every Class 1 chapter, lab and quiz works without an account. Paid plans — **Family**, **Family Plus** and **Classroom** (with a per-student **School** licence) — add more children, sync across devices, unlimited practice, deeper reports, practice packs and teacher tools. Plans and limits: `src/platform/plans.ts`.
+The site is hosted on **GitHub Pages only** and runs entirely in the browser. Progress is saved on each device.
 
-- **Who signs in:** parents and teachers (one-time code by phone or email). Children never create accounts — at home they use a parent's device; at school they enter a class code, tap their name and their 3 secret pictures.
-- **Backend:** Supabase (Postgres with row-level security, Edge Functions) in `supabase/`; contract in `supabase/CONTRACT.md`; payments through Razorpay subscriptions (UPI AutoPay, cards).
-- **Off until configured:** without `VITE_SUPABASE_URL` / `VITE_SUPABASE_ANON_KEY` the site runs exactly as before (device-only, nothing locked). See `.env.example`.
-- **Tests:** `npm run test:db` runs the database migration in an in-memory Postgres and checks plan limits, row-level security, school seats and deletes (also in CI).
-- **Launch checklist:** `docs/LAUNCH.md` — Supabase, Razorpay KYC and plans, Cloudflare Pages + private repo, legal review of the draft policy in `src/platform/legal.ts`.
+To publish: `npm run build`, then `npm run deploy` (pushes `dist` to the `gh-pages` branch).
+
+**Parked:** `src/platform/` and `supabase/` hold account, payment and classroom code that is switched off. With no `VITE_SUPABASE_*` settings it never loads or shows, nothing is locked, and no other service is used. `npm run test:db` still checks its database rules.
 
 ---
 

@@ -12,6 +12,8 @@ export { CURRICULUM_DATA } from './src/data/curriculum';
 export { CURATED_QUESTIONS, MATH_GENERATORS } from './src/class1/questionBank';
 export { CLASS1_SKILLS } from './src/class1/skills';
 export { CLASS1_BOARD_MAP } from './src/class1/boardMap';
+export { CLASS1_LESSON_PLANS } from './src/class1/lessonPlans';
+export { READING_SETS, cleanWord } from './src/class1/readingSets';
 `;
 const dir = mkdtempSync(join(tmpdir(), 'omnilearn-check-'));
 const out = join(dir, 'bundle.mjs');
@@ -66,6 +68,28 @@ for (const c of class1) {
   }
 }
 Object.keys(m.CLASS1_BOARD_MAP).forEach((id) => class1.some((c) => c.id === id) || fail(`boardMap: ${id} is not a Class 1 chapter`));
+
+// Every chapter has a lesson plan.
+for (const c of class1) {
+  if (!m.CLASS1_LESSON_PLANS[c.id]) fail(`lessonPlans: missing plan for ${c.id}`);
+}
+
+// Reading sets: chapters exist, words to find are really in the text, questions are sound.
+const pieceIds = new Set();
+for (const set of m.READING_SETS) {
+  const chapter = class1.find((c) => c.id === set.chapterId);
+  if (!chapter) fail(`reading ${set.mode}: unknown chapter ${set.chapterId}`);
+  else if (chapter.defaultSimulationMode !== set.mode) fail(`reading ${set.mode}: chapter uses mode ${chapter.defaultSimulationMode}`);
+  if (!skillIds.has(set.skillId)) fail(`reading ${set.mode}: unknown skill ${set.skillId}`);
+  for (const piece of set.pieces) {
+    if (pieceIds.has(piece.id)) fail(`reading: duplicate piece id ${piece.id}`);
+    pieceIds.add(piece.id);
+    const words = new Set(piece.lines.flatMap((l) => l.text.split(/\s+/).map(m.cleanWord)));
+    for (const w of piece.findWords) if (!words.has(m.cleanWord(w))) fail(`reading ${piece.id}: "${w}" is not in the text`);
+    if (new Set(piece.lines.map((l) => l.text)).size !== piece.lines.length) fail(`reading ${piece.id}: repeated line`);
+    piece.questions.forEach((q, i) => checkOptions(`reading ${piece.id} q${i + 1}`, q.options, q.answer));
+  }
+}
 
 // Curated question bank
 const qIds = m.CURATED_QUESTIONS.map((q) => q.id);

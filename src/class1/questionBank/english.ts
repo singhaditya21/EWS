@@ -159,4 +159,16 @@ export const ENGLISH_QUESTIONS: BankQuestion[] = [
   { id: 'e.listening-10', skillId: 'e.listening', prompt: 'Which word rhymes with "star"?', options: ['car', 'cat', 'sun', 'moon'], answer: 0, explain: 'Star and car both end with -ar, so they rhyme.' },
   { id: 'e.listening-11', skillId: 'e.listening', prompt: 'What do we say when we make a mistake?', options: ['Thank you', 'Sorry', 'Hello', 'Welcome'], answer: 1, explain: 'We say "Sorry" when we make a mistake.' },
   { id: 'e.listening-12', skillId: 'e.listening', prompt: 'In "The Lion and the Mouse", how did the mouse help the lion?', options: ['It bit the net open', 'It roared loudly', 'It ran away fast', 'It brought food'], answer: 0, explain: 'The little mouse cut the net with its teeth and set the lion free.' },
+
+  // e.picturetalk — talking and reading about pictures
+  { id: 'e.picturetalk-01', skillId: 'e.picturetalk', prompt: '🐦 🌳 Which sentence fits the picture?', options: ['A fish is in the bowl.', 'A bird is in the tree.', 'A cat is on the bed.'], answer: 1, explain: 'The picture shows a bird and a tree.' },
+  { id: 'e.picturetalk-02', skillId: 'e.picturetalk', prompt: '🐕 🏠 Which sentence fits the picture?', options: ['The dog is near the house.', 'The cow is on the road.', 'The hen is in the bus.'], answer: 0, explain: 'The picture shows a dog and a house.' },
+  { id: 'e.picturetalk-03', skillId: 'e.picturetalk', prompt: '🍎🍎🍎 Which sentence fits the picture?', options: ['I can see two apples.', 'I can see four apples.', 'I can see three apples.'], answer: 2, explain: 'Count them: one, two, three apples.' },
+  { id: 'e.picturetalk-04', skillId: 'e.picturetalk', prompt: '👧 📖 Which sentence fits the picture?', options: ['The girl is eating.', 'The girl is reading a book.', 'The girl is sleeping.'], answer: 1, explain: 'The picture shows a girl and a book.' },
+  { id: 'e.picturetalk-05', skillId: 'e.picturetalk', prompt: '👦 ⚽ Which sentence fits the picture?', options: ['The boy is playing with a ball.', 'The boy is cooking food.', 'The boy is writing.'], answer: 0, explain: 'The picture shows a boy and a ball.' },
+  { id: 'e.picturetalk-06', skillId: 'e.picturetalk', prompt: '🌧️ ☂️ Which sentence fits the picture?', options: ['It is hot and sunny.', 'It is night.', 'It is raining.'], answer: 2, explain: 'Rain and an umbrella go together.' },
+  { id: 'e.picturetalk-07', skillId: 'e.picturetalk', prompt: '🐄 🥛 Which sentence fits the picture?', options: ['The cow gives us milk.', 'The cow gives us eggs.', 'The cow gives us wool.'], answer: 0, explain: 'Cows give us milk.' },
+  { id: 'e.picturetalk-08', skillId: 'e.picturetalk', prompt: '🌙 ⭐ Which sentence fits the picture?', options: ['It is morning.', 'It is night.', 'It is noon.'], answer: 1, explain: 'We see the moon and stars at night.' },
+  { id: 'e.picturetalk-09', skillId: 'e.picturetalk', prompt: '🚌 🏫 Which sentence fits the picture?', options: ['The boat goes to sea.', 'The train goes to town.', 'The bus goes to school.'], answer: 2, explain: 'The picture shows a bus and a school.' },
+  { id: 'e.picturetalk-10', skillId: 'e.picturetalk', prompt: '🐟🐟 Which sentence fits the picture?', options: ['I can see two fish.', 'I can see two cats.', 'I can see one bird.'], answer: 0, explain: 'Count them: two fish.' },
 ];

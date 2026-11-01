@@ -59,7 +59,7 @@ export const PLANS: Record<PlanId, PlanInfo> = {
     price: { monthly: 0, yearly: 0 },
     limits: FREE_LIMITS,
     highlights: [
-      'All 34 Class 1 chapters, labs and quizzes',
+      'All Class 1 chapters, labs and quizzes',
       '1 child, progress saved on this device',
       '3 practice rounds a day',
       'Basic progress report',

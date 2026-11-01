@@ -102,7 +102,7 @@ export const Class1Toolbar: React.FC<{
             Cancel
           </button>
         </form>
-      ) : role !== 'child' && (signedIn || !canAddLocal) ? (
+      ) : role !== 'child' && cloudConfigured && (signedIn || !canAddLocal) ? (
         <button
           type="button"
           onClick={() => openPage(signedIn ? 'account' : 'plans')}
@@ -111,7 +111,7 @@ export const Class1Toolbar: React.FC<{
         >
           + Add learner
         </button>
-      ) : role !== 'child' ? (
+      ) : role !== 'child' && canAddLocal ? (
         <button type="button" onClick={() => setAdding(true)} className={linkBtn}>
           + Add learner
         </button>
@@ -136,7 +136,7 @@ export const Class1Toolbar: React.FC<{
           🏫 I’m in school
         </button>
       )}
-      {role !== 'child' && (
+      {role !== 'child' && cloudConfigured && (
         <>
           <button type="button" onClick={() => openPage('account')} className={linkBtn}>
             {signedIn ? `👤 ${session.displayName ?? 'Account'}` : '👤 Sign in'}
@@ -146,7 +146,7 @@ export const Class1Toolbar: React.FC<{
           </button>
         </>
       )}
-      {role === 'teacher' && (
+      {role === 'teacher' && cloudConfigured && (
         <button type="button" onClick={() => openPage('classroom')} className={linkBtn}>
           🏫 Classroom
         </button>

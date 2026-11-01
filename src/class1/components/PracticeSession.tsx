@@ -8,6 +8,7 @@ import { playPop, playSuccessChime, playFanfare } from '../../utils/soundEffects
 import { usePlan, planAtLeast } from '../../platform/entitlements';
 import { PackInfo, fetchPack, packsForChapter, samplePack } from '../../platform/packs';
 import { PLANS } from '../../platform/plans';
+import { cloudConfigured } from '../../platform/config';
 import { UpgradeNotice } from '../../platform/components/UpgradeNotice';
 
 type PracticeKind = 'lesson' | 'review' | 'pack';
@@ -255,7 +256,7 @@ export const PracticeSession: React.FC<{ chapterId: string }> = ({ chapterId }) 
               🧠 Olympiad sample (free)
             </button>
           )}
-          {packsForChapter(chapterId).map((pack) =>
+          {(cloudConfigured ? packsForChapter(chapterId) : []).map((pack) =>
             planAtLeast(plan, pack.minPlan) ? (
               <button
                 key={pack.key}

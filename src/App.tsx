@@ -9,6 +9,7 @@ import { Navbar } from './components/layout/Navbar';
 import { CurriculumSidebar } from './components/layout/CurriculumSidebar';
 import { LabWorkspace } from './components/layout/LabWorkspace';
 import { progress, useActiveProfile } from './class1/progressStore';
+import { cloudConfigured } from './platform/config';
 import { useRoute } from './platform/nav';
 import { initSession } from './platform/session';
 import { startSync } from './platform/sync';
@@ -32,7 +33,9 @@ export const App: React.FC = () => {
   const [kidFocusMode, setKidFocusMode] = useState(false);
   // Completed lessons belong to the active child profile and are saved on this device.
   const completedChapterIds = useActiveProfile().completedChapterIds;
+  // Account pages exist only when a backend is connected; otherwise there is nowhere for them to go.
   const route = useRoute();
+  const page = cloudConfigured ? route.page : null;
 
   useEffect(() => {
     startSync();
@@ -132,15 +135,15 @@ export const App: React.FC = () => {
         onToggleKidFocusMode={handleToggleKidFocusMode}
       />
 
-      {route.page ? (
+      {page ? (
         <div className="flex-1 flex min-h-0">
-          {route.page === 'plans' && <PlansPage />}
-          {route.page === 'account' && <AccountPage />}
-          {route.page === 'classroom' && <ClassroomPage />}
-          {route.page === 'school' && <SchoolPage />}
-          {route.page === 'invite' && <InvitePage token={route.arg} />}
-          {route.page === 'student' && <StudentLoginPage initialCode={route.query.get('code')} />}
-          {(route.page === 'privacy' || route.page === 'terms') && <LegalPage kind={route.page} />}
+          {page === 'plans' && <PlansPage />}
+          {page === 'account' && <AccountPage />}
+          {page === 'classroom' && <ClassroomPage />}
+          {page === 'school' && <SchoolPage />}
+          {page === 'invite' && <InvitePage token={route.arg} />}
+          {page === 'student' && <StudentLoginPage initialCode={route.query.get('code')} />}
+          {(page === 'privacy' || page === 'terms') && <LegalPage kind={page} />}
         </div>
       ) : (
         <div className="flex-1 flex min-h-0">

@@ -58,12 +58,16 @@ interface SpeakOptions {
   queue?: boolean;
   /** Speak even when Voice is OFF (used for explicit "read aloud" taps). */
   force?: boolean;
+  /** Called when this speech finishes, is interrupted, or can't play at all. */
+  onEnd?: () => void;
 }
 
 export const speakText = (text: string, opts: SpeakOptions = {}) => {
-  if (!supported() || (!voiceEnabled && !opts.force)) return;
   const clean = cleanForSpeech(text);
-  if (!clean) return;
+  if (!clean || !supported() || (!voiceEnabled && !opts.force)) {
+    opts.onEnd?.();
+    return;
+  }
   const lang: SpeechLang = opts.lang ?? (hasDevanagari(clean) ? 'hi-IN' : 'en-IN');
   if (!opts.queue) window.speechSynthesis.cancel();
   const u = new SpeechSynthesisUtterance(clean);
@@ -72,6 +76,10 @@ export const speakText = (text: string, opts: SpeakOptions = {}) => {
   if (voice) u.voice = voice;
   u.rate = opts.rate ?? 0.92;
   u.pitch = opts.pitch ?? 1.08;
+  if (opts.onEnd) {
+    u.onend = opts.onEnd;
+    u.onerror = opts.onEnd;
+  }
   window.speechSynthesis.speak(u);
 };
 

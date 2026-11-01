@@ -649,4 +649,99 @@ export const CLASS1_LESSON_PLANS: Record<string, Class1LessonPlan> = {
       'Play "Odd One Out" with kitchen things (spoon, fork, ladle and a tomato) and let your child make one for you. Count circles you can spot at home, like plates, bangles and clock faces.',
     materials: ['Real objects or picture cards in groups', 'Chalk shape drawing on the board', 'Matching pair cards'],
   },
+
+  // ---------------------------------------------------------------------------
+  // Reading: Sarangi and Mridang themes
+  // ---------------------------------------------------------------------------
+  'cls1-hindi-parivar': {
+    objectives: [
+      'The child can name family members in Hindi.',
+      'The child can tap and read common words such as घर, दादी and माँ.',
+      'The child can tell a short story in order: पहले, फिर, अंत में.',
+    ],
+    warmUp: 'Sit in a circle and ask each child, “तुम्हारे घर में कौन-कौन है?” Sing a family action rhyme together.',
+    activity: 'Read “गोलू का घर” aloud with the class pointing at each word. Children draw their own family and label one person, then take turns saying a sentence about their drawing.',
+    check: 'Write घर, माँ and दादी on the board and ask children to point to the word you say. Ask, “गोलू को कहानी कौन सुनाता है?”',
+    support: 'Start with word cards for माँ and घर only, paired with a picture, and read together rather than alone.',
+    homeActivity: 'At bedtime, tell your child a short story about your own family, then ask them to tell it back: पहले क्या हुआ, फिर क्या हुआ?',
+    materials: ['Word cards', 'Drawing paper', 'Crayons'],
+  },
+  'cls1-hindi-jeev-jagat': {
+    objectives: [
+      'The child can read the names of common animals in Hindi.',
+      'The child can say why working together helps.',
+      'The child can answer a “कौन” or “क्या” question about a story.',
+    ],
+    warmUp: 'Play “आवाज़ पहचानो”: make an animal sound and children call out the animal in Hindi.',
+    activity: 'Act out “चींटी और दाना”: one child tries to lift a heavy bag alone, then friends help carry it. Read the story together and find the word दाना on each line it appears.',
+    check: 'Ask, “चींटी ने दाना कैसे उठाया?” Show picture cards and ask children to read the matching animal word.',
+    support: 'Use three animals the child already knows and match each picture to its word before reading.',
+    homeActivity: 'Watch ants near a doorway or tree with your child. Talk in Hindi about what they carry and how they work together.',
+    materials: ['A heavy bag', 'Animal picture cards', 'Word cards'],
+  },
+  'cls1-hindi-khan-paan': {
+    objectives: [
+      'The child can read the names of common foods in Hindi.',
+      'The child can say what a simple dish is made from.',
+      'The child can name fruits and say why they are good for us.',
+    ],
+    warmUp: 'Ask each child, “आज तुमने क्या खाया?” and write three of the food words on the board.',
+    activity: 'Bring dal and rice in two bowls. Children feel and name them, then read “गरम-गरम खिचड़ी” and put the story in order. Sort food picture cards into फल and सब्ज़ी.',
+    check: 'Show a food card and ask children to read its word. Ask, “खिचड़ी किससे बनती है?”',
+    support: 'Use real food items beside each word so the child can link the word to something they can see and touch.',
+    homeActivity: 'Let your child help wash dal or rice. Name each thing you use in Hindi and ask them to find the word on a packet if they can.',
+    materials: ['Dal and rice in bowls', 'Food picture cards', 'Word cards'],
+  },
+  'cls1-hindi-tyohar': {
+    objectives: [
+      'The child can read festival words such as दीया, रंगोली and मिठाई.',
+      'The child can tell what happens at a festival in the right order.',
+      'The child can talk about a festival or fair they have seen.',
+    ],
+    warmUp: 'Ask, “तुम्हारा मनपसंद त्योहार कौन-सा है?” Include the festivals your class celebrates, and let children share.',
+    activity: 'Read “दीवाली की रात” together. In groups, children make a simple rangoli with chalk or draw a fair scene, then say one sentence about it. Adapt the talk to festivals your class celebrates.',
+    check: 'Ask children to read दीये and मिठाई from the board, and to say what happened first in the story.',
+    support: 'Use the pictures in the story as clues, and let the child repeat each line after you.',
+    homeActivity: 'Before your next festival, make a list of three things your family will do. Say them in order, and let your child help with one.',
+    materials: ['Coloured chalk', 'Drawing paper', 'Word cards'],
+  },
+  'cls1-hindi-hari-bhari': {
+    objectives: [
+      'The child can read words about plants and rain such as बीज, पानी and फूल.',
+      'The child can put the steps of a growing plant in order.',
+      'The child can say what a plant needs to grow.',
+    ],
+    warmUp: 'Go outside or look out of the window and ask, “तुम्हें क्या-क्या हरा दिख रहा है?”',
+    activity: 'Plant moong seeds on wet cotton in a small cup and read “नन्हा पौधा” together. Children water the seeds and draw what they see every few days.',
+    check: 'Ask children to order three drawings: बीज, पौधा, फूल. Ask, “पौधे को क्या चाहिए?”',
+    support: 'Show a real seed and a real plant side by side, and read just the words बीज and पौधा first.',
+    homeActivity: 'Grow a few moong or methi seeds on wet cotton at home. Your child waters them each morning and tells you what changed.',
+    materials: ['Moong seeds', 'Cotton', 'Small cups', 'Water'],
+  },
+  'cls1-eng-picture-talk': {
+    objectives: [
+      'The child can name things in a picture in English.',
+      'The child can say a full sentence: I can see two birds.',
+      'The child can count objects in a picture and say the number.',
+    ],
+    warmUp: 'Hold up a picture from a calendar or newspaper. Ask, “What can you see?” and accept one word, then help the child say a full sentence.',
+    activity: 'Pairs get a picture. One child says, “I can see …” while the partner finds it and counts how many. Then sing the counting song with actions.',
+    check: 'Point at a picture and ask, “How many?” and “What can you see?” Listen for a full sentence.',
+    support: 'Start with one object at a time and give the sentence frame “I can see a ___.”',
+    homeActivity: 'At the vegetable shop or at home, play “I can see”: take turns saying what you see and how many.',
+    materials: ['Calendar or newspaper pictures', 'Counters or bottle caps'],
+  },
+  'cls1-eng-farm-seasons': {
+    objectives: [
+      'The child can name farm animals and their sounds.',
+      'The child can name the seasons and what they are like.',
+      'The child can put a picture story in order using first, next and last.',
+    ],
+    warmUp: 'Make animal sounds and ask children to name the animal in English. Then ask, “What is the weather like today?”',
+    activity: 'Say the farm poem with actions for each animal. In groups, children order four drawings of a rainy day and tell the story using first, next and last.',
+    check: 'Ask, “Which animal says baa?” Show two pictures and ask which comes first.',
+    support: 'Use two picture cards for ordering before moving to three or four, and repeat the animal sounds together.',
+    homeActivity: 'Talk about the weather each morning this week. Your child says one sentence, such as “Today it is hot.”',
+    materials: ['Picture cards', 'Drawing paper', 'Crayons'],
+  },
 };

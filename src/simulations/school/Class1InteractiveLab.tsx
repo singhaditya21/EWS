@@ -12,6 +12,8 @@ import { progress, useProgress } from '../../class1/progressStore';
 import { ProgressReport } from '../../class1/components/ProgressReport';
 import { SchoolBoard } from '../../types/curriculum.types';
 import { MIC_NOTICE } from '../../platform/legal';
+import { ReadingMode, readingSetFor } from '../../class1/readingSets';
+import { ReadingActivity } from '../../class1/components/ReadingActivity';
 import {
   Calculator,
   Shapes,
@@ -76,7 +78,8 @@ export type Class1LabMode =
   | 'evs-water-air-habits'
   | 'evs-clothes-places-games'
   | 'arts-colors-music'
-  | 'olympiad-reasoning-gym';
+  | 'olympiad-reasoning-gym'
+  | ReadingMode;
 
 type Class1SubjectGroup = 'math' | 'english' | 'hindi' | 'evs' | 'computer' | 'arts';
 
@@ -104,9 +107,16 @@ const MODE_CATALOG: {
   { id: 'eng-nouns-this-that', subject: 'english', label: '4. Nouns (4 Baskets) & This/That 🧺', icon: BookOpen },
   { id: 'eng-pronouns-adjectives', subject: 'english', label: '5. Pronouns (He/She/It) & Adjectives 🌟', icon: BookOpen },
   { id: 'eng-digraphs-sentences', subject: 'english', label: '6. Digraphs (ch/sh/th) & Sentence Builder ✍️', icon: BookOpen },
+  { id: 'eng-picture-talk', subject: 'english', label: '7. Picture Talk 🖼️', icon: BookOpen },
+  { id: 'eng-farm-seasons', subject: 'english', label: '8. Farm & Seasons 🐄', icon: BookOpen },
   { id: 'hindi-varnamala', subject: 'hindi', label: '1. सारंगी: वर्णमाला, मात्रा, गिनती व कविता', icon: Languages },
   { id: 'hindi-shabd-train', subject: 'hindi', label: '2. दो, तीन व चार अक्षर वाले शब्द रेलगाड़ी 🚂', icon: Languages },
   { id: 'hindi-barahkhadi-vyakaran', subject: 'hindi', label: '3. बारहखड़ी (क–कः), विलोम व एक–अनेक 🪔', icon: Languages },
+  { id: 'hindi-parivar', subject: 'hindi', label: '4. मेरा परिवार 🏠', icon: BookOpen },
+  { id: 'hindi-jeev-jagat', subject: 'hindi', label: '5. जीव-जगत 🐜', icon: BookOpen },
+  { id: 'hindi-khan-paan', subject: 'hindi', label: '6. हमारा खान-पान 🍲', icon: BookOpen },
+  { id: 'hindi-tyohar', subject: 'hindi', label: '7. त्योहार और मेले 🪔', icon: BookOpen },
+  { id: 'hindi-hari-bhari', subject: 'hindi', label: '8. हरी-भरी दुनिया 🌱', icon: BookOpen },
   { id: 'evs-sense-organs', subject: 'evs', label: '1. My Body & 5 Sense Organs', icon: Eye },
   { id: 'evs-plants-living', subject: 'evs', label: '2. Growing Plant & Living Things', icon: Sprout },
   { id: 'evs-animals-food-safety', subject: 'evs', label: '3. Animals (Babies/Homes) & Safety', icon: CheckCircle2 },
@@ -1140,6 +1150,8 @@ export const Class1InteractiveLab: React.FC<{
     }
   };
 
+  const readingSet = readingSetFor(mode);
+
   const currentSubjectGroup: Class1SubjectGroup =
     MODE_CATALOG.find((m) => m.id === mode)?.subject || 'math';
 
@@ -1980,12 +1992,12 @@ export const Class1InteractiveLab: React.FC<{
           <div className="flex flex-wrap items-center gap-1.5">
             {(
               [
-                { id: 'math', label: '📐 Math (12)', color: 'bg-cyan-500 text-slate-950' },
-                { id: 'english', label: '📖 English / Mridang (6)', color: 'bg-amber-500 text-slate-950' },
-                { id: 'hindi', label: '🇮🇳 Hindi / सारंगी (3)', color: 'bg-rose-500 text-white' },
-                { id: 'evs', label: '🌱 EVS & GK (9)', color: 'bg-emerald-500 text-slate-950' },
-                { id: 'computer', label: '💻 Computer (2)', color: 'bg-violet-500 text-white' },
-                { id: 'arts', label: '🎨 Arts & Olympiad (2)', color: 'bg-pink-500 text-white' },
+                { id: 'math', label: '📐 Math', color: 'bg-cyan-500 text-slate-950' },
+                { id: 'english', label: '📖 English / Mridang', color: 'bg-amber-500 text-slate-950' },
+                { id: 'hindi', label: '🇮🇳 Hindi / सारंगी', color: 'bg-rose-500 text-white' },
+                { id: 'evs', label: '🌱 EVS & GK', color: 'bg-emerald-500 text-slate-950' },
+                { id: 'computer', label: '💻 Computer', color: 'bg-violet-500 text-white' },
+                { id: 'arts', label: '🎨 Arts & Olympiad', color: 'bg-pink-500 text-white' },
               ] as const
             ).map((subj) => {
               const activeSubj = currentSubjectGroup === subj.id;
@@ -2003,7 +2015,7 @@ export const Class1InteractiveLab: React.FC<{
                       : 'bg-[#090D16] text-slate-300 border border-slate-800 hover:text-white'
                   }`}
                 >
-                  {subj.label}
+                  {subj.label} ({MODE_CATALOG.filter((m) => m.subject === subj.id).length})
                 </button>
               );
             })}
@@ -2036,6 +2048,9 @@ export const Class1InteractiveLab: React.FC<{
           })}
         </div>
       </div>
+
+      {/* STORIES, POEMS AND PICTURE TALK (SARANGI AND MRIDANG THEMES) */}
+      {readingSet && <ReadingActivity set={readingSet} onStar={awardStar} />}
 
       {/* MODE 1: SPATIAL PRE-NUMBER CONCEPTS (FINDING THE FURRY CAT!) */}
       {mode === 'spatial-prenumber' && (
