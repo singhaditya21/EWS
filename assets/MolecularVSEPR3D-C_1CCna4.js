@@ -1,4 +1,4 @@
-import{c as f,r as d,j as e,k as S,F as b}from"./index-CZ3Zb4iQ.js";import{S as x,u as p,V as y,Q as P,H as j,D as z}from"./Scene3DWrapper-Ck15XhGX.js";import{P as g}from"./ParameterPanel-B7lSTZqU.js";/**
+import{c as f,r as d,j as e,k as S,F as b}from"./index-CQjIHIwD.js";import{S as x,u as p,V as y,Q as P,H as j,D as z}from"./Scene3DWrapper-Dq3UFEaW.js";import{P as g}from"./ParameterPanel-USDQH3BB.js";/**
  * @license lucide-react v0.454.0 - ISC
  *
  * This source code is licensed under the ISC license.
