@@ -942,6 +942,16 @@ export const Class1InteractiveLab: React.FC<{
   const stars = profile.stars;
   const childName = profile.name;
   const recognitionRef = useRef<{ abort?: () => void } | null>(null);
+  const subjectRowRef = useRef<HTMLDivElement>(null);
+  const lessonRowRef = useRef<HTMLDivElement>(null);
+
+  // On phones these rows scroll sideways: keep the current subject and lesson in view.
+  useEffect(() => {
+    [subjectRowRef.current, lessonRowRef.current].forEach((row) => {
+      const chip = row?.querySelector<HTMLElement>('[data-active]');
+      if (row && chip) row.scrollLeft = chip.offsetLeft - (row.clientWidth - chip.offsetWidth) / 2;
+    });
+  }, [mode]);
   const hasHindiVoice = useHasVoice('hi-IN');
 
   // Stop talking and listening when the child leaves this chapter.
@@ -1480,11 +1490,11 @@ export const Class1InteractiveLab: React.FC<{
       )}
       {/* Top Kid-Friendly Voice Narration & Star Reward Header */}
       <div className="flex flex-wrap items-center justify-between gap-2 p-3 rounded-2xl bg-gradient-to-r from-cyan-950/60 via-slate-900 to-emerald-950/60 border border-cyan-500/30 shadow-md">
-        <div className="flex items-center gap-3">
-          <div className="px-3 py-1.5 rounded-xl bg-amber-500/20 border border-amber-400 flex items-center gap-1.5">
+        <div className={`flex items-center gap-3 ${missionBanner ? 'w-full lg:w-auto' : ''}`}>
+          <div className="shrink-0 px-3 py-1.5 rounded-xl bg-amber-500/20 border border-amber-400 flex items-center gap-1.5">
             <Trophy className="w-4 h-4 text-amber-400" />
             <span className="text-xs font-extrabold text-amber-200">
-              ⭐ {stars} Stars Earned!
+              ⭐ {stars}<span className="hidden lg:inline"> Stars Earned!</span>
             </span>
           </div>
 
@@ -1499,7 +1509,7 @@ export const Class1InteractiveLab: React.FC<{
           )}
         </div>
 
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="phone-scroll-row flex flex-wrap items-center gap-2 min-w-0 flex-[1_1_0%] lg:flex-initial">
           <button
             type="button"
             onClick={() => {
@@ -1989,7 +1999,7 @@ export const Class1InteractiveLab: React.FC<{
       {/* Categorized Subject & Activity Selector Bar (Decluttered for 6-Year-Olds!) */}
       <div className="p-3 rounded-2xl bg-[#111827] border border-[#1F2937] space-y-2.5">
         <div className="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-slate-800/80">
-          <div className="flex flex-wrap items-center gap-1.5">
+          <div ref={subjectRowRef} className="phone-scroll-row relative flex flex-wrap items-center gap-1.5 max-w-full">
             {(
               [
                 { id: 'math', label: '📐 Math', color: 'bg-cyan-500 text-slate-950' },
@@ -2009,6 +2019,7 @@ export const Class1InteractiveLab: React.FC<{
                     const firstInGroup = MODE_CATALOG.find((m) => m.subject === subj.id);
                     if (firstInGroup) goToMode(firstInGroup.id);
                   }}
+                  data-active={activeSubj || undefined}
                   className={`px-3 py-1.5 rounded-xl text-xs font-extrabold transition-all ${
                     activeSubj
                       ? `${subj.color} shadow-sm scale-102`
@@ -2020,13 +2031,13 @@ export const Class1InteractiveLab: React.FC<{
               );
             })}
           </div>
-          <span className="text-[11px] font-mono text-slate-400">
+          <span className="hidden lg:inline text-[11px] font-mono text-slate-400">
             Showing {MODE_CATALOG.filter((m) => m.subject === currentSubjectGroup).length} Lessons in{' '}
             <strong className="text-cyan-300 uppercase">{currentSubjectGroup}</strong>
           </span>
         </div>
 
-        <div className="flex flex-wrap items-center gap-1.5">
+        <div ref={lessonRowRef} className="phone-scroll-row relative flex flex-wrap items-center gap-1.5">
           {MODE_CATALOG.filter((m) => m.subject === currentSubjectGroup).map((m) => {
             const Icon = m.icon;
             const active = mode === m.id;
@@ -2035,6 +2046,7 @@ export const Class1InteractiveLab: React.FC<{
                 key={m.id}
                 type="button"
                 onClick={() => goToMode(m.id)}
+                data-active={active || undefined}
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
                   active
                     ? 'bg-cyan-500/25 text-cyan-200 border-2 border-cyan-400 shadow-sm'

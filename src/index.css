@@ -47,3 +47,30 @@ input[type="range"] {
     min-height: 44px;
   }
 }
+
+/*
+ * On phones and touch tablets, groups of buttons become one swipeable row so the activity stays
+ * near the top. A narrow window with a mouse keeps wrapping, because it can't swipe.
+ */
+@media (max-width: 639px), (max-width: 1023px) and (pointer: coarse) {
+  .phone-scroll-row {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .phone-scroll-row::-webkit-scrollbar {
+    display: none;
+  }
+  .phone-scroll-row > * {
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}

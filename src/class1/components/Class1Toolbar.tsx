@@ -35,7 +35,7 @@ export const Class1Toolbar: React.FC<{
   // A child signed in at school sees only their name, their class's lessons and a sign-out.
   if (student) {
     return (
-      <div className="flex flex-wrap items-center gap-2 text-xs">
+      <div className="phone-scroll-row flex flex-wrap items-center gap-2 text-xs">
         <span className="px-3 py-1.5 rounded-lg bg-emerald-500/15 border border-emerald-500/40 text-emerald-100 font-extrabold text-sm">
           👋 {student.student.avatar} {student.student.display_name} • class {student.classCode}
         </span>
@@ -63,9 +63,9 @@ export const Class1Toolbar: React.FC<{
   const canAddLocal = !signedIn && profiles.length < limits.maxChildren;
 
   return (
-    <div className="flex flex-wrap items-center gap-2 text-xs">
+    <div className="phone-scroll-row flex flex-wrap items-center gap-2 text-xs">
       <label className="flex items-center gap-1.5 text-slate-300 font-bold">
-        Learner
+        <span className="hidden lg:inline">Learner</span>
         <select
           value={state.activeProfileId}
           onChange={(e) => progress.switchProfile(e.target.value)}
@@ -151,7 +151,7 @@ export const Class1Toolbar: React.FC<{
           🏫 Classroom
         </button>
       )}
-      <span className="text-[10px] text-slate-500">
+      <span className="hidden lg:inline text-[10px] text-slate-500">
         {signedIn && limits.cloudSync ? 'Synced to your account' : 'Saved on this device'}
       </span>
     </div>

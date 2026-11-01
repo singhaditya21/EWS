@@ -74,7 +74,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   return (
     <>
       <header className="sticky top-0 z-30 bg-[#090D16]/95 border-b border-[#1F2937] backdrop-blur-md">
-        <div className="max-w-[1600px] mx-auto px-3 sm:px-5 h-16 flex items-center justify-between gap-3">
+        <div className="max-w-[1600px] mx-auto px-3 sm:px-5 h-16 flex items-center justify-between gap-2 sm:gap-3 phone-scroll-row">
           {/* Brand Logo */}
           <div className="flex items-center gap-2.5">
             <button
@@ -89,7 +89,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-cyan-500 via-blue-600 to-emerald-500 flex items-center justify-center shadow-md shadow-cyan-500/20">
               <Atom className="w-5 h-5 text-white" />
             </div>
-            <div>
+            <div className="hidden lg:block">
               <div className="flex items-center gap-2">
                 <span className="font-extrabold text-sm sm:text-base tracking-tight text-white">
                   OmniLearn <span className="text-cyan-400">Labs</span>
@@ -116,7 +116,8 @@ export const Navbar: React.FC<NavbarProps> = ({
               }`}
             >
               <GraduationCap className="w-4 h-4" />
-              <span>{kidFocusMode ? '🎒 Primary Kids School (Class 1–5)' : 'School (Class 1–12)'}</span>
+              <span className="hidden lg:inline">{kidFocusMode ? '🎒 Primary Kids School (Class 1–5)' : 'School (Class 1–12)'}</span>
+              <span className="lg:hidden whitespace-nowrap">School</span>
             </button>
 
             {!kidFocusMode && (
@@ -131,7 +132,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   }`}
                 >
                   <Cpu className="w-4 h-4" />
-                  <span>Engineering</span>
+                  <span className="hidden lg:inline">Engineering</span>
                 </button>
 
                 <button
@@ -144,7 +145,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   }`}
                 >
                   <HeartPulse className="w-4 h-4" />
-                  <span>Medical</span>
+                  <span className="hidden lg:inline">Medical</span>
                 </button>
               </>
             )}
@@ -157,13 +158,15 @@ export const Navbar: React.FC<NavbarProps> = ({
                 type="button"
                 onClick={onToggleKidFocusMode}
                 title="Lock navigation to Primary Class 1–5 for young children"
+                aria-label={kidFocusMode ? 'Kid Mode on' : 'Kid Mode'}
                 className={`px-2.5 py-1.5 rounded-xl text-xs font-extrabold border transition-all ${
                   kidFocusMode
                     ? 'bg-amber-400 text-slate-950 border-white shadow-sm'
                     : 'bg-[#111827] text-amber-300 border-amber-500/40 hover:border-amber-400'
                 }`}
               >
-                {kidFocusMode ? '🌞 Kid Mode: ON' : '🧒 Kid Mode'}
+                {kidFocusMode ? '🌞' : '🧒'}
+                <span className="hidden lg:inline"> {kidFocusMode ? 'Kid Mode: ON' : 'Kid Mode'}</span>
               </button>
             )}
 
@@ -211,8 +214,8 @@ export const Navbar: React.FC<NavbarProps> = ({
         {/* Sub-Bar for School Track: Class 1 to Class 12 Quick Selector + Mobile Board Toggle */}
         {activeTrack === 'school' && (
           <div className="bg-[#0D1322] border-t border-[#1F2937]/80 px-3 sm:px-5 py-1.5">
-            <div className="max-w-[1600px] mx-auto flex items-center justify-between gap-2 overflow-x-auto no-scrollbar">
-              <div className="flex items-center gap-1 shrink-0">
+            <div className="max-w-[1600px] mx-auto flex items-center justify-between gap-2">
+              <div className="flex items-center gap-1 flex-1 min-w-0 overflow-x-auto no-scrollbar [&>*]:shrink-0">
                 <BookOpen className="w-3.5 h-3.5 text-cyan-400 mr-1" />
                 {!kidFocusMode && (
                   <button

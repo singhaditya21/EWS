@@ -136,9 +136,13 @@ export const LabWorkspace: React.FC<LabWorkspaceProps> = ({
     if (target && onSelectChapter) onSelectChapter(target);
   };
   const class1Meta = CLASS1_BOARD_MAP[chapter.id];
+  // A child on a phone or tablet should reach the activity at once; syllabus detail is in the CBSE/ICSE tab.
+  const compactForChild = Boolean(class1Meta) && role === 'child';
+  const hideForChild = compactForChild ? 'hidden lg:inline-flex' : '';
 
   useEffect(() => {
     setViewportTab('simulation');
+    window.scrollTo(0, 0);
   }, [chapter.id]);
 
   const renderActiveSimulation = () => {
@@ -222,10 +226,10 @@ export const LabWorkspace: React.FC<LabWorkspaceProps> = ({
       {/* Chapter Header & Dual-Board Syllabus Alignment Banner */}
       <div className="rounded-2xl bg-[#111827] border border-[#1F2937] p-4 shadow-md space-y-3">
         <div className="flex flex-wrap items-start justify-between gap-3">
-          <div className="space-y-1.5">
+          <div className="space-y-1.5 min-w-0">
             <div className="flex flex-wrap items-center gap-2">
               <span
-                className={`px-2.5 py-0.5 rounded-full text-xs font-mono font-bold border ${accentBadge}`}
+                className={`px-2.5 py-0.5 rounded-full text-xs font-mono font-bold border ${hideForChild} ${accentBadge}`}
               >
                 {chapter.streamCategory} • {chapter.subject}
               </span>
@@ -234,7 +238,7 @@ export const LabWorkspace: React.FC<LabWorkspaceProps> = ({
               </span>
               {class1Meta && (
                 <span
-                  className={`px-2.5 py-0.5 rounded-full text-[11px] font-mono font-bold border ${STATUS_BADGE_STYLE[class1Meta[activeBoard].status]}`}
+                  className={`px-2.5 py-0.5 rounded-full text-[11px] font-mono font-bold border ${hideForChild} ${STATUS_BADGE_STYLE[class1Meta[activeBoard].status]}`}
                   title="How this chapter fits the selected board's Class 1 syllabus"
                 >
                   {activeBoard}: {BOARD_STATUS_LABEL[class1Meta[activeBoard].status]}
@@ -242,14 +246,14 @@ export const LabWorkspace: React.FC<LabWorkspaceProps> = ({
               )}
               {class1Meta && (
                 <span
-                  className="px-2.5 py-0.5 rounded-full text-[11px] font-mono bg-slate-900 text-slate-400 border border-slate-800"
+                  className={`px-2.5 py-0.5 rounded-full text-[11px] font-mono bg-slate-900 text-slate-400 border border-slate-800 ${hideForChild}`}
                   title="Content is checked by a practising Class 1 teacher before it is marked reviewed"
                 >
                   {class1Meta.review.status === 'reviewed' ? '✓ Teacher reviewed' : 'Teacher review pending'}
                 </span>
               )}
               {chapter.wing && (
-                <span className="px-2.5 py-0.5 rounded-full text-[11px] font-mono bg-slate-900 text-slate-400 border border-slate-800">
+                <span className={`px-2.5 py-0.5 rounded-full text-[11px] font-mono bg-slate-900 text-slate-400 border border-slate-800 ${hideForChild}`}>
                   {chapter.wing}
                 </span>
               )}
@@ -258,14 +262,14 @@ export const LabWorkspace: React.FC<LabWorkspaceProps> = ({
             <h1 className="text-lg sm:text-xl font-extrabold text-white tracking-tight">
               {chapter.title}
             </h1>
-            <p className="text-xs sm:text-sm text-slate-300 max-w-4xl leading-relaxed">
+            <p className={`text-xs sm:text-sm text-slate-300 max-w-4xl leading-relaxed ${compactForChild ? 'hidden lg:block' : ''}`}>
               {chapter.summary}
             </p>
           </div>
 
           {/* Viewport Mode Switcher (Child-Friendly Tabs for Class 1–5 vs. CAD/Formula for Class 6–12/Eng/Med) */}
-          <div className="flex flex-col sm:items-end gap-2">
-            <div className="flex flex-wrap items-center gap-1.5 bg-[#090D16] p-1.5 rounded-xl border border-slate-800">
+          <div className="flex flex-col lg:items-end gap-2 w-full lg:w-auto min-w-0">
+            <div className="phone-scroll-row flex flex-wrap items-center gap-1.5 bg-[#090D16] p-1.5 rounded-xl border border-slate-800">
               <button
                 type="button"
                 onClick={() => setViewportTab('simulation')}
@@ -384,7 +388,7 @@ export const LabWorkspace: React.FC<LabWorkspaceProps> = ({
             </div>
 
             {/* Sequential Lesson Navigation & Completion Toggle */}
-            <div className="flex flex-wrap items-center gap-1.5">
+            <div className="phone-scroll-row flex flex-wrap items-center gap-1.5">
               {prevChapter && onSelectChapter && (
                 <button
                   type="button"
@@ -438,7 +442,7 @@ export const LabWorkspace: React.FC<LabWorkspaceProps> = ({
         )}
 
         {/* Dual-Board Syllabus Alignment Bar */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5 pt-2 border-t border-slate-800/80 text-xs">
+        <div className={`${compactForChild ? 'hidden lg:grid' : 'grid'} grid-cols-1 md:grid-cols-2 gap-2.5 pt-2 border-t border-slate-800/80 text-xs`}>
           <div
             className={`p-2.5 rounded-xl border flex items-start gap-2 ${
               activeBoard === 'CBSE'
