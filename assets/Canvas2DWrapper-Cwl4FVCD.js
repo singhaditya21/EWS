@@ -1,4 +1,4 @@
-import{c as b,r as n,j as e}from"./index-CQjIHIwD.js";import{A as B}from"./ParameterPanel-USDQH3BB.js";/**
+import{c as b,r as n,j as e}from"./index-qUTW0AIj.js";import{A as B}from"./ParameterPanel-BMYwEOwF.js";/**
  * @license lucide-react v0.454.0 - ISC
  *
  * This source code is licensed under the ISC license.
