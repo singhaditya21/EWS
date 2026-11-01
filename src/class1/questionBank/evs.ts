@@ -210,4 +210,27 @@ export const EVS_QUESTIONS: BankQuestion[] = [
   { id: 'v.games-08', skillId: 'v.games', prompt: 'Which outdoor game uses a long stick and a small stick?', options: ['carrom', 'gilli-danda', 'ludo', 'chess'], answer: 1, explain: 'Gilli-danda uses a small gilli and a long danda.' },
   { id: 'v.games-09', skillId: 'v.games', prompt: 'Playing outdoor games makes our body ___.', options: ['weak', 'sick', 'strong', 'sleepy'], answer: 2, explain: 'Running and playing make our body strong.' },
   { id: 'v.games-10', skillId: 'v.games', prompt: 'Which game is played with a racquet and a shuttlecock?', options: ['cricket', 'kabaddi', 'carrom', 'badminton'], answer: 3, explain: 'Badminton uses a racquet and a shuttlecock.' },
+
+  // v.me — about me, feelings and my people
+  { id: 'v.me-01', skillId: 'v.me', prompt: 'Which of these should you know by heart?', options: ['A grown-up’s phone number', 'A shop’s price list', 'A stranger’s name'], answer: 0, explain: 'A grown-up’s phone number helps if you get lost.' },
+  { id: 'v.me-02', skillId: 'v.me', prompt: 'Who can you share your address with?', options: ['A stranger on the road', 'People you trust', 'Anyone online'], answer: 1, explain: 'Share your address only with people you trust.' },
+  { id: 'v.me-03', skillId: 'v.me', prompt: 'Your friend gave you a gift. How might you feel?', options: ['Sleepy', 'Hungry', 'Happy'], answer: 2, explain: 'Gifts make most of us feel happy.' },
+  { id: 'v.me-04', skillId: 'v.me', prompt: 'You feel angry. What should you do?', options: ['Take slow breaths', 'Shout at everyone', 'Throw things'], answer: 0, explain: 'Slow breaths help us calm down.' },
+  { id: 'v.me-05', skillId: 'v.me', prompt: 'Which of these is a feeling?', options: ['Table', 'Sad', 'Pencil'], answer: 1, explain: 'Sad is a feeling.' },
+  { id: 'v.me-06', skillId: 'v.me', prompt: 'Who is your father’s mother?', options: ['Your aunt', 'Your sister', 'Your grandmother'], answer: 2, explain: 'Your father’s mother is your grandmother.' },
+  { id: 'v.me-07', skillId: 'v.me', prompt: 'Which family is special?', options: ['All families', 'Only big families', 'Only small families'], answer: 0, explain: 'All families are special, big or small.' },
+  { id: 'v.me-08', skillId: 'v.me', prompt: 'What do good friends do?', options: ['Hit each other', 'Share and help', 'Break toys'], answer: 1, explain: 'Good friends share and help each other.' },
+  { id: 'v.me-09', skillId: 'v.me', prompt: 'What do we do at a birthday party?', options: ['Go to sleep', 'Clean the road', 'Share cake with friends'], answer: 2, explain: 'We celebrate with family and friends.' },
+  { id: 'v.me-10', skillId: 'v.me', prompt: 'Your classmate looks sad. What can you do?', options: ['Ask what is wrong', 'Laugh at them', 'Run away'], answer: 0, explain: 'Being kind helps people feel better.' },
+  // v.communication — ways we communicate
+  { id: 'v.communication-01', skillId: 'v.communication', prompt: 'Which one do we listen to?', options: ['Newspaper', 'Radio', 'Book'], answer: 1, explain: 'We listen to the radio.' },
+  { id: 'v.communication-02', skillId: 'v.communication', prompt: 'Which one do we watch?', options: ['Letter', 'Telephone', 'Television'], answer: 2, explain: 'We watch television.' },
+  { id: 'v.communication-03', skillId: 'v.communication', prompt: 'Which one do we post at the post office?', options: ['A letter', 'A radio', 'A television'], answer: 0, explain: 'We post letters.' },
+  { id: 'v.communication-04', skillId: 'v.communication', prompt: 'Which one needs a stamp?', options: ['A phone call', 'A television', 'A letter'], answer: 2, explain: 'A letter needs a stamp.' },
+  { id: 'v.communication-05', skillId: 'v.communication', prompt: 'What can we use to talk to someone far away?', options: ['A spoon', 'A phone', 'A chair'], answer: 1, explain: 'A phone helps us talk to people far away.' },
+  { id: 'v.communication-06', skillId: 'v.communication', prompt: 'Where do we read today’s news?', options: ['In a newspaper', 'On a plate', 'On a shoe'], answer: 0, explain: 'Newspapers bring us the day’s news.' },
+  { id: 'v.communication-07', skillId: 'v.communication', prompt: 'Your friend is next to you. How do you tell them something?', options: ['Send a letter', 'Post a parcel', 'Just talk'], answer: 2, explain: 'We talk to people who are near us.' },
+  { id: 'v.communication-08', skillId: 'v.communication', prompt: 'What can you send quickly from a computer?', options: ['An email', 'A chair', 'A bicycle'], answer: 0, explain: 'Email reaches people very quickly.' },
+  { id: 'v.communication-09', skillId: 'v.communication', prompt: 'A message says to click a link. What should you do?', options: ['Click it at once', 'Ask a grown-up first', 'Send your name'], answer: 1, explain: 'Always ask a grown-up first.' },
+  { id: 'v.communication-10', skillId: 'v.communication', prompt: 'What should we do after a long time on a screen?', options: ['Keep watching', 'Sit closer', 'Take a break'], answer: 2, explain: 'Breaks are good for our eyes.' },
 ];

@@ -1,5 +1,6 @@
 import { CurriculumChapter } from '../types/curriculum.types';
 import { CLASS1_READING_CHAPTERS } from './class1ReadingChapters';
+import { CLASS1_TOPIC_CHAPTERS } from './class1TopicChapters';
 
 export const CURRICULUM_DATA: CurriculumChapter[] = [
   // ============================================================================
@@ -689,7 +690,7 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
       icseChapter: 'CISCE Class I EVS — Theme 1: About Me; Theme 8: Keeping Oneself Clean, Safe and Healthy',
       examRelevance: 'Class 1 EVS Core & Health Awareness',
       differenceNote:
-        'CISCE’s About Me also covers personal details, likes and feelings, which this chapter doesn’t teach yet.',
+        'CISCE’s About Me theme also covers personal details and feelings, taught in the All About Me chapter.',
     },
     keyFormulas: [
       {
@@ -1064,7 +1065,7 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
       icseChapter: 'CISCE Class I Computer Studies — Topic 1: Computer, A Machine; Topic 3: Parts; Topic 5: Mouse; Topic 6: Keyboard',
       examRelevance: 'ICSE Mandatory Class 1 Subject & CBSE Foundational Digital Literacy',
       differenceNote:
-        'CISCE sets 7 Class I computer topics. Uses of a Computer and Storage Devices aren’t in the app yet. CBSE has no Class 1 computer textbook.',
+        'CISCE sets 7 Class I computer topics; uses and storage are in the next chapter. CBSE has no Class 1 computer textbook.',
     },
     keyFormulas: [
       {
@@ -2081,6 +2082,7 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
     ],
   },
   ...CLASS1_READING_CHAPTERS,
+  ...CLASS1_TOPIC_CHAPTERS,
   {
     id: 'cls2-evs-water-sky',
     title: 'Water, Weather & The Sky Above Us',

@@ -27,7 +27,7 @@
 
 ## 🧒 Class 1 (CBSE & ICSE)
 
-Class 1 is the most complete part of the app: 41 play-based chapters across Maths, English, Hindi, EVS, Computer Studies and Arts.
+Class 1 is the most complete part of the app: 47 play-based chapters across Maths, English, Hindi, EVS, Computer Studies and Arts.
 
 - **One shared core, two board views.** `src/class1/boardMap.ts` places every chapter in each board's sequence and marks it *Core*, *Integrated theme* (CBSE has no Class 1 EVS book), *Extension* or *Enrichment*. The sidebar, chapter labels and Prev/Next follow the selected board.
 - **Syllabus map.** `src/class1/syllabus.ts` lists NCERT Joyful Mathematics 1, Mridang 1 and Sarangi 1 chapters (CBSE) and the Class I themes from CISCE's Curriculum for Primary Classes, 2016 (CISCE prescribes no textbooks), showing what is covered, covered by theme, partly covered or still missing.

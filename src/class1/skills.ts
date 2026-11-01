@@ -43,6 +43,7 @@ export const CLASS1_SKILLS: Class1Skill[] = [
   { id: 'm.halves', subject: 'math', label: 'Halves and equal sharing' },
   { id: 'm.wordproblem', subject: 'math', label: 'Story sums (add or take away)', fln: 'numeracy' },
   { id: 'm.tables', subject: 'math', label: 'Tables of 2, 5 and 10 (extension)' },
+  { id: 'm.dayorder', subject: 'math', label: 'Order of the day: earlier, later, short and long' },
 
   // English
   { id: 'e.letters', subject: 'english', label: 'Letter sounds and vowels', fln: 'literacy' },
@@ -58,6 +59,9 @@ export const CLASS1_SKILLS: Class1Skill[] = [
   { id: 'e.digraphs', subject: 'english', label: 'ch, sh, th, wh sounds', fln: 'literacy' },
   { id: 'e.sentences', subject: 'english', label: 'Capital letters, full stop, question mark', fln: 'literacy' },
   { id: 'e.listening', subject: 'english', label: 'Listening to stories, poems and greetings', fln: 'literacy' },
+  { id: 'e.prepositions', subject: 'english', label: 'Position words (in, on, under, behind)' },
+  { id: 'e.gender', subject: 'english', label: 'He and she' },
+  { id: 'e.tenses', subject: 'english', label: 'Yesterday, today and tomorrow in sentences' },
   { id: 'e.picturetalk', subject: 'english', label: 'Talking and reading about pictures', fln: 'literacy' },
 
   // Hindi
@@ -72,6 +76,8 @@ export const CLASS1_SKILLS: Class1Skill[] = [
 
   // EVS
   { id: 'v.body', subject: 'evs', label: 'My body and sense organs' },
+  { id: 'v.me', subject: 'evs', label: 'About me, my feelings and my people' },
+  { id: 'v.communication', subject: 'evs', label: 'Ways we communicate' },
   { id: 'v.hygiene', subject: 'evs', label: 'Cleanliness and good habits' },
   { id: 'v.living', subject: 'evs', label: 'Living and non-living things' },
   { id: 'v.plants', subject: 'evs', label: 'Parts of a plant' },
@@ -92,6 +98,8 @@ export const CLASS1_SKILLS: Class1Skill[] = [
   // Computer
   { id: 'c.machines', subject: 'computer', label: 'Natural and man-made things; machines' },
   { id: 'c.parts', subject: 'computer', label: 'Parts of a computer' },
+  { id: 'c.uses', subject: 'computer', label: 'Uses of a computer' },
+  { id: 'c.storage', subject: 'computer', label: 'Storage devices and data' },
   { id: 'c.paint', subject: 'computer', label: 'Drawing with Paint tools' },
   { id: 'c.labsafety', subject: 'computer', label: 'Computer lab manners and safety' },
 

@@ -14,6 +14,7 @@ export { CLASS1_SKILLS } from './src/class1/skills';
 export { CLASS1_BOARD_MAP } from './src/class1/boardMap';
 export { CLASS1_LESSON_PLANS } from './src/class1/lessonPlans';
 export { READING_SETS, cleanWord } from './src/class1/readingSets';
+export { TOPIC_SETS } from './src/class1/topicSets';
 `;
 const dir = mkdtempSync(join(tmpdir(), 'omnilearn-check-'));
 const out = join(dir, 'bundle.mjs');
@@ -69,6 +70,16 @@ for (const c of class1) {
 }
 Object.keys(m.CLASS1_BOARD_MAP).forEach((id) => class1.some((c) => c.id === id) || fail(`boardMap: ${id} is not a Class 1 chapter`));
 
+// Each board's sequence has one chapter per position within a subject.
+for (const board of ['CBSE', 'ICSE']) {
+  const seen = new Set();
+  for (const [id, entry] of Object.entries(m.CLASS1_BOARD_MAP)) {
+    const key = `${entry.skills[0]?.[0]}:${entry[board].order}`;
+    if (seen.has(key)) fail(`boardMap ${id}: ${board} order ${entry[board].order} is used twice in this subject`);
+    seen.add(key);
+  }
+}
+
 // Every chapter has a lesson plan.
 for (const c of class1) {
   if (!m.CLASS1_LESSON_PLANS[c.id]) fail(`lessonPlans: missing plan for ${c.id}`);
@@ -88,6 +99,24 @@ for (const set of m.READING_SETS) {
     for (const w of piece.findWords) if (!words.has(m.cleanWord(w))) fail(`reading ${piece.id}: "${w}" is not in the text`);
     if (new Set(piece.lines.map((l) => l.text)).size !== piece.lines.length) fail(`reading ${piece.id}: repeated line`);
     piece.questions.forEach((q, i) => checkOptions(`reading ${piece.id} q${i + 1}`, q.options, q.answer));
+  }
+}
+
+// Topic sets: chapters, skills, sorting and questions are sound.
+for (const set of m.TOPIC_SETS) {
+  const chapter = class1.find((c) => c.id === set.chapterId);
+  if (!chapter) fail(`topic ${set.mode}: unknown chapter ${set.chapterId}`);
+  else if (chapter.defaultSimulationMode !== set.mode) fail(`topic ${set.mode}: chapter uses mode ${chapter.defaultSimulationMode}`);
+  for (const s of set.sections) {
+    const where = `topic ${set.mode}/${s.id}`;
+    if (s.kind !== 'cards' && !skillIds.has(s.skillId)) fail(`${where}: unknown skill ${s.skillId}`);
+    if (s.kind === 'cards' && new Set(s.cards.map((c) => c.name)).size !== s.cards.length) fail(`${where}: repeated card`);
+    if (s.kind === 'sort') {
+      const buckets = new Set(s.buckets.map((b) => b.id));
+      s.items.forEach((it) => buckets.has(it.bucket) || fail(`${where}: "${it.text}" has unknown bucket ${it.bucket}`));
+      buckets.forEach((b) => s.items.some((it) => it.bucket === b) || fail(`${where}: bucket ${b} has no items`));
+    }
+    if (s.kind === 'choose') s.questions.forEach((q, i) => checkOptions(`${where} q${i + 1}`, q.options, q.answer));
   }
 }
 

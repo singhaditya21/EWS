@@ -4,7 +4,9 @@ import { progress } from '../progressStore';
 import { cancelSpeech, speakText } from '../../utils/speech';
 import { playPop, playSuccessChime } from '../../utils/soundEffects';
 
-type StarFn = (msg: string, lang: 'en-IN' | 'hi-IN', key: string) => void;
+export type StarFn = (msg: string, lang: 'en-IN' | 'hi-IN', key: string) => void;
+/** The parts of a reading set the order and question panels need; topic activities pass these too. */
+type PanelSet = Pick<ReadingSet, 'lang' | 'skillId' | 'chapterId'>;
 type Tab = 'read' | 'find' | 'order' | 'answer';
 
 const shuffle = <T,>(xs: T[]) => {
@@ -16,7 +18,7 @@ const shuffle = <T,>(xs: T[]) => {
   return a;
 };
 
-const pillCls = (active: boolean) =>
+export const pillCls = (active: boolean) =>
   `min-h-[44px] px-3.5 py-2 rounded-xl text-sm font-extrabold border-2 transition-all ${
     active ? 'bg-cyan-500 text-slate-950 border-white' : 'bg-[#090D16] text-slate-200 border-slate-700 hover:border-cyan-400'
   }`;
@@ -159,7 +161,7 @@ const FindPanel: React.FC<{ piece: ReadingPiece; set: ReadingSet; onStar: StarFn
   );
 };
 
-const OrderPanel: React.FC<{ piece: ReadingPiece; set: ReadingSet; onStar: StarFn }> = ({ piece, set, onStar }) => {
+export const OrderPanel: React.FC<{ piece: ReadingPiece; set: PanelSet; onStar: StarFn }> = ({ piece, set, onStar }) => {
   const [round, setRound] = useState(0);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const cards = useMemo(() => shuffle(piece.lines.map((_, i) => i)), [piece, round]);
@@ -244,7 +246,7 @@ const OrderPanel: React.FC<{ piece: ReadingPiece; set: ReadingSet; onStar: StarF
   );
 };
 
-const AnswerPanel: React.FC<{ piece: ReadingPiece; set: ReadingSet; onStar: StarFn }> = ({ piece, set, onStar }) => {
+export const AnswerPanel: React.FC<{ piece: ReadingPiece; set: PanelSet; onStar: StarFn }> = ({ piece, set, onStar }) => {
   const [idx, setIdx] = useState(0);
   const [picked, setPicked] = useState<number | null>(null);
   const [score, setScore] = useState(0);

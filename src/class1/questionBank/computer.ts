@@ -48,4 +48,27 @@ export const COMPUTER_QUESTIONS: BankQuestion[] = [
   { id: 'c.labsafety-08', skillId: 'c.labsafety', prompt: 'Before leaving the lab, we should ___.', options: ['pull wires out', 'bang the keys', 'spill water', 'shut down properly'], answer: 3, explain: 'Shutting down properly keeps the computer safe.' },
   { id: 'c.labsafety-09', skillId: 'c.labsafety', prompt: 'How should we press the keys on the keyboard?', options: ['gently', 'very hard', 'with a pencil', 'with our feet'], answer: 0, explain: 'Pressing keys gently stops them from breaking.' },
   { id: 'c.labsafety-10', skillId: 'c.labsafety', prompt: 'Someone online asks for your home address. What should you do?', options: ['give it', 'tell a grown-up', 'share photos', 'keep chatting'], answer: 1, explain: 'Never share your address online. Tell a grown-up you trust.' },
+
+  // c.uses — uses of a computer
+  { id: 'c.uses-01', skillId: 'c.uses', prompt: 'Which job can a computer do?', options: ['Cook rice', 'Type a letter', 'Wash clothes'], answer: 1, explain: 'We can type letters on a computer.' },
+  { id: 'c.uses-02', skillId: 'c.uses', prompt: 'Where do we use computers to learn?', options: ['At school', 'In the bath', 'In a tree'], answer: 0, explain: 'Many schools have computers.' },
+  { id: 'c.uses-03', skillId: 'c.uses', prompt: 'What can we play on a computer?', options: ['Cricket on a field', 'Kabaddi', 'Learning games'], answer: 2, explain: 'Computers have learning games.' },
+  { id: 'c.uses-04', skillId: 'c.uses', prompt: 'What can we listen to on a computer?', options: ['Songs', 'Birds in the sky', 'Our heartbeat'], answer: 0, explain: 'We can play songs on a computer.' },
+  { id: 'c.uses-05', skillId: 'c.uses', prompt: 'Who uses computers to keep records of money?', options: ['Farmers in fields', 'Banks', 'Fish'], answer: 1, explain: 'Banks use computers to keep records.' },
+  { id: 'c.uses-06', skillId: 'c.uses', prompt: 'What do we use to send a message to someone far away?', options: ['Email', 'A pencil box', 'A shoe'], answer: 0, explain: 'Email sends messages quickly.' },
+  { id: 'c.uses-07', skillId: 'c.uses', prompt: 'Where can we book train tickets with computers?', options: ['A playground', 'A garden', 'A railway station'], answer: 2, explain: 'Railway stations use computers.' },
+  { id: 'c.uses-08', skillId: 'c.uses', prompt: 'What do we use to find information with a grown-up?', options: ['A pillow', 'The internet', 'A spoon'], answer: 1, explain: 'The internet has lots of information.' },
+  { id: 'c.uses-09', skillId: 'c.uses', prompt: 'Which place keeps patient records on computers?', options: ['A hospital', 'A park', 'A pond'], answer: 0, explain: 'Hospitals keep records on computers.' },
+  { id: 'c.uses-10', skillId: 'c.uses', prompt: 'What can a computer NOT do for you?', options: ['Play songs', 'Show pictures', 'Eat your food'], answer: 2, explain: 'We must eat our own food.' },
+  // c.storage — storage devices and data
+  { id: 'c.storage-01', skillId: 'c.storage', prompt: 'What is data?', options: ['Words and pictures on a computer', 'Water in a bottle', 'A kind of fruit'], answer: 0, explain: 'Data means the words, pictures and songs on a computer.' },
+  { id: 'c.storage-02', skillId: 'c.storage', prompt: 'Which of these stores data?', options: ['Mouse', 'Pen drive', 'Monitor'], answer: 1, explain: 'A pen drive stores data.' },
+  { id: 'c.storage-03', skillId: 'c.storage', prompt: 'Which one is a round, shiny disc?', options: ['Keyboard', 'Speaker', 'CD'], answer: 2, explain: 'A CD is a round, shiny disc.' },
+  { id: 'c.storage-04', skillId: 'c.storage', prompt: 'What does a storage device do?', options: ['Keeps data safe', 'Cooks food', 'Makes noise'], answer: 0, explain: 'Storage devices keep data safe.' },
+  { id: 'c.storage-05', skillId: 'c.storage', prompt: 'A pen drive plugs into a…', options: ['Fan', 'Computer', 'Fridge'], answer: 1, explain: 'A pen drive plugs into a computer.' },
+  { id: 'c.storage-06', skillId: 'c.storage', prompt: 'What can a data card keep?', options: ['Water', 'Sand', 'Photos'], answer: 2, explain: 'A data card keeps photos and data.' },
+  { id: 'c.storage-07', skillId: 'c.storage', prompt: 'Which one can keep a film?', options: ['DVD', 'Mouse', 'Pencil'], answer: 0, explain: 'A DVD can keep films.' },
+  { id: 'c.storage-08', skillId: 'c.storage', prompt: 'A storage device is like a…', options: ['School bag for your books', 'Bicycle', 'Tree'], answer: 0, explain: 'Like a bag keeps books, storage keeps data.' },
+  { id: 'c.storage-09', skillId: 'c.storage', prompt: 'Which of these is NOT a storage device?', options: ['CD', 'Pen drive', 'Mouse'], answer: 2, explain: 'A mouse moves the pointer. It does not store data.' },
+  { id: 'c.storage-10', skillId: 'c.storage', prompt: 'Which one is smallest?', options: ['Data card', 'Monitor', 'Printer'], answer: 0, explain: 'A data card is tiny.' },
 ];

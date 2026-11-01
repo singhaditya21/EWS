@@ -87,7 +87,23 @@ const MEASURE_FACTS: [string, string, string[]][] = [
   ['On a pan balance, the side that goes DOWN is…', 'Heavier', ['Lighter', 'Equal']],
 ];
 
+const DAY_EVENTS = ['waking up', 'eating breakfast', 'going to school', 'eating lunch', 'playing in the evening', 'eating dinner', 'going to sleep'];
+const SHORT_TASKS = ['clapping your hands', 'opening a door', 'drinking some water', 'blinking your eyes'];
+const LONG_TASKS = ['a day at school', 'sleeping at night', 'a long train trip'];
+
 export const MATH_GENERATORS: Record<string, QuestionGenerator> = {
+  'm.dayorder': (seed) => {
+    const r = rng(seed);
+    if (r() < 0.3) {
+      const long = pick(r, LONG_TASKS);
+      return q('m.dayorder', seed, 'Which one takes a LONG time?', r, long, SHORT_TASKS.slice(0, 2), `${long} takes much longer.`);
+    }
+    const a = int(r, 0, DAY_EVENTS.length - 2);
+    const b = int(r, a + 1, DAY_EVENTS.length - 1);
+    const earlier = r() < 0.5;
+    const answer = earlier ? DAY_EVENTS[a] : DAY_EVENTS[b];
+    return q('m.dayorder', seed, `Which happens ${earlier ? 'EARLIER' : 'LATER'} in the day?`, r, answer, [earlier ? DAY_EVENTS[b] : DAY_EVENTS[a]], `We usually do ${DAY_EVENTS[a]} before ${DAY_EVENTS[b]}.`);
+  },
   'm.position': (seed) => {
     const r = rng(seed);
     const [p, c, d] = pick(r, POSITION_FACTS);

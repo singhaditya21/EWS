@@ -744,4 +744,86 @@ export const CLASS1_LESSON_PLANS: Record<string, Class1LessonPlan> = {
     homeActivity: 'Talk about the weather each morning this week. Your child says one sentence, such as “Today it is hot.”',
     materials: ['Picture cards', 'Drawing paper', 'Crayons'],
   },
+
+  // ---------------------------------------------------------------------------
+  // Topics that close the gaps against CISCE's Class I curriculum
+  // ---------------------------------------------------------------------------
+  'cls1-evs-communication': {
+    objectives: [
+      'The child can name ways we share news, such as a phone, radio and newspaper.',
+      'The child can say whether we listen to, watch or read each one.',
+      'The child knows to show a stranger’s message to a grown-up.',
+    ],
+    warmUp: 'Play a whispering game around the circle, then ask, “How else can we send a message to a friend?”',
+    activity: 'Set up stations with a toy phone, a newspaper, a written letter and a picture of a TV. Groups visit each one and sort picture cards into listen, watch and read. Make a paper-cup telephone if you have time.',
+    check: 'Hold up a picture and ask, “Do we listen, watch or read?” Ask what to do if a stranger sends a message.',
+    support: 'Start with only a phone and a newspaper, using the real objects.',
+    homeActivity: 'Together, make a list of the ways your family shared news this week, such as a phone call or a message. Talk about which one your child likes best.',
+    materials: ['Toy phone or paper cups and string', 'Newspaper', 'A letter or postcard', 'Picture cards'],
+  },
+  'cls1-evs-me-people': {
+    objectives: [
+      'The child can say their name, a parent’s name and where they live.',
+      'The child can name feelings such as happy, sad and angry.',
+      'The child can talk about family, friends and neighbours.',
+    ],
+    warmUp: 'Sing a name song and ask each child to show a face for happy, sad, angry and surprised.',
+    activity: 'Children make a “My People” drawing with their family, friends and neighbours. In pairs, each child tells a friend about one person. Be sensitive to all kinds of families, and never ask children to share details that make them uncomfortable.',
+    check: 'Show a feelings face and ask, “How does this person feel?” Ask each child privately to tell you a grown-up’s phone number.',
+    support: 'Practise one detail at a time. Use a mirror for making feeling faces.',
+    homeActivity: 'Teach your child your phone number with a small tune. At bedtime, ask what made them feel happy or sad today.',
+    materials: ['Drawing paper', 'Crayons', 'Feeling face cards', 'A mirror'],
+  },
+  'cls1-evs-keeping-safe': {
+    objectives: [
+      'The child can say that their body belongs to them.',
+      'The child can tell a safe touch from an unsafe touch.',
+      'The child can use No, Go, Tell and name a grown-up they trust.',
+    ],
+    warmUp: 'Calmly talk about people who keep us safe. Ask each child to think of one grown-up they trust, without saying it aloud if they prefer.',
+    activity: 'Use a calm, matter-of-fact voice and short sessions. Practise saying NO in a strong voice, then walking to a trusted adult. Use simple pretend situations about strangers and road safety. Follow your school’s child-protection policy, and know who to report to if a child tells you something.',
+    check: 'Ask, “What are the three steps?” Ask, “Whose fault is it if someone touches you in an unsafe way?” The answer is never the child’s.',
+    support: 'Keep to the three words No, Go, Tell, and let the child practise them with a puppet. Speak with a parent or the school counsellor if a child seems upset.',
+    homeActivity: 'Together, choose three grown-ups your child can tell anything to. Tell your child they will never be in trouble for telling you, and that surprises are fine but unsafe secrets are not.',
+    materials: ['A puppet or soft toy', 'Picture cards of safe and unsafe actions'],
+  },
+  'cls1-comp-uses-storage': {
+    objectives: [
+      'The child can name places where computers are used.',
+      'The child can list things we do on a computer.',
+      'The child can pick out a storage device such as a pen drive.',
+    ],
+    warmUp: 'Ask, “Where have you seen a computer?” and draw the answers on the board.',
+    activity: 'Show a real pen drive, CD and data card if you have them. Compare storing data to keeping books in a bag. Children sort picture cards into “a computer can help” and “a computer can’t help”.',
+    check: 'Hold up a pen drive and a mouse and ask which one stores data. Ask for one place that uses computers.',
+    support: 'Use real objects to hold and name before showing pictures.',
+    homeActivity: 'Point out computers on your next trip to a bank, shop or station. Ask your child what they think the computer is doing.',
+    materials: ['Pen drive', 'CD or DVD', 'Data card', 'Picture cards'],
+  },
+  'cls1-math-my-day': {
+    objectives: [
+      'The child can name the morning, afternoon, evening and night.',
+      'The child can put daily events in order using earlier and later.',
+      'The child can tell a short event from a long one.',
+    ],
+    warmUp: 'Act out your day from waking up to sleeping while the class copies and says what comes next.',
+    activity: 'Groups put picture cards of daily events in order along a string line. Then children do a short task and a long task, such as clapping once and sorting all the crayons, and say which took longer.',
+    check: 'Ask, “What do you do earlier, brush your teeth or go to school?” Ask for one thing that takes a long time.',
+    support: 'Use only three picture cards at first: morning, afternoon and night.',
+    homeActivity: 'At dinner, ask your child to tell you three things they did today, in order, using first, then and last.',
+    materials: ['Picture cards of daily events', 'String and pegs', 'Crayons'],
+  },
+  'cls1-eng-words-in-use': {
+    objectives: [
+      'The child can use in, on, under and behind in a sentence.',
+      'The child can use he and she correctly.',
+      'The child can tell whether a sentence is about yesterday, today or tomorrow.',
+    ],
+    warmUp: 'Play “Where is the ball?”: put a ball in, on, under and behind a box and let children say a sentence.',
+    activity: 'In pairs, one child hides a toy and the other asks, “Is it under the chair?” Then children act out “I played”, “I am playing” and “I will play” while the class says yesterday, today or tomorrow.',
+    check: 'Place an object and ask, “Where is it?” Say a sentence and ask children to point to a yesterday, today or tomorrow card.',
+    support: 'Practise one position word at a time, with the child’s own body: stand behind the chair, sit on the mat.',
+    homeActivity: 'While tidying up, give your child instructions such as “Put the book on the table.” Then swap, and let your child give you instructions.',
+    materials: ['A ball and a box', 'A toy', 'Yesterday, today and tomorrow cards'],
+  },
 };

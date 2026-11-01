@@ -14,6 +14,8 @@ import { SchoolBoard } from '../../types/curriculum.types';
 import { MIC_NOTICE } from '../../platform/legal';
 import { ReadingMode, readingSetFor } from '../../class1/readingSets';
 import { ReadingActivity } from '../../class1/components/ReadingActivity';
+import { TopicMode, topicSetFor } from '../../class1/topicSets';
+import { TopicActivity } from '../../class1/components/TopicActivity';
 import {
   Calculator,
   Shapes,
@@ -79,7 +81,8 @@ export type Class1LabMode =
   | 'evs-clothes-places-games'
   | 'arts-colors-music'
   | 'olympiad-reasoning-gym'
-  | ReadingMode;
+  | ReadingMode
+  | TopicMode;
 
 type Class1SubjectGroup = 'math' | 'english' | 'hindi' | 'evs' | 'computer' | 'arts';
 
@@ -101,6 +104,7 @@ const MODE_CATALOG: {
   { id: 'math-vertical-staircase', subject: 'math', label: '10. Vertical T|O Sums & Stairs 🪜', icon: Calculator },
   { id: 'math-ordinals-fractions', subject: 'math', label: '11. 1st–10th Race & Pizza Halves 🍕', icon: Trophy },
   { id: 'math-word-problems-tables', subject: 'math', label: '12. Story Sums & Musical Tables (2×, 5×, 10×) 🧮', icon: Calculator },
+  { id: 'math-my-day', subject: 'math', label: '13. The Order of My Day 🌅', icon: Clock },
   { id: 'eng-phonics-vowels', subject: 'english', label: '1. Vowels (A,E,I,O,U) & CVC', icon: BookOpen },
   { id: 'eng-grammar-opposites', subject: 'english', label: '2. Opposites, Plurals & Verbs', icon: BookOpen },
   { id: 'eng-mridang-stories', subject: 'english', label: '3. Mridang Poems & Stories 🎭', icon: Sparkles },
@@ -109,6 +113,7 @@ const MODE_CATALOG: {
   { id: 'eng-digraphs-sentences', subject: 'english', label: '6. Digraphs (ch/sh/th) & Sentence Builder ✍️', icon: BookOpen },
   { id: 'eng-picture-talk', subject: 'english', label: '7. Picture Talk 🖼️', icon: BookOpen },
   { id: 'eng-farm-seasons', subject: 'english', label: '8. Farm & Seasons 🐄', icon: BookOpen },
+  { id: 'eng-words-in-use', subject: 'english', label: '9. In, On, He, She, Yesterday ✏️', icon: BookOpen },
   { id: 'hindi-varnamala', subject: 'hindi', label: '1. सारंगी: वर्णमाला, मात्रा, गिनती व कविता', icon: Languages },
   { id: 'hindi-shabd-train', subject: 'hindi', label: '2. दो, तीन व चार अक्षर वाले शब्द रेलगाड़ी 🚂', icon: Languages },
   { id: 'hindi-barahkhadi-vyakaran', subject: 'hindi', label: '3. बारहखड़ी (क–कः), विलोम व एक–अनेक 🪔', icon: Languages },
@@ -126,8 +131,12 @@ const MODE_CATALOG: {
   { id: 'evs-houses-food', subject: 'evs', label: '7. Houses (Kutcha/Pucca) & Food 🏡🍎', icon: Home },
   { id: 'evs-water-air-habits', subject: 'evs', label: '8. Water 💧, Air 🌬️ & Daily Habits 🪥', icon: Sun },
   { id: 'evs-clothes-places-games', subject: 'evs', label: '9. Clothes 👕, Neighbourhood 🏥 & Games ♟️⚽', icon: Home },
+  { id: 'evs-communication', subject: 'evs', label: '10. How We Share News 📻', icon: Sparkles },
+  { id: 'evs-me-people', subject: 'evs', label: '11. All About Me 🙋', icon: Sparkles },
+  { id: 'evs-keeping-safe', subject: 'evs', label: '12. Keeping Safe 🛡️', icon: CheckCircle2 },
   { id: 'computer-smart-machine', subject: 'computer', label: '1. Computer, Keyboard & Mouse 🖥️', icon: Monitor },
   { id: 'computer-paint-manners', subject: 'computer', label: '2. Kid Paint Studio 🎨 & Lab Manners ✅', icon: Monitor },
+  { id: 'computer-uses-storage', subject: 'computer', label: '3. Uses & Storage 💾', icon: Monitor },
   { id: 'arts-colors-music', subject: 'arts', label: '1. Color Mixing & Xylophone 🎵', icon: Palette },
   { id: 'olympiad-reasoning-gym', subject: 'arts', label: '2. Olympiad Brain Gym (Odd One Out & Analogies) 🧠', icon: Trophy },
 ];
@@ -1161,6 +1170,7 @@ export const Class1InteractiveLab: React.FC<{
   };
 
   const readingSet = readingSetFor(mode);
+  const topicSet = topicSetFor(mode);
 
   const currentSubjectGroup: Class1SubjectGroup =
     MODE_CATALOG.find((m) => m.id === mode)?.subject || 'math';
@@ -2063,6 +2073,7 @@ export const Class1InteractiveLab: React.FC<{
 
       {/* STORIES, POEMS AND PICTURE TALK (SARANGI AND MRIDANG THEMES) */}
       {readingSet && <ReadingActivity set={readingSet} onStar={awardStar} />}
+      {topicSet && <TopicActivity set={topicSet} onStar={awardStar} />}
 
       {/* MODE 1: SPATIAL PRE-NUMBER CONCEPTS (FINDING THE FURRY CAT!) */}
       {mode === 'spatial-prenumber' && (
