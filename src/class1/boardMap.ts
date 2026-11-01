@@ -45,55 +45,56 @@ const meta = (
 });
 
 // CBSE order follows NCERT Joyful Mathematics 1 / Mridang 1 / Sarangi 1 chapter order.
-// ICSE order follows a typical ICSE-school Class 1 term plan (schools choose their own books).
+// ICSE order and status follow CISCE's Curriculum for Primary Classes (I–V), 2016: its Class I
+// themes in order. CISCE prescribes no textbooks, so a school's books may differ.
 export const CLASS1_BOARD_MAP: Record<string, Class1ChapterMeta> = {
   // Mathematics
   'cls1-math-spatial-furry-cat': meta(['m.position'], ['core', 1], ['core', 1]),
   'cls1-math-shapes-roll-slide': meta(['m.shapes', 'm.patterns'], ['core', 2], ['core', 7]),
   'cls1-math-numbers-comparison': meta(['m.count20', 'm.compare', 'm.make10'], ['core', 3], ['core', 2]),
   'cls1-math-add-sub-frog': meta(['m.add20', 'm.sub20'], ['core', 4], ['core', 4]),
-  'cls1-math-measurement-balance': meta(['m.measure'], ['core', 5], ['core', 9]),
-  'cls1-math-abacus': meta(['m.placevalue', 'm.skipcount'], ['core', 6], ['core', 5]),
-  'cls1-math-patterns-pictograph': meta(['m.patterns', 'm.data'], ['core', 7], ['core', 8]),
-  'cls1-math-clock-money': meta(['m.time', 'm.money'], ['core', 8], ['core', 10]),
-  'cls1-math-ordinals-groups-data': meta(['m.groups', 'm.ordinal', 'm.data'], ['core', 9], ['core', 11]),
-  'cls1-math-word-problems-tables': meta(['m.wordproblem', 'm.tables'], ['extension', 10], ['core', 12]),
-  'cls1-math-vertical-staircase': meta(['m.order', 'm.evenodd'], ['extension', 11], ['core', 6]),
-  'cls1-math-ordinals-fractions': meta(['m.ordinal', 'm.order', 'm.halves'], ['extension', 12], ['core', 3]),
+  'cls1-math-measurement-balance': meta(['m.measure'], ['core', 5], ['core', 8]),
+  'cls1-math-abacus': meta(['m.placevalue', 'm.skipcount'], ['core', 6], ['core', 3]),
+  'cls1-math-patterns-pictograph': meta(['m.patterns', 'm.data'], ['core', 7], ['core', 9]),
+  'cls1-math-clock-money': meta(['m.time', 'm.money'], ['core', 8], ['extension', 10]),
+  'cls1-math-ordinals-groups-data': meta(['m.groups', 'm.ordinal', 'm.data'], ['core', 9], ['extension', 11]),
+  'cls1-math-word-problems-tables': meta(['m.wordproblem', 'm.tables'], ['extension', 10], ['core', 6]),
+  'cls1-math-vertical-staircase': meta(['m.order', 'm.evenodd'], ['extension', 11], ['core', 5]),
+  'cls1-math-ordinals-fractions': meta(['m.ordinal', 'm.order', 'm.halves'], ['extension', 12], ['extension', 12]),
 
-  // English — Mridang 1 builds listening and reading through stories and poems; formal grammar
-  // terms (nouns, pronouns, adjectives) are typical of ICSE-school grammar books, not Mridang.
-  'cls1-eng-mridang-stories': meta(['e.listening'], ['core', 1], ['core', 6]),
+  // English — Mridang 1 builds listening and reading through stories and poems; CISCE's Class I
+  // English also lists grammar in context (nouns, pronouns, adjectives, articles).
+  'cls1-eng-mridang-stories': meta(['e.listening'], ['core', 1], ['core', 2]),
   'cls1-eng-phonics-vowels': meta(['e.letters', 'e.cvc', 'e.article'], ['core', 2], ['core', 1]),
-  'cls1-eng-picture-talk': meta(['e.picturetalk'], ['core', 3], ['extension', 7]),
-  'cls1-eng-farm-seasons': meta(['e.picturetalk', 'e.listening'], ['core', 4], ['extension', 8]),
-  'cls1-eng-nouns-this-that': meta(['e.nouns', 'e.thisthat'], ['extension', 5], ['core', 2]),
-  'cls1-eng-grammar-opposites': meta(['e.opposites', 'e.verbs', 'e.plurals'], ['extension', 6], ['core', 3]),
-  'cls1-eng-pronouns-adjectives': meta(['e.pronouns', 'e.adjectives'], ['extension', 7], ['core', 4]),
-  'cls1-eng-digraphs-sentences': meta(['e.digraphs', 'e.sentences'], ['extension', 8], ['core', 5]),
+  'cls1-eng-picture-talk': meta(['e.picturetalk'], ['core', 3], ['core', 3]),
+  'cls1-eng-farm-seasons': meta(['e.picturetalk', 'e.listening'], ['core', 4], ['core', 4]),
+  'cls1-eng-nouns-this-that': meta(['e.nouns', 'e.thisthat'], ['extension', 5], ['core', 5]),
+  'cls1-eng-grammar-opposites': meta(['e.opposites', 'e.verbs', 'e.plurals'], ['extension', 6], ['core', 6]),
+  'cls1-eng-pronouns-adjectives': meta(['e.pronouns', 'e.adjectives'], ['extension', 7], ['core', 7]),
+  'cls1-eng-digraphs-sentences': meta(['e.digraphs', 'e.sentences'], ['extension', 8], ['core', 8]),
 
   // Hindi
   'cls1-hindi-varnamala': meta(['h.swar', 'h.vyanjan', 'h.ginti'], ['core', 1], ['core', 1]),
   'cls1-hindi-shabd-train': meta(['h.shabd'], ['core', 2], ['core', 2]),
   'cls1-hindi-barahkhadi-vyakaran': meta(['h.matra', 'h.vilom', 'h.vachan'], ['core', 3], ['core', 3]),
-  'cls1-hindi-parivar': meta(['h.padhna'], ['core', 4], ['extension', 4]),
-  'cls1-hindi-jeev-jagat': meta(['h.padhna'], ['core', 5], ['extension', 5]),
-  'cls1-hindi-khan-paan': meta(['h.padhna'], ['core', 6], ['extension', 6]),
-  'cls1-hindi-tyohar': meta(['h.padhna'], ['core', 7], ['extension', 7]),
-  'cls1-hindi-hari-bhari': meta(['h.padhna'], ['core', 8], ['extension', 8]),
+  'cls1-hindi-parivar': meta(['h.padhna'], ['core', 4], ['core', 4]),
+  'cls1-hindi-jeev-jagat': meta(['h.padhna'], ['core', 5], ['core', 5]),
+  'cls1-hindi-khan-paan': meta(['h.padhna'], ['core', 6], ['core', 6]),
+  'cls1-hindi-tyohar': meta(['h.padhna'], ['core', 7], ['core', 7]),
+  'cls1-hindi-hari-bhari': meta(['h.padhna'], ['core', 8], ['core', 8]),
 
   // EVS — CBSE has no Class 1 EVS textbook; these themes appear inside Mridang and school activities.
   'cls1-evs-body-senses': meta(['v.body', 'v.hygiene'], ['integrated', 1], ['core', 1]),
-  'cls1-evs-plants-living': meta(['v.living', 'v.plants'], ['integrated', 2], ['core', 5]),
-  'cls1-evs-animals-food-safety': meta(['v.animals', 'v.food', 'v.safety'], ['integrated', 3], ['core', 6]),
-  'cls1-evs-houses-food': meta(['v.houses', 'v.food'], ['integrated', 4], ['core', 3]),
+  'cls1-evs-plants-living': meta(['v.living', 'v.plants'], ['integrated', 2], ['core', 6]),
+  'cls1-evs-animals-food-safety': meta(['v.animals', 'v.food', 'v.safety'], ['integrated', 3], ['core', 7]),
+  'cls1-evs-houses-food': meta(['v.houses', 'v.food'], ['integrated', 4], ['core', 2]),
   'cls1-evs-seasons-sky': meta(['v.seasons', 'v.sky'], ['integrated', 5], ['core', 8]),
   'cls1-evs-clothes-places-games': meta(['v.seasons', 'v.neighbourhood', 'v.games'], ['integrated', 6], ['core', 4]),
-  'cls1-evs-water-air-habits': meta(['v.waterair', 'v.hygiene'], ['integrated', 7], ['core', 2]),
-  'cls1-evs-helpers-transport': meta(['v.helpers', 'v.transport'], ['integrated', 8], ['core', 7]),
-  'cls1-evs-india-manners': meta(['v.india', 'v.manners'], ['integrated', 9], ['core', 9]),
+  'cls1-evs-water-air-habits': meta(['v.waterair', 'v.hygiene'], ['integrated', 7], ['core', 3]),
+  'cls1-evs-helpers-transport': meta(['v.helpers', 'v.transport'], ['integrated', 8], ['core', 5]),
+  'cls1-evs-india-manners': meta(['v.india', 'v.manners'], ['integrated', 9], ['extension', 9]),
 
-  // Computer Studies — taught as a subject in ICSE schools; not prescribed by NCERT for Class 1.
+  // Computer Studies — a CISCE Class I subject (7 topics); not prescribed by NCERT for Class 1.
   'cls1-comp-smart-machine': meta(['c.machines', 'c.parts'], ['enrichment', 1], ['core', 1]),
   'cls1-comp-paint-manners': meta(['c.paint', 'c.labsafety'], ['enrichment', 2], ['core', 2]),
 

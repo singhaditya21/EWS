@@ -14,9 +14,9 @@ const base = {
 const hindi = { ...base, subject: 'Hindi (हिंदी)' };
 const english = { ...base, subject: 'English' };
 
-const ICSE_HINDI = 'CISCE Class 1 Hindi — reading short stories and poems (school-chosen reader)';
+const ICSE_HINDI = 'CISCE कक्षा I हिंदी — थीम 1: सुनना और बोलना; थीम 2: पढ़ना एवं लिखना (कविता और कहानी)';
 const HINDI_NOTE =
-  'NCERT Sarangi teaches letters and words through stories and poems from the first lesson. ICSE schools choose their own Hindi readers, so these original pieces work as extra reading practice there.';
+  'NCERT Sarangi teaches letters and words through stories and poems from the first lesson. CISCE’s Class I Hindi also uses rhymes and stories for listening, speaking, reading and writing, and schools choose their own books.';
 
 const readingFormula = {
   label: 'पढ़ने के तीन कदम',
@@ -159,9 +159,9 @@ export const CLASS1_READING_CHAPTERS: CurriculumChapter[] = [
     summary: 'Look at a picture, say what you see, find objects and count them. Then read along with an original counting song and fruit poem.',
     syllabusAlignment: {
       cbseChapter: 'NCERT Mridang 1 — Unit 2: Picture Time; Unit 3: Fun with Pictures (original activities on these themes)',
-      icseChapter: 'CISCE Class 1 English — listening and speaking: talking about pictures, simple rhymes',
+      icseChapter: 'CISCE Class I English — Listening and Speaking (picture reading, talking about familiar things)',
       examRelevance: 'Speaking and listening in simple sentences',
-      differenceNote: 'Mridang builds spoken English through picture talk before formal reading. ICSE schools practise the same skill through picture composition.',
+      differenceNote: 'Both boards use picture talk: Mridang has picture-reading lessons, and CISCE lists picture reading under Listening and Speaking.',
     },
     keyFormulas: [
       {
@@ -190,9 +190,9 @@ export const CLASS1_READING_CHAPTERS: CurriculumChapter[] = [
     summary: 'Read along with original poems about farm animals and the seasons, then put picture stories in the right order.',
     syllabusAlignment: {
       cbseChapter: 'NCERT Mridang 1 — Unit 2: A Farm; Unit 4: The Four Seasons (original poems and picture stories on these themes)',
-      icseChapter: 'CISCE Class 1 English — reading: rhymes and short stories, putting events in order',
+      icseChapter: 'CISCE Class I English — Listening and Speaking; Reading and Writing (poems and short stories)',
       examRelevance: 'Reading short texts and sequencing events',
-      differenceNote: 'Mridang links English to the world around the child, so EVS themes like farms and seasons appear here. ICSE readers vary by school.',
+      differenceNote: 'Mridang links English to the world around the child. CISCE doesn’t set texts, so poems and stories at this level fit.',
     },
     keyFormulas: [
       {

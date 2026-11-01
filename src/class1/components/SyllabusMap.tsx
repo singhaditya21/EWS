@@ -32,7 +32,7 @@ export const SyllabusMap: React.FC<{
         <p className="text-xs text-slate-400">
           {board === 'CBSE'
             ? 'NCERT textbook chapters and where the app teaches each one.'
-            : 'Typical ICSE-school Class 1 topics. CISCE does not prescribe Class 1 textbooks, so your school’s books may order these differently.'}{' '}
+            : 'The Class I themes in CISCE’s Curriculum for Primary Classes (2016). CISCE prescribes no textbooks, so your school’s books may differ.'}{' '}
           {full} of {units.length} fully covered{themed ? `, ${themed} covered by theme` : ''}.
         </p>
       </div>

@@ -1,6 +1,6 @@
 // Where each board's Class 1 syllabus is covered in the app.
-// CBSE: NCERT textbook chapters (fixed books). ICSE: typical topics, because CISCE does not
-// prescribe Class 1 textbooks and schools choose their own publishers.
+// CBSE: NCERT textbook chapters. ICSE: the Class I themes in CISCE's Curriculum for Primary
+// Classes (I–V), 2016. CISCE prescribes no textbooks, so schools choose their own publishers.
 import { SchoolBoard } from '../types/curriculum.types';
 
 /** themed = original activities on the unit's theme; the textbook's own text isn't reproduced. */
@@ -102,62 +102,71 @@ export const CBSE_BOOKS: SyllabusBook[] = [
 
 /** CISCE "Curriculum for Primary Classes (I – V)", 2016. CISCE prescribes no Class 1 textbooks. */
 export const CISCE_PRIMARY_CURRICULUM =
-  'http://web.archive.org/web/20210822150952/https://www.cisce.org/pdf/Curiculum-Preschool-Class-VIII/PrimaryCurriculum.pdf';
+  'https://web.archive.org/web/20210822150952/https://www.cisce.org/pdf/Curiculum-Preschool-Class-VIII/PrimaryCurriculum.pdf';
+
+const source = CISCE_PRIMARY_CURRICULUM;
 
 export const ICSE_TOPICS: SyllabusBook[] = [
   {
-    title: 'Mathematics',
-    source: CISCE_PRIMARY_CURRICULUM,
+    title: 'Mathematics (6 themes)',
+    source,
     units: [
-      u('Pre-number concepts', ['cls1-math-spatial-furry-cat']),
-      u('Numbers 1–100, before/after/between, comparison', ['cls1-math-numbers-comparison', 'cls1-math-abacus', 'cls1-math-vertical-staircase']),
-      u('Ordinal numbers', ['cls1-math-ordinals-fractions', 'cls1-math-ordinals-groups-data']),
-      u('Addition and subtraction (incl. column method)', ['cls1-math-add-sub-frog', 'cls1-math-vertical-staircase']),
-      u('Word problems', ['cls1-math-word-problems-tables']),
-      u('Multiplication as repeated addition, early tables', ['cls1-math-ordinals-groups-data', 'cls1-math-word-problems-tables']),
-      u('Shapes and patterns', ['cls1-math-shapes-roll-slide', 'cls1-math-patterns-pictograph']),
-      u('Measurement, time and money', ['cls1-math-measurement-balance', 'cls1-math-clock-money']),
-      u('Halves (equal sharing)', ['cls1-math-ordinals-fractions']),
-      u('Data handling (pictographs)', ['cls1-math-patterns-pictograph']),
+      u('Theme 1: Numbers', ['cls1-math-numbers-comparison', 'cls1-math-abacus']),
+      u('Theme 2: Number Operations', ['cls1-math-add-sub-frog', 'cls1-math-vertical-staircase', 'cls1-math-word-problems-tables']),
+      u('Theme 3: Geometry', ['cls1-math-shapes-roll-slide', 'cls1-math-spatial-furry-cat']),
+      u('Theme 4: Measurement', ['cls1-math-measurement-balance', 'cls1-math-spatial-furry-cat'], 'partial', 'Length, weight and capacity are covered. Ordering daily events (earlier, later) needs its own activity.'),
+      u('Theme 5: Data Handling', ['cls1-math-patterns-pictograph']),
+      u('Theme 6: Patterns', ['cls1-math-patterns-pictograph', 'cls1-math-shapes-roll-slide']),
     ],
   },
   {
-    title: 'English',
+    title: 'English (3 strands)',
+    source,
     units: [
-      u('Phonics, vowels, a/an', ['cls1-eng-phonics-vowels']),
-      u('Naming words, this/that/these/those', ['cls1-eng-nouns-this-that']),
-      u('Action words, opposites, one/many', ['cls1-eng-grammar-opposites']),
-      u('Pronouns and describing words', ['cls1-eng-pronouns-adjectives']),
-      u('Digraphs and sentences', ['cls1-eng-digraphs-sentences']),
-      u('Rhymes and stories (reader)', ['cls1-eng-mridang-stories', 'cls1-eng-farm-seasons'], 'partial', 'ICSE readers vary by school; the app uses general stories and rhymes.'),
-      u('Talking about pictures', ['cls1-eng-picture-talk']),
+      u('Listening and Speaking', ['cls1-eng-mridang-stories', 'cls1-eng-picture-talk', 'cls1-eng-farm-seasons']),
+      u('Reading and Writing', ['cls1-eng-phonics-vowels', 'cls1-eng-digraphs-sentences', 'cls1-eng-farm-seasons']),
+      u('Grammar and Vocabulary in Context', ['cls1-eng-nouns-this-that', 'cls1-eng-grammar-opposites', 'cls1-eng-pronouns-adjectives', 'cls1-eng-phonics-vowels'], 'partial', 'Prepositions, gender and simple tenses aren’t practised yet.'),
     ],
   },
   {
-    title: 'Hindi',
+    title: 'Hindi, as second language (2 themes)',
+    source,
     units: [
-      u('वर्णमाला', ['cls1-hindi-varnamala']),
-      u('शब्द रचना', ['cls1-hindi-shabd-train']),
-      u('मात्राएँ, विलोम, वचन', ['cls1-hindi-barahkhadi-vyakaran']),
-      u('छोटी कहानियाँ और कविताएँ', ['cls1-hindi-parivar', 'cls1-hindi-jeev-jagat', 'cls1-hindi-khan-paan', 'cls1-hindi-tyohar', 'cls1-hindi-hari-bhari']),
+      u('थीम 1: सुनना और बोलना', ['cls1-hindi-parivar', 'cls1-hindi-jeev-jagat', 'cls1-hindi-tyohar']),
+      u('थीम 2: पढ़ना एवं लिखना', ['cls1-hindi-varnamala', 'cls1-hindi-shabd-train', 'cls1-hindi-barahkhadi-vyakaran', 'cls1-hindi-khan-paan', 'cls1-hindi-hari-bhari']),
     ],
   },
   {
-    title: 'EVS',
+    title: 'Environmental Studies (14 themes)',
+    source,
     units: [
-      u('Me, my body and good habits', ['cls1-evs-body-senses', 'cls1-evs-water-air-habits']),
-      u('Food, houses and clothes', ['cls1-evs-houses-food', 'cls1-evs-clothes-places-games']),
-      u('Plants and animals', ['cls1-evs-plants-living', 'cls1-evs-animals-food-safety']),
-      u('Helpers, neighbourhood and transport', ['cls1-evs-helpers-transport', 'cls1-evs-clothes-places-games']),
-      u('Weather, seasons, water, air and sky', ['cls1-evs-seasons-sky', 'cls1-evs-water-air-habits']),
-      u('Our country and manners', ['cls1-evs-india-manners']),
+      u('Theme 1: About Me', ['cls1-evs-body-senses'], 'partial', 'Body and sense organs are covered. Personal details, likes and feelings aren’t yet.'),
+      u('Theme 2: Others in my World', ['cls1-hindi-parivar'], 'partial', 'Family appears in Hindi reading only. Friends, neighbours and celebrations need an EVS lesson.'),
+      u('Theme 3: My Needs, Food We Eat', ['cls1-evs-houses-food', 'cls1-evs-animals-food-safety']),
+      u('Theme 4: My Needs, Water', ['cls1-evs-water-air-habits']),
+      u('Theme 5: My Needs, Shelter', ['cls1-evs-houses-food']),
+      u('Theme 6: My Needs, Clothing', ['cls1-evs-clothes-places-games', 'cls1-evs-seasons-sky']),
+      u('Theme 7: My Needs, Air', ['cls1-evs-water-air-habits']),
+      u('Theme 8: Keeping Oneself Clean, Safe and Healthy', ['cls1-evs-body-senses', 'cls1-evs-water-air-habits', 'cls1-evs-clothes-places-games'], 'partial', 'Hygiene and games are covered. Good touch and bad touch, and safety at home and in public places, aren’t yet.'),
+      u('Theme 9: Places in the Neighbourhood', ['cls1-evs-clothes-places-games', 'cls1-evs-helpers-transport']),
+      u('Theme 10: Plants', ['cls1-evs-plants-living']),
+      u('Theme 11: Animals', ['cls1-evs-animals-food-safety']),
+      u('Theme 12: Transport', ['cls1-evs-helpers-transport', 'cls1-evs-animals-food-safety']),
+      u('Theme 13: Communication', [], 'gap', 'Radio, TV, newspaper, phone and other ways we communicate aren’t covered yet.'),
+      u('Theme 14: The World around Me', ['cls1-evs-seasons-sky']),
     ],
   },
   {
-    title: 'Computer Studies',
+    title: 'Computer Studies (7 topics)',
+    source,
     units: [
-      u('Computer as a machine, parts', ['cls1-comp-smart-machine']),
-      u('Paint and lab manners', ['cls1-comp-paint-manners']),
+      u('Topic 1: Computer, A Machine', ['cls1-comp-smart-machine']),
+      u('Topic 2: Uses of a Computer', [], 'gap', 'Not covered yet.'),
+      u('Topic 3: Parts of a Computer', ['cls1-comp-smart-machine']),
+      u('Topic 4: Using Computers, Do’s and Don’ts', ['cls1-comp-paint-manners']),
+      u('Topic 5: Computer Mouse', ['cls1-comp-smart-machine']),
+      u('Topic 6: Computer Keyboard', ['cls1-comp-smart-machine']),
+      u('Topic 7: Storage Devices', [], 'gap', 'Not covered yet.'),
     ],
   },
 ];

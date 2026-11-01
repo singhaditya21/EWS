@@ -30,7 +30,7 @@
 Class 1 is the most complete part of the app: 41 play-based chapters across Maths, English, Hindi, EVS, Computer Studies and Arts.
 
 - **One shared core, two board views.** `src/class1/boardMap.ts` places every chapter in each board's sequence and marks it *Core*, *Integrated theme* (CBSE has no Class 1 EVS book), *Extension* or *Enrichment*. The sidebar, chapter labels and Prev/Next follow the selected board.
-- **Syllabus map.** `src/class1/syllabus.ts` lists NCERT Joyful Mathematics 1, Mridang 1 and Sarangi 1 chapters (CBSE) and typical ICSE topics (CISCE prescribes no Class 1 textbooks), showing what is covered, partly covered or still missing.
+- **Syllabus map.** `src/class1/syllabus.ts` lists NCERT Joyful Mathematics 1, Mridang 1 and Sarangi 1 chapters (CBSE) and the Class I themes from CISCE's Curriculum for Primary Classes, 2016 (CISCE prescribes no textbooks), showing what is covered, covered by theme, partly covered or still missing.
 - **Practice and review.** 65 skills (`src/class1/skills.ts`); maths questions are generated (`questionBank/math.ts`), other subjects use written question banks. Only the first attempt counts, and skills come back for review on a spaced schedule.
 - **Progress on the device only.** Child profiles, stars (once per activity per day), quiz first attempts, skill levels and teacher observations live in `localStorage` (`src/class1/progressStore.ts`) — no accounts, no network.
 - **Board-appropriate reports and worksheets.** CBSE: descriptors with no marks (supports the teacher's Holistic Progress Card) and activity sheets with an "I can…" self-check. ICSE: first-attempt percentages and marked practice tests with an answer key.

@@ -21,10 +21,10 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
       'Master Class 1 spatial pre-number words by moving the Furry Cat ON/UNDER the table, INSIDE/OUTSIDE the box, and NEAR/FAR from the tree.',
     syllabusAlignment: {
       cbseChapter: 'NCERT Joyful Mathematics 1 — Ch 1: Finding the Furry Cat!',
-      icseChapter: 'CISCE Class 1 Mathematics — Pre-Number Concepts (Inside/Outside, On/Under, Near/Far, Big/Small)',
+      icseChapter: 'CISCE Class I Mathematics — Theme 3: Geometry (relative position); Theme 4: Measurement (near, far, big, small)',
       examRelevance: 'Class 1 Spatial & Pre-Mathematical Readiness',
       differenceNote:
-        'Both CBSE NCERT Ch 1 and ICSE start Class 1 with spatial vocabulary before introducing number symbols.',
+        'Both boards build position and comparison words early. CISCE places them inside its Geometry and Measurement themes.',
     },
     keyFormulas: [
       {
@@ -81,10 +81,10 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
       'Count objects using interactive 10-frames, explore Before/After/Between numbers from 1 to 20, and compare quantities with the Hungry Crocodile (<, >, =) mouth.',
     syllabusAlignment: {
       cbseChapter: 'NCERT Joyful Mathematics 1 — Ch 3: Mango Treat & Ch 4: Making 10',
-      icseChapter: 'CISCE Class 1 Mathematics — Numbers 1 to 20, Before/After/Between & Comparison (<, >, =)',
+      icseChapter: 'CISCE Class I Mathematics — Theme 1: Numbers (1 to 20, zero, comparison)',
       examRelevance: 'NIPUN Bharat Foundational Numeracy & CISCE Class 1 Core',
       differenceNote:
-        'CBSE NCERT emphasises ten-frame subitising ("Making 10"), while many ICSE-school textbooks also introduce the symbols <, > and = in Class 1.',
+        'NCERT builds numbers through ten-frames and “Making 10”. CISCE’s Numbers theme also asks children to compare numbers and introduces zero through a subtraction pattern.',
     },
     keyFormulas: [
       {
@@ -141,10 +141,10 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
       'Learn single-digit and teen addition ("putting together") and subtraction ("taking away") by hopping a frog forward and backward along a 0–20 number line.',
     syllabusAlignment: {
       cbseChapter: 'NCERT Joyful Mathematics 1 — Ch 5: How Many? & Ch 6: Vegetable Farm',
-      icseChapter: 'CISCE Class 1 Mathematics — Addition & Subtraction up to 20',
+      icseChapter: 'CISCE Class I Mathematics — Theme 2: Number Operations (addition and subtraction up to 20)',
       examRelevance: 'Class 1 Arithmetic Operations Mastery',
       differenceNote:
-        'Both CBSE and ICSE teach addition as forward jumps on the number line and subtraction as backward jumps, plus zero properties (n + 0 = n, n - 0 = n).',
+        'CISCE takes addition facts up to 9 first, then up to 20, and suggests a number line in the play area. The number-line frog suits both boards.',
     },
     keyFormulas: [
       {
@@ -201,10 +201,10 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
       'Build two-digit numbers from 1 to 99 using Tens and Ones rods on a Spike Abacus and practice rhythmic skip counting by 2s, 5s, and 10s.',
     syllabusAlignment: {
       cbseChapter: 'NCERT Joyful Mathematics 1 — Ch 8: Fun with Numbers',
-      icseChapter: 'CISCE Class 1 Mathematics — Numbers up to 100, Place Value (Tens & Ones) & Skip Counting',
+      icseChapter: 'CISCE Class I Mathematics — Theme 1: Numbers (tens and ones up to 99)',
       examRelevance: 'Foundational Place-Value & Multiplication Readiness',
       differenceNote:
-        'ICSE introduces 2-digit expanded form (46 = 40 + 6) and skip counting grids in Class 1; CBSE emphasizes bundling 10 sticks into 1 Ten.',
+        'CISCE suggests bundles of sticks and the spike abacus for tens and ones. Both boards stop at 99 in Class 1. Skip counting fits CISCE’s number patterns (2, 4, 6).',
     },
     keyFormulas: [
       {
@@ -261,10 +261,10 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
       'Test Spheres (Balls), Cubes (Boxes), Cylinders (Drums), and Cones (Caps) on an interactive inclined ramp to discover which shapes Roll, Slide, or both!',
     syllabusAlignment: {
       cbseChapter: 'NCERT Joyful Mathematics 1 — Ch 2: What is Long? What is Round? & Ch 9: Utsav',
-      icseChapter: 'CISCE Class 1 Mathematics — 2D & 3D Shapes, Rolling & Sliding, Patterns',
+      icseChapter: 'CISCE Class I Mathematics — Theme 3: Geometry (3D and 2D shapes); Theme 1: sorting by rolling and sliding',
       examRelevance: 'Class 1 Spatial Geometry & Pattern Recognition',
       differenceNote:
-        'Both CBSE and ICSE test real-life 3D object classification (Ball = Sphere, Dice = Cube, Pencil cell = Cylinder, Birthday cap = Cone) and rolling vs. sliding.',
+        'Both boards start from real objects. CISCE adds tracing the faces of solids to find flat shapes.',
     },
     keyFormulas: [
       {
@@ -326,10 +326,10 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
       'Read o’clock and half-past times on an interactive Analog Clock and combine Indian Rupee coins and notes (₹1, ₹2, ₹5, ₹10, ₹20, ₹50) in a Piggy Bank.',
     syllabusAlignment: {
       cbseChapter: 'NCERT Joyful Mathematics 1 — Ch 10: How do I Spend my Day? (parts of the day; clock reading is an extension) & Ch 12: How Much Can We Spend?',
-      icseChapter: 'CISCE Class 1 Mathematics — Time & Money (Indian Coins and Notes)',
+      icseChapter: 'Extension for CISCE Class I — Theme 4 covers the order of daily events; clock reading and rupee sums go further',
       examRelevance: 'Everyday Practical Numeracy (Time & Currency)',
       differenceNote:
-        'ICSE Class 1 teaches both o’clock (:00) and half-past (:30) clock hands alongside Indian Rupee (₹) coin addition.',
+        'CISCE’s Class I time is about the order and length of daily events, not reading a clock, and money appears only as shopping play. Treat clock hands and rupee sums as extensions.',
     },
     keyFormulas: [
       {
@@ -386,10 +386,10 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
       'Measure tables in Handspans, compare Heavier vs. Lighter on a 2-Pan Beam Balance, and pour water from a Jug into Glasses to explore Capacity.',
     syllabusAlignment: {
       cbseChapter: 'NCERT Joyful Mathematics 1 — Ch 7: Lina’s Family',
-      icseChapter: 'CISCE Class 1 Mathematics — Measurement (Non-Standard Length, Mass & Capacity)',
+      icseChapter: 'CISCE Class I Mathematics — Theme 4: Measurement (non-standard length, weight and capacity)',
       examRelevance: 'Class 1 Measurement & Physical Comparison',
       differenceNote:
-        'Both boards use non-standard units (Handspan, Footspan, Cubit, Pace, Pan Balance blocks, and Cups/Glasses) in Class 1 before standard cm/kg/L in Class 2–3.',
+        'Both boards use handspans and other non-standard units in Class 1.',
     },
     keyFormulas: [
       {
@@ -446,10 +446,10 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
       'Complete festive shape, fruit, and number patterns (ABAB, AAB, ABC, +2) and build an interactive Toy Pictograph to find Most and Least.',
     syllabusAlignment: {
       cbseChapter: 'NCERT Joyful Mathematics 1 — Ch 9: Utsav & Ch 13: So Many Toys',
-      icseChapter: 'CISCE Class 1 Mathematics — Patterns & Data Handling (Pictographs)',
+      icseChapter: 'CISCE Class I Mathematics — Theme 5: Data Handling; Theme 6: Patterns',
       examRelevance: 'Logical Sequencing & Visual Data Interpretation',
       differenceNote:
-        'Covers both repeating visual patterns and counting/grouping objects into a picture chart.',
+        'CISCE asks children to read simple information from visuals and to extend patterns from daily life, such as rangoli and floor tiles.',
     },
     keyFormulas: [
       {
@@ -506,10 +506,10 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
       'Learn Ordinal Positions (1st First to 10th Tenth) in a race, count Equal Groups by Repeated Addition (4 groups of 3 = 12), and organize data.',
     syllabusAlignment: {
       cbseChapter: 'NCERT Joyful Mathematics 1 — Ch 11: How Many Times? & Ch 13: So Many Toys',
-      icseChapter: 'CISCE Class 1 Mathematics — Ordinal Numbers, Equal Groups & Data Handling',
+      icseChapter: 'Extension for CISCE Class I — ordinals and equal groups aren’t listed; data handling is Theme 5',
       examRelevance: 'Class 1 Multiplication Readiness & Logical Ordering',
       differenceNote:
-        'ICSE explicitly tests spelling and symbols of Ordinal Numbers (1st First to 10th Tenth) in Class 1, while CBSE Ch 11 introduces equal groups ("How Many Times?").',
+        'NCERT Ch 11 teaches multiplication as repeated addition. CISCE’s Class I curriculum doesn’t list equal groups or ordinal numbers, though your school’s textbook may include them.',
     },
     keyFormulas: [
       {
@@ -530,7 +530,7 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
         options: ['M', 'A', 'N', 'G'],
         correctIndex: 2,
         explanation: 'M is 1st, A is 2nd, and N is 3rd (Third).',
-        boardTag: 'ICSE Class 1 Ordinals',
+        boardTag: 'Class 1 Ordinals',
       },
       {
         id: 'c1m6-q2',
@@ -566,10 +566,10 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
       'Build 3-letter CVC words (CAT, HEN, PIG, DOG, SUN, BUS) with spoken audio pronunciation and learn when to use "An" (before A, E, I, O, U) vs. "A".',
     syllabusAlignment: {
       cbseChapter: 'NCERT Mridang 1 — letter sounds practised across Units 1–4 (no separate phonics chapter)',
-      icseChapter: 'CISCE Class 1 English — Vowels & Consonants, Phonics & Articles (A / An)',
+      icseChapter: 'CISCE Class I English — Reading and Writing; Grammar and Vocabulary (a, an, the)',
       examRelevance: 'Foundational English Literacy & Phonics (NIPUN Bharat / CISCE)',
       differenceNote:
-        'ICSE Class 1 English formally introduces the article rule ("An" before vowel sounds A, E, I, O, U and "A" before consonant sounds) alongside 3-letter phonics.',
+        'CISCE lists a, an and the under Grammar and Vocabulary. It doesn’t name phonics as a topic, but letter sounds support its reading outcomes.',
     },
     keyFormulas: [
       {
@@ -626,10 +626,10 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
       'Match everyday Opposites (Hot ↔ Cold, Big ↔ Small, Day ↔ Night), explore Action Words (Reading, Running, Swimming), and turn One into Many.',
     syllabusAlignment: {
       cbseChapter: 'NCERT Mridang 1 — language activities across Units 1–4 (action words, opposites, one/many)',
-      icseChapter: 'CISCE Class 1 English Grammar — Doing Words, Opposites & Singular/Plural',
+      icseChapter: 'CISCE Class I English — Grammar and Vocabulary in Context (action words, opposites, one and many)',
       examRelevance: 'Class 1 Vocabulary & Grammar Foundations',
       differenceNote:
-        'Both CBSE and ICSE teach action verbs through picture stories and test common opposite pairs and -s/-es plurals.',
+        'CISCE teaches naming, action and describing words with their opposites, and one and many, in context rather than as rules.',
     },
     keyFormulas: [
       {
@@ -686,10 +686,10 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
       'Discover how our 5 Sense Organs (Eyes, Ears, Nose, Tongue, and Skin) help us see, hear, smell, taste, and feel the world around us.',
     syllabusAlignment: {
       cbseChapter: 'No separate EVS textbook in CBSE Class 1 (NCF-FS) — theme met through NCERT Mridang 1 Unit 1: My Family and Me',
-      icseChapter: 'CISCE Class 1 EVS — My Body, Sense Organs & Cleanliness',
+      icseChapter: 'CISCE Class I EVS — Theme 1: About Me; Theme 8: Keeping Oneself Clean, Safe and Healthy',
       examRelevance: 'Class 1 EVS Core & Health Awareness',
       differenceNote:
-        'Both CBSE and ICSE emphasize matching each of the 5 sense organs to its function and daily hygiene habits (brushing twice daily, washing hands).',
+        'CISCE’s About Me also covers personal details, likes and feelings, which this chapter doesn’t teach yet.',
     },
     keyFormulas: [
       {
@@ -746,10 +746,10 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
       'Give a seed water and warm sunlight to watch its Roots, Stem, Leaves, and Flowers grow, and learn how Living Things differ from Non-Living Things.',
     syllabusAlignment: {
       cbseChapter: 'No separate EVS textbook in CBSE Class 1 (NCF-FS) — theme met through NCERT Mridang 1 Unit 2: Life Around Us',
-      icseChapter: 'CISCE Class 1 EVS — Living & Non-Living Things, Plants Around Us',
+      icseChapter: 'CISCE Class I EVS — Theme 10: Plants. Living and non-living things are an extension',
       examRelevance: 'Class 1 Life Science & Nature Exploration',
       differenceNote:
-        'ICSE Class 1 Science introduces Big Plants (Trees), Small Bushy Plants (Shrubs), Very Small Weak Plants (Herbs), Climbers, and Creepers.',
+        'CISCE Class I asks for the names of plants around us, plants on land and in water, climbers, and the parts we eat. Living and non-living things come in its Class III Science.',
     },
     keyFormulas: [
       {
@@ -786,7 +786,7 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
         options: ['Leaf', 'Root', 'Seed coat', 'Thorn'],
         correctIndex: 0,
         explanation: 'Green leaves are the food factory (kitchen) of the plant.',
-        boardTag: 'ICSE Class 1 Science',
+        boardTag: 'Class 1 EVS',
       },
     ],
   },
@@ -806,10 +806,10 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
       'Explore Wild, Domestic, Pet, and Aquatic (Water) animals, their homes, and practice Red-Yellow-Green Traffic Signal & Zebra Crossing safety rules.',
     syllabusAlignment: {
       cbseChapter: 'No separate EVS textbook in CBSE Class 1 (NCF-FS) — theme met through NCERT Mridang 1 Unit 2: Life Around Us (A Farm) & Unit 3: Food',
-      icseChapter: 'CISCE Class 1 EVS — Animals & Their Homes, Food & Road Safety',
+      icseChapter: 'CISCE Class I EVS — Theme 11: Animals; Theme 3: Food We Eat; Theme 12: Transport (traffic signals)',
       examRelevance: 'Class 1 EVS General Awareness & Safety Education',
       differenceNote:
-        'Covers animal habitats/shelters (Lion in Den, Cow in Shed, Dog in Kennel, Horse in Stable) and 3-color traffic signals.',
+        'CISCE covers pet, wild and domestic animals, animal sounds, and traffic signals.',
     },
     keyFormulas: [
       {
@@ -871,10 +871,10 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
       'Switch between Summer, Monsoon Rain, Winter, and Spring, and toggle Day vs. Night Sky to explore the Sun, Moon, Stars, and seasonal clothing.',
     syllabusAlignment: {
       cbseChapter: 'No separate EVS textbook in CBSE Class 1 (NCF-FS) — theme met through NCERT Mridang 1 Unit 4: Seasons (The Four Seasons)',
-      icseChapter: 'CISCE Class 1 EVS — Clothes, Weather & Seasons, Water and the Sky',
+      icseChapter: 'CISCE Class I EVS — Theme 14: The World around Me; Theme 6: Clothing',
       examRelevance: 'Class 1 Environmental & Seasonal Awareness',
       differenceNote:
-        'Both boards link seasonal weather (Hot Summer, Wet Monsoon, Cold Winter) to fabric choices (Cotton, Raincoat, Woolen) and sky observations (Sun vs. Moon/Stars).',
+        'CISCE links the sky and weather across summer, winter and the monsoon.',
     },
     keyFormulas: [
       {
@@ -936,10 +936,10 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
       'Learn Hindi Swar (अ से अः) and Vyanjan (क, ख, ग, घ, च, छ, ज, झ) with colorful pictures, English meanings, and native Hindi voice pronunciation!',
     syllabusAlignment: {
       cbseChapter: 'NCERT सारंगी 1 (Sarangi) — letters learnt through its 19 story/poem lessons (incl. अक्षर गीत)',
-      icseChapter: 'CISCE कक्षा 1 हिंदी — वर्णमाला (स्वर अ–अः, व्यंजन क–ज्ञ)',
+      icseChapter: 'CISCE कक्षा I हिंदी — थीम 2: पढ़ना एवं लिखना (वर्ण और शब्द)',
       examRelevance: 'Foundational Bilingual Literacy (NEP 2020 Class 1)',
       differenceNote:
-        'NCERT Sarangi introduces Hindi letters through stories, family conversations, and picture association, while ICSE Class 1 Hindi systematically covers Swar (अ–अः), Vyanjan groups, and 2/3-letter words like घर, जल, कमल.',
+        'NCERT Sarangi introduces letters through stories and pictures. CISCE’s Class I Hindi suggests letter and word cards, charts and rhymes.',
     },
     keyFormulas: [
       {
@@ -996,10 +996,10 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
       'Discover India’s proud National Symbols (Tiranga Flag, Peacock, Royal Bengal Tiger, Lotus, Mango) and practice the 5 Golden Magic Words of Good Manners!',
     syllabusAlignment: {
       cbseChapter: 'No separate EVS textbook in CBSE Class 1 (NCF-FS) — theme met through school GK & value-education activities',
-      icseChapter: 'CISCE Class 1 EVS — Our Country & Good Manners',
+      icseChapter: 'Extension for CISCE Class I — national symbols aren’t in its 14 EVS themes',
       examRelevance: 'Citizenship, Values & Social Awareness (Class 1)',
       differenceNote:
-        'Both CBSE and ICSE teach National Symbols alongside polite social behavior (Please, Thank You, Sorry, Excuse Me, Welcome).',
+        'National symbols aren’t in CISCE’s Class I EVS themes, so treat this as extra general knowledge.',
     },
     keyFormulas: [
       {
@@ -1020,7 +1020,7 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
         options: ['Crow', 'Peacock', 'Sparrow', 'Pigeon'],
         correctIndex: 1,
         explanation: 'The colorful Indian Peacock is the National Bird of India!',
-        boardTag: 'CBSE & ICSE Class 1 GK/EVS',
+        boardTag: 'Class 1 GK',
       },
       {
         id: 'c1e5-q2',
@@ -1061,10 +1061,10 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
       'Distinguish Natural Things from Man-Made Machines and explore the 6 main parts of a Computer: Monitor, CPU, Keyboard, Mouse, Speakers, and Printer!',
     syllabusAlignment: {
       cbseChapter: 'Not prescribed by NCERT for Class 1 — school-level digital literacy',
-      icseChapter: 'CISCE Class 1 Computer Studies — The Computer as a Machine & Its Parts',
+      icseChapter: 'CISCE Class I Computer Studies — Topic 1: Computer, A Machine; Topic 3: Parts; Topic 5: Mouse; Topic 6: Keyboard',
       examRelevance: 'ICSE Mandatory Class 1 Subject & CBSE Foundational Digital Literacy',
       differenceNote:
-        'ICSE schools usually teach Computer Studies as a subject from Class 1 (CPU as the brain, keyboard, mouse, lab manners); CBSE has no Class 1 computer textbook.',
+        'CISCE sets 7 Class I computer topics. Uses of a Computer and Storage Devices aren’t in the app yet. CBSE has no Class 1 computer textbook.',
     },
     keyFormulas: [
       {
@@ -1121,10 +1121,10 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
       'Sing and read along with NCERT Class 1 Mridang units: Two Little Hands, Polite Greetings (Good Morning to Good Night), The Cap-Seller & the Monkeys, and Anandi’s Rainbow!',
     syllabusAlignment: {
       cbseChapter: 'NCERT Mridang 1 — Unit 1: Two Little Hands & Greetings; Unit 2: The Cap-Seller and the Monkeys; Unit 4: Anandi’s Rainbow',
-      icseChapter: 'CISCE Class 1 English Literature — Rhymes, Stories & Greetings (school-chosen reader)',
+      icseChapter: 'CISCE Class I English — Listening and Speaking (poems, stories, greetings)',
       examRelevance: 'Foundational Reading Comprehension & Oral Fluency (Class 1)',
       differenceNote:
-        'Both CBSE Mridang and ICSE English Literature build listening comprehension, moral reasoning, and expressive reading through stories and action rhymes.',
+        'Both boards use recitation and stories. CISCE says recitation should be a regular part of class.',
     },
     keyFormulas: [
       {
@@ -1186,10 +1186,10 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
       'Meet our Community Helpers (Doctor, Teacher, Firefighter, Postman, Farmer, Police Officer) and explore Land, Water, and Air Means of Transport!',
     syllabusAlignment: {
       cbseChapter: 'No separate EVS textbook in CBSE Class 1 (NCF-FS) — theme met through school EVS/GK activities',
-      icseChapter: 'CISCE Class 1 EVS — People Who Help Us, Neighbourhood & Means of Transport',
+      icseChapter: 'CISCE Class I EVS — Theme 9: Places in the Neighbourhood; Theme 12: Transport',
       examRelevance: 'Core CBSE & ICSE Class 1 EVS',
       differenceNote:
-        'ICSE Class 1 EVS explicitly tests matching Community Helpers with their workplaces (Hospital, School, Fire Station, Post Office) and classifying vehicles into Land, Water, and Air transport.',
+        'CISCE covers people such as doctors and drivers, places such as hospitals and post offices, and land, air and water transport.',
     },
     keyFormulas: [
       {
@@ -1246,10 +1246,10 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
       'Mix Primary Colors (Red, Blue, Yellow) to create Secondary Colors (Orange, Green, Purple) and play real musical notes on the 8-Key Rainbow Sargam Xylophone!',
     syllabusAlignment: {
       cbseChapter: 'NCF-FS Art Education (no textbook) — colour play & music, supported by Jadui Pitara',
-      icseChapter: 'CISCE Class 1 Art & Music — Primary & Secondary Colours, Musical Notes',
+      icseChapter: 'CISCE Arts Education (Classes I–III) — Colour; music and rhythm activities',
       examRelevance: 'NEP 2020 Holistic Aesthetic & Cultural Development (Class 1)',
       differenceNote:
-        'Both NCF-FS (Jadui Pitara) and CISCE integrate visual arts (color mixing) and musical pitch exploration into Class 1 foundational learning.',
+        'CISCE’s Arts Education has a Colour theme that includes mixing two colours. NCF-FS also promotes colour play and music.',
     },
     keyFormulas: [
       {
@@ -1306,10 +1306,10 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
       'Solve 2-digit vertical Tens & Ones (T | O) column addition and subtraction sums, climb Ascending (Smallest→Greatest) & Descending stairs, and pair shoes for Even vs. Odd!',
     syllabusAlignment: {
       cbseChapter: 'Extension beyond NCERT Joyful Mathematics 1 — builds on Ch 8: Fun with Numbers',
-      icseChapter: 'CISCE Class 1 Mathematics — Column Addition/Subtraction, Ascending/Descending Order & Even/Odd',
+      icseChapter: 'CISCE Class I Mathematics — Theme 2: Number Operations (within 99, no regrouping); Theme 1: Numbers (ordering)',
       examRelevance: 'Core CBSE & ICSE Class 1 Written Notebook & Exam Skill',
       differenceNote:
-        'ICSE Class 1 tests vertical T | O column sums, Ascending/Descending staircase ordering, and pairing objects into 2s to identify Even vs. Odd numbers.',
+        'CISCE includes addition and subtraction within 99 without regrouping, and ordering numbers. Even and odd appear only as number patterns (2, 4, 6 and 1, 3, 5).',
     },
     keyFormulas: [
       {
@@ -1366,10 +1366,10 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
       'Sort Naming Words (Nouns) into the 4 Baskets (Person, Place, Animal, Thing) and practice pointing with This, That, These, and Those!',
     syllabusAlignment: {
       cbseChapter: 'NCERT Mridang 1 — naming and pointing words in activities across Units 1–4',
-      icseChapter: 'CISCE Class 1 English Grammar — Naming Words (Nouns) & This/That/These/Those',
+      icseChapter: 'CISCE Class I English — Grammar and Vocabulary in Context (nouns, this and that)',
       examRelevance: 'Core CBSE & ICSE Class 1 Grammar',
       differenceNote:
-        'ICSE Class 1 English Grammar tests classifying Nouns into Person, Place, Animal, and Thing and choosing between This/That (singular) and These/Those (plural).',
+        'CISCE teaches grammar in context, using sentences such as “this cat is small, that cat is big”.',
     },
     keyFormulas: [
       {
@@ -1426,10 +1426,10 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
       'Compare Kutcha (mud/straw) and Pucca (brick/cement) houses, Igloos, Houseboats, and Tents, explore rooms in a home, and build a Healthy Everyday Food Plate!',
     syllabusAlignment: {
       cbseChapter: 'No separate EVS textbook in CBSE Class 1 (NCF-FS) — theme met through NCERT Mridang 1 Unit 3: Food (The Food We Eat)',
-      icseChapter: 'CISCE Class 1 EVS — Food We Eat & Houses / Shelter',
+      icseChapter: 'CISCE Class I EVS — Theme 3: Food We Eat; Theme 5: Shelter',
       examRelevance: 'Core CBSE & ICSE Class 1 EVS',
       differenceNote:
-        'ICSE Class 1 EVS specifically compares Kutcha vs. Pucca house building materials, special houses (Igloo, Houseboat, Tent), and Healthy vs. Junk food habits.',
+        'CISCE covers the child’s own house, rooms, types of houses nearby, and healthy eating habits.',
     },
     keyFormulas: [
       {
@@ -1491,10 +1491,10 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
       'Cheer for animals in the 1st-to-10th Ordinal Number Race, find numbers just Before, Between, and After, and slice a pizza into equal Halves (1/2) and Quarters (1/4)!',
     syllabusAlignment: {
       cbseChapter: 'Extension beyond NCERT Joyful Mathematics 1 — ordinal positions & equal sharing (no separate chapter)',
-      icseChapter: 'CISCE Class 1 Mathematics — Ordinal Numbers, Before/After/Between & Halves (Equal Sharing)',
+      icseChapter: 'Extension for CISCE Class I — before, after and between are in Theme 1; ordinals and halves aren’t listed',
       examRelevance: 'Core ICSE Class 1 Math & SOF International Mathematics Olympiad (IMO)',
       differenceNote:
-        'ICSE Class 1 and Math Olympiads test spelling of Ordinal Numbers (First to Tenth) and equal sharing into halves and quarters.',
+        'CISCE’s Class I curriculum lists before, after and between numbers, but not ordinal numbers or halves. Your school’s textbook may still include them.',
     },
     keyFormulas: [
       {
@@ -1515,7 +1515,7 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
         options: ['First (1st)', 'Second (2nd)', 'Third (3rd)', 'Fifth (5th)'],
         correctIndex: 2,
         explanation: '3rd place is called THIRD!',
-        boardTag: 'ICSE & Olympiad Class 1 Math',
+        boardTag: 'Olympiad Class 1 Math',
       },
       {
         id: 'c1m11-q2',
@@ -1551,10 +1551,10 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
       'Replace Naming Words with Pronouns (He, She, It, We, They) and use colorful Describing Words (Adjectives like Red, Tall, Hot, Cold, Happy) to build vivid sentences!',
     syllabusAlignment: {
       cbseChapter: 'NCERT Mridang 1 — he/she/it sentences & describing words in activities',
-      icseChapter: 'CISCE Class 1 English Grammar — Pronouns & Describing Words (Adjectives)',
+      icseChapter: 'CISCE Class I English — Grammar and Vocabulary in Context (pronouns, adjectives)',
       examRelevance: 'Core ICSE Class 1 English Grammar & IEO Olympiad',
       differenceNote:
-        'ICSE Class 1 English Grammar formally introduces Pronouns (He, She, It, We, They) and Adjectives (size, color, number, quality) with sentence substitution.',
+        'CISCE lists pronouns and adjectives for Class I, to be used in context.',
     },
     keyFormulas: [
       {
@@ -1611,7 +1611,7 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
       'Snap Devanagari letters together on the Hindi Word Train to form 2-letter (घर, जल, फल), 3-letter (कमल, मटर, बतख), and 4-letter (अजगर, शरबत, थरमस) words and read complete Hindi sentences!',
     syllabusAlignment: {
       cbseChapter: 'NCERT सारंगी 1 (Sarangi) — reading simple words across its story/poem lessons',
-      icseChapter: 'CISCE कक्षा 1 हिंदी — शब्द रचना (दो, तीन व चार अक्षर के शब्द)',
+      icseChapter: 'CISCE कक्षा I हिंदी — थीम 2: पढ़ना एवं लिखना (सरल शब्द)',
       examRelevance: 'Core CBSE & ICSE Class 1 Hindi Reading Fluency',
       differenceNote:
         'Joining 2, 3, and 4 consonant/vowel letters without matras is the essential bridge between Varnamala recognition and sentence reading.',
@@ -1671,10 +1671,10 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
       'Discover where water comes from (Rain, Rivers, Lakes) and how we use it, feel the power of moving air (Wind), and follow a healthy Morning-to-Night Class 1 daily routine!',
     syllabusAlignment: {
       cbseChapter: 'No separate EVS textbook in CBSE Class 1 (NCF-FS) — theme met through Vidya Pravesh & daily-routine activities',
-      icseChapter: 'CISCE Class 1 EVS — Air, Water & Good Habits',
+      icseChapter: 'CISCE Class I EVS — Theme 4: Water; Theme 7: Air; Theme 8: Keeping Oneself Clean, Safe and Healthy',
       examRelevance: 'Core CBSE & ICSE Class 1 EVS & Moral Science',
       differenceNote:
-        'Combines ICSE Class 1 EVS chapters on Water and Air with daily hygiene and moral habits (brushing twice daily, saving water, washing hands).',
+        'Covers CISCE’s water, air and hygiene themes.',
     },
     keyFormulas: [
       {
@@ -1731,10 +1731,10 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
       'Solve real-life Class 1 Addition and Subtraction Story Problems by spotting clue words ("altogether/total" vs. "left/flew away"), and sing along with Musical Multiplication Tables of 1, 2, 5, and 10!',
     syllabusAlignment: {
       cbseChapter: 'NCERT Joyful Mathematics 1 — builds on Ch 5: How Many? & Ch 11: How Many Times? (tables are an extension)',
-      icseChapter: 'CISCE Class 1 Mathematics — Word Problems on Addition & Subtraction; Early Multiplication Tables (varies by school textbook)',
+      icseChapter: 'CISCE Class I Mathematics — Theme 2: Number Operations (day-to-day problems). Tables are an extension',
       examRelevance: 'Core CBSE & ICSE Class 1 Math & IMO Olympiad',
       differenceNote:
-        'Many ICSE-school textbooks add early multiplication tables (1, 2, 5, 10) to Class 1; NCERT Joyful Mathematics stops at equal groups and repeated addition.',
+        'CISCE asks children to solve picture and story problems. Multiplication tables aren’t in its Class I curriculum, and NCERT teaches only repeated addition.',
     },
     keyFormulas: [
       {
@@ -1771,7 +1771,7 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
         options: ['8', '10', '12', '14'],
         correctIndex: 2,
         explanation: '2 sixes are 12 (2 × 6 = 12)!',
-        boardTag: 'ICSE Class 1 Tables',
+        boardTag: 'Class 1 Tables',
       },
     ],
   },
@@ -1791,10 +1791,10 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
       'Discover how two letters join to make one special Digraph sound (CH in Chair, SH in Ship, TH in Thumb, WH in Whale) and unscramble jumbled words using Capital Letters, Full Stops (.), and Question Marks (?)!',
     syllabusAlignment: {
       cbseChapter: 'NCERT Mridang 1 — reading & simple-sentence activities (digraphs are an extension)',
-      icseChapter: 'CISCE Class 1 English Grammar — Consonant Digraphs, Capital Letters, Full Stop/Question Mark & Jumbled Sentences',
+      icseChapter: 'CISCE Class I English — Reading and Writing; Grammar and Vocabulary (capital letters, punctuation). Digraphs are an extension',
       examRelevance: 'Core ICSE & CBSE Class 1 English Reading & IEO Olympiad',
       differenceNote:
-        'ICSE Class 1 tests sentence punctuation (starting with a Capital letter and ending with a Full Stop or Question Mark) and word-order unscrambling.',
+        'CISCE expects a capital letter to start a sentence and a full stop to end it. It doesn’t name digraphs, so treat ch, sh, th and wh as extra reading support.',
     },
     keyFormulas: [
       {
@@ -1851,10 +1851,10 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
       'Practice the 12-sound Barahkhadi strip (क, का, कि, की, कु, कू, के, कै, को, कौ, कं, कः) and master Class 1 Hindi Grammar: विलोम शब्द (दिन-रात, बड़ा-छोटा) and एक–अनेक (तारा-तारे, किताब-किताबें)!',
     syllabusAlignment: {
       cbseChapter: 'NCERT सारंगी 1 (Sarangi) — matras and word play inside its story/poem lessons (no separate grammar chapter)',
-      icseChapter: 'CISCE कक्षा 1 हिंदी व्याकरण — बारहखड़ी, विलोम शब्द और वचन (एक–अनेक)',
+      icseChapter: 'CISCE कक्षा I हिंदी — थीम 2: पढ़ना एवं लिखना (बारहखड़ी, मात्राएँ); विलोम और वचन अतिरिक्त अभ्यास हैं',
       examRelevance: 'Core CBSE & ICSE Class 1 Hindi Grammar',
       differenceNote:
-        'Combines Barahkhadi pronunciation with foundational Hindi Vyakaran (Vilom Shabd and Ek-Anek Vachan).',
+        'CISCE suggests a बारहखड़ी chart for building simple words. विलोम and वचन go beyond what its Class I Hindi lists.',
     },
     keyFormulas: [
       {
@@ -1911,10 +1911,10 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
       'Learn where Cotton and Wool come from, explore important places in our neighbourhood (Hospital, Post Office, School, Fire Station, Park), and compare Indoor Games (Chess, Carrom, Ludo) with Outdoor Games (Football, Cricket)!',
     syllabusAlignment: {
       cbseChapter: 'No separate EVS textbook in CBSE Class 1 (NCF-FS) — theme met through NCERT Mridang 1 Unit 4: Seasons & school activities',
-      icseChapter: 'CISCE Class 1 EVS — Clothes We Wear, Our Neighbourhood & Games We Play',
+      icseChapter: 'CISCE Class I EVS — Theme 6: Clothing; Theme 9: Places in the Neighbourhood; Theme 8: indoor and outdoor games',
       examRelevance: 'Core CBSE & ICSE Class 1 EVS & General Knowledge',
       differenceNote:
-        'ICSE Class 1 EVS links seasonal clothes to natural fibers (Cotton from cotton plants, Wool from sheep) and classifies neighbourhood services and games.',
+        'CISCE covers clothes for seasons and occasions, places nearby, and indoor and outdoor games.',
     },
     keyFormulas: [
       {
@@ -1971,10 +1971,10 @@ export const CURRICULUM_DATA: CurriculumChapter[] = [
       'Explore digital drawing tools in MS Paint / Tux Paint (Pencil, Fill with Color Bucket, Eraser, Shapes, Text) and practice safe, polite Computer Room Do’s and Don’ts!',
     syllabusAlignment: {
       cbseChapter: 'Not prescribed by NCERT for Class 1 — school-level digital literacy',
-      icseChapter: 'CISCE Class 1 Computer Studies — Drawing with Paint & Computer Lab Manners',
+      icseChapter: 'CISCE Class I Computer Studies — Topic 4: Using Computers, Do’s and Don’ts. Paint is an extension',
       examRelevance: 'Core ICSE Class 1 Computer Studies & Cyber Olympiad',
       differenceNote:
-        'Paint-tool drawing and lab safety are common in ICSE-school Class 1 Computer Studies; CBSE schools may cover them as optional digital literacy.',
+        'Lab manners match CISCE’s Topic 4. Paint isn’t in its Class I topics, and CBSE schools may use it as optional digital literacy.',
     },
     keyFormulas: [
       {
