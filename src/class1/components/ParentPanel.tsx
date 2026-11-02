@@ -22,6 +22,7 @@ export const ParentPanel: React.FC<{
   const right = answers.filter((a) => a.correct).length;
   const stars = week.filter((a) => a.kind === 'star').length;
   const finished = week.filter((a) => a.kind === 'complete').length;
+  const explored = week.filter((a) => a.kind === 'play').length;
 
   const levels = Object.entries(profile.skills).map(([id, rec]) => ({ id, level: skillLevel(rec) }));
   const strong = levels.filter((l) => l.level === 'proficient').map((l) => SKILL_BY_ID[l.id]?.label).filter(Boolean);
@@ -47,7 +48,8 @@ export const ParentPanel: React.FC<{
         <p className="text-xs text-slate-400">Last 7 days on this device.</p>
       </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+      <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
+        {stat('things explored', String(explored))}
         {stat('questions answered', String(answers.length))}
         {stat('answered right', answers.length ? `${Math.round((right / answers.length) * 100)}%` : '—')}
         {stat('stars earned', String(stars))}

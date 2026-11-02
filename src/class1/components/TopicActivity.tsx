@@ -2,13 +2,14 @@ import React, { useMemo, useState } from 'react';
 import { CardsSection, SortSection, TopicSection, TopicSet } from '../topicSets';
 import { AnswerPanel, OrderPanel, StarFn, pillCls } from './ReadingActivity';
 import { progress } from '../progressStore';
+import { CLASS1_BOARD_MAP } from '../boardMap';
 import { speakText } from '../../utils/speech';
 import { playPop, playSuccessChime } from '../../utils/soundEffects';
 
 const LANG = 'en-IN' as const;
 
 /** Tap a card to hear it. Seeing every card earns the star. */
-const CardsPanel: React.FC<{ section: CardsSection; onStar: StarFn }> = ({ section, onStar }) => {
+const CardsPanel: React.FC<{ section: CardsSection; chapterId: string; onStar: StarFn }> = ({ section, chapterId, onStar }) => {
   const [seen, setSeen] = useState<string[]>([]);
   const [active, setActive] = useState<string | null>(null);
 
@@ -18,7 +19,10 @@ const CardsPanel: React.FC<{ section: CardsSection; onStar: StarFn }> = ({ secti
     if (seen.includes(name)) return;
     const next = [...seen, name];
     setSeen(next);
-    if (next.length === section.cards.length) onStar('You looked at every card!', LANG, `${section.id}:cards`);
+    if (next.length === section.cards.length) {
+      (CLASS1_BOARD_MAP[chapterId]?.skills ?? []).forEach((skill) => progress.recordSkillPlay(skill, chapterId));
+      onStar('You looked at every card!', LANG, `${section.id}:cards`);
+    }
   };
 
   return (
@@ -148,7 +152,7 @@ const SortPanel: React.FC<{ section: SortSection; chapterId: string; onStar: Sta
 const SectionView: React.FC<{ section: TopicSection; chapterId: string; onStar: StarFn }> = ({ section, chapterId, onStar }) => {
   switch (section.kind) {
     case 'cards':
-      return <CardsPanel section={section} onStar={onStar} />;
+      return <CardsPanel section={section} chapterId={chapterId} onStar={onStar} />;
     case 'sort':
       return <SortPanel section={section} chapterId={chapterId} onStar={onStar} />;
     case 'order':

@@ -10,6 +10,7 @@ import { UpgradeNotice } from '../../platform/components/UpgradeNotice';
 
 const LEVEL_STYLE: Record<SkillLevel, string> = {
   'not-started': 'bg-slate-800 text-slate-400 border-slate-700',
+  explored: 'bg-cyan-500/15 text-cyan-200 border-cyan-400/50',
   beginning: 'bg-rose-500/15 text-rose-200 border-rose-400/50',
   developing: 'bg-amber-500/15 text-amber-200 border-amber-400/50',
   proficient: 'bg-emerald-500/15 text-emerald-200 border-emerald-400/50',

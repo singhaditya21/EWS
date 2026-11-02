@@ -16,6 +16,7 @@ import { ReadingMode, readingSetFor } from '../../class1/readingSets';
 import { ReadingActivity } from '../../class1/components/ReadingActivity';
 import { TopicMode, topicSetFor } from '../../class1/topicSets';
 import { TopicActivity } from '../../class1/components/TopicActivity';
+import { QuickCheck } from '../../class1/components/QuickCheck';
 import {
   Calculator,
   Shapes,
@@ -140,6 +141,9 @@ const MODE_CATALOG: {
   { id: 'arts-colors-music', subject: 'arts', label: '1. Color Mixing & Xylophone 🎵', icon: Palette },
   { id: 'olympiad-reasoning-gym', subject: 'arts', label: '2. Olympiad Brain Gym (Odd One Out & Analogies) 🧠', icon: Trophy },
 ];
+
+/** Things to explore in a lab before the "show what you know" check appears. */
+const QUICK_CHECK_AFTER = 3;
 
 // The frog number line runs 0–20, so hops can't overshoot either end.
 const maxFrogHops = (start: number, op: 'add' | 'sub') => (op === 'add' ? 20 - start : start);
@@ -483,36 +487,42 @@ const HEALTHY_VS_JUNK_FOODS = [
 
 const ARCADE_MISSIONS = [
   {
+    skillId: 'm.make10',
     prompt: '🔊 Number Bond Mission: Which number joins with 6 to make 10? (6 + ? = 10)',
     options: ['2', '4', '7', '9'],
     correct: 1,
     rewardMsg: 'Super! 6 plus 4 makes 10!',
   },
   {
+    skillId: 'e.nouns',
     prompt: '🔊 English Noun Mission: Is “SCHOOL 🏫” a Person, Place, Animal, or Thing?',
     options: ['Person 👧', 'Place 🏫', 'Animal 🐶', 'Thing ⚽'],
     correct: 1,
     rewardMsg: 'Awesome! A School is a PLACE where we learn!',
   },
   {
+    skillId: 'h.swar',
     prompt: '🔊 Hindi Varnamala Mission: “आ से ___” — Which sweet yellow fruit starts with आ?',
     options: ['अनार', 'आम', 'उल्लू', 'कमल'],
     correct: 1,
     rewardMsg: 'शाबाश! आ से आम (Mango)!',
   },
   {
+    skillId: 'v.animals',
     prompt: '🔊 EVS Animal Baby Mission: What is the baby (young one) of a DOG 🐶 called?',
     options: ['Kitten 🐱', 'Puppy 🐶', 'Calf 🐄', 'Cub 🦁'],
     correct: 1,
     rewardMsg: 'Wonderful! A baby dog is called a Puppy!',
   },
   {
+    skillId: 'c.parts',
     prompt: '🔊 Computer Whiz Mission: Which key is the LONGEST key on a computer keyboard?',
     options: ['Enter Key ↵', 'Spacebar ━━━', 'Letter A', 'Number 1'],
     correct: 1,
     rewardMsg: 'Spot on! The Spacebar is the longest key on the keyboard!',
   },
   {
+    skillId: 'a.colours',
     prompt: '🔊 Color Mixing Mission: What Secondary Color do you get when you mix BLUE 🔵 + YELLOW 🟡?',
     options: ['Orange 🟠', 'Green 🟢', 'Purple 🟣', 'Red 🔴'],
     correct: 1,
@@ -939,9 +949,10 @@ const SHAPES_3D = [
 export const Class1InteractiveLab: React.FC<{
   initialMode?: string;
   board?: SchoolBoard;
+  chapterId?: string;
   /** Called when the child picks another activity, so the chapter panel follows along. */
   onModeChange?: (mode: string) => void;
-}> = ({ initialMode, board = 'CBSE', onModeChange }) => {
+}> = ({ initialMode, board = 'CBSE', chapterId, onModeChange }) => {
   const [mode, setMode] = useState<Class1LabMode>(
     (initialMode as Class1LabMode) || 'spatial-prenumber'
   );
@@ -953,6 +964,8 @@ export const Class1InteractiveLab: React.FC<{
   const recognitionRef = useRef<{ abort?: () => void } | null>(null);
   const subjectRowRef = useRef<HTMLDivElement>(null);
   const lessonRowRef = useRef<HTMLDivElement>(null);
+  const answeredRef = useRef(new Set<string>());
+  const [exploredCount, setExploredCount] = useState(0);
 
   // On phones these rows scroll sideways: keep the current subject and lesson in view.
   useEffect(() => {
@@ -1169,6 +1182,11 @@ export const Class1InteractiveLab: React.FC<{
     }
   };
 
+  // Saved play plus this visit's tries, so the check is still there after leaving and coming back.
+  const exploredHere = Math.max(
+    exploredCount,
+    profile.activity.filter((a) => a.kind === 'play' && a.chapterId === chapterId).length
+  );
   const readingSet = readingSetFor(mode);
   const topicSet = topicSetFor(mode);
 
@@ -1187,8 +1205,10 @@ export const Class1InteractiveLab: React.FC<{
    * Gives a star once per activity per day. Repeat taps on the same thing still get praise,
    * but no extra star, so the star count means something to parents.
    */
-  const awardStar = (msg: string, lang: 'en-IN' | 'hi-IN' = 'en-IN', key?: string) => {
+  const awardStar = (msg: string, lang: 'en-IN' | 'hi-IN' = 'en-IN', key?: string, playedSkill?: string) => {
     const earned = progress.awardStar(`${mode}:${key ?? msg}`);
+    setExploredCount((n) => n + 1);
+    if (earned && playedSkill) progress.recordSkillPlay(playedSkill, chapterId);
     if (earned) {
       playSuccessChime();
       setMissionBanner(`🎉 ${msg} (+1 ⭐ Star!)`);
@@ -1200,6 +1220,18 @@ export const Class1InteractiveLab: React.FC<{
     if (earned && bilingualMode && lang === 'en-IN') {
       speakText('बहुत बढ़िया! आपको एक स्टार मिला!', { lang: 'hi-IN', queue: true });
     }
+  };
+
+  /** A tap that explores something: earns a star and counts as play, never as a right answer. */
+  const playStar = (skillId: string, msg: string, lang: 'en-IN' | 'hi-IN' = 'en-IN') =>
+    awardStar(msg, lang, undefined, skillId);
+
+  /** A real right-or-wrong moment. Only the child's first try at each item counts. */
+  const recordAnswer = (skillId: string, correct: boolean, itemKey: string | number) => {
+    const key = `${skillId}:${itemKey}`;
+    if (answeredRef.current.has(key)) return;
+    answeredRef.current.add(key);
+    progress.recordSkillResult(skillId, correct, chapterId);
   };
 
   const compSymbol = leftCount > rightCount ? '>' : leftCount < rightCount ? '<' : '=';
@@ -1795,6 +1827,7 @@ export const Class1InteractiveLab: React.FC<{
                   key={opt}
                   type="button"
                   onClick={() => {
+                    recordAnswer(ARCADE_MISSIONS[arcadeMissionIdx].skillId, idx === ARCADE_MISSIONS[arcadeMissionIdx].correct, `arcade-${arcadeMissionIdx}`);
                     if (idx === ARCADE_MISSIONS[arcadeMissionIdx].correct) {
                       playFanfare();
                       setArcadeStreak((s) => s + 1);
@@ -2071,6 +2104,11 @@ export const Class1InteractiveLab: React.FC<{
         </div>
       </div>
 
+      {/* After some exploring, a short check turns play into evidence of learning. */}
+      {chapterId && !readingSet && !topicSet && exploredHere >= QUICK_CHECK_AFTER && (
+        <QuickCheck chapterId={chapterId} onStar={awardStar} />
+      )}
+
       {/* STORIES, POEMS AND PICTURE TALK (SARANGI AND MRIDANG THEMES) */}
       {readingSet && <ReadingActivity set={readingSet} onStar={awardStar} />}
       {topicSet && <TopicActivity set={topicSet} onStar={awardStar} />}
@@ -2103,7 +2141,7 @@ export const Class1InteractiveLab: React.FC<{
                   type="button"
                   onClick={() => {
                     setCatPosition(pos.id);
-                    awardStar(pos.speech);
+                    playStar('m.position', pos.speech);
                   }}
                   className={`px-3 py-1.5 rounded-lg text-xs font-bold border transition-all ${
                     catPosition === pos.id
@@ -2250,7 +2288,7 @@ export const Class1InteractiveLab: React.FC<{
               <button
                 type="button"
                 onClick={() =>
-                  awardStar(`${leftCount} ${compWord} ${rightCount}!`)
+                  playStar('m.compare', `${leftCount} ${compWord} ${rightCount}!`)
                 }
                 className="px-3 py-1 rounded-lg bg-emerald-500 text-slate-950 text-xs font-extrabold"
               >
@@ -2312,7 +2350,7 @@ export const Class1InteractiveLab: React.FC<{
               <button
                 type="button"
                 onClick={() =>
-                  awardStar(`${bondLeft} plus ${10 - bondLeft} makes 10!`)
+                  playStar('m.make10', `${bondLeft} plus ${10 - bondLeft} makes 10!`)
                 }
                 className="px-3 py-1 rounded-lg bg-amber-400 text-slate-950 text-xs font-extrabold"
               >
@@ -2403,7 +2441,7 @@ export const Class1InteractiveLab: React.FC<{
             <button
               type="button"
               onClick={() =>
-                awardStar(
+                playStar(operation === 'add' ? 'm.add20' : 'm.sub20',
                   `${startNum} ${operation === 'add' ? 'plus' : 'minus'} ${changeNum} equals ${resultNum}!`
                 )
               }
@@ -2471,6 +2509,7 @@ export const Class1InteractiveLab: React.FC<{
                   type="button"
                   onClick={() => {
                     const nextTarget = Math.floor(Math.random() * 88) + 11;
+                    recordAnswer('m.placevalue', true, targetAbacusMission);
                     awardStar(`You made ${targetAbacusMission}, ${numberToWords(targetAbacusMission)}!`);
                     setTargetAbacusMission(nextTarget);
                   }}
@@ -3023,9 +3062,10 @@ export const Class1InteractiveLab: React.FC<{
                 {totalMoney === activeToy.price && (
                   <button
                     type="button"
-                    onClick={() =>
-                      awardStar(`Exact change! You bought the ${activeToy.name} for ${activeToy.price} rupees!`)
-                    }
+                    onClick={() => {
+                      recordAnswer('m.money', true, activeToy.name);
+                      awardStar(`Exact change! You bought the ${activeToy.name} for ${activeToy.price} rupees!`);
+                    }}
                     className="px-3 py-1 rounded-lg bg-emerald-500 text-slate-950 text-xs font-extrabold shrink-0"
                   >
                     🎉 Buy Toy (+1 ⭐)
@@ -3389,6 +3429,7 @@ export const Class1InteractiveLab: React.FC<{
                     type="button"
                     onClick={() => {
                       setChosenVowel(v);
+                      recordAnswer('e.cvc', v === CVC_WORDS[cvcIdx].vowel, cvcIdx);
                       if (v === CVC_WORDS[cvcIdx].vowel) {
                         awardStar(
                           `Correct! ${CVC_WORDS[cvcIdx].c1}, ${v}, ${CVC_WORDS[cvcIdx].c2} spells ${CVC_WORDS[cvcIdx].word}!`
@@ -3480,7 +3521,7 @@ export const Class1InteractiveLab: React.FC<{
                   type="button"
                   onClick={() => {
                     setOppositeIdx(idx);
-                    awardStar(pair.speech);
+                    playStar('e.opposites', pair.speech);
                   }}
                   className={`p-2.5 rounded-xl border text-xs font-bold flex items-center justify-between ${
                     oppositeIdx === idx
@@ -3602,7 +3643,7 @@ export const Class1InteractiveLab: React.FC<{
               <button
                 type="button"
                 onClick={() =>
-                  awardStar(
+                  playStar('e.listening',
                     `${MRIDANG_STORIES[selectedStoryIdx].title}. ${MRIDANG_STORIES[
                       selectedStoryIdx
                     ].lines.join(' ')}`
@@ -3887,7 +3928,7 @@ export const Class1InteractiveLab: React.FC<{
                   type="button"
                   onClick={() => {
                     setSelectedAnimalFamilyIdx(idx);
-                    awardStar(
+                    playStar('v.animals',
                       `A ${af.animal}'s baby is a ${af.baby}. It lives in a ${af.home} and ${af.sound}`
                     );
                   }}
@@ -4004,7 +4045,7 @@ export const Class1InteractiveLab: React.FC<{
                     type="button"
                     onClick={() => {
                       setSelectedSwarIdx(idx);
-                      awardStar(`${item.speech} (${item.eng})`, 'hi-IN');
+                      playStar('h.swar', `${item.speech} (${item.eng})`, 'hi-IN');
                     }}
                     className={`p-2.5 rounded-xl border flex flex-col items-center gap-1 transition-all ${
                       selectedSwarIdx === idx
@@ -4057,7 +4098,7 @@ export const Class1InteractiveLab: React.FC<{
                     type="button"
                     onClick={() => {
                       setSelectedVyanjanIdx(idx);
-                      awardStar(`${item.speech} (${item.eng})`, 'hi-IN');
+                      playStar('h.vyanjan', `${item.speech} (${item.eng})`, 'hi-IN');
                     }}
                     className={`p-2.5 rounded-xl border flex flex-col items-center gap-1 transition-all ${
                       selectedVyanjanIdx === idx
@@ -4110,7 +4151,7 @@ export const Class1InteractiveLab: React.FC<{
                     type="button"
                     onClick={() => {
                       setSelectedMatraIdx(idx);
-                      awardStar(m.speech, 'hi-IN');
+                      playStar('h.matra', m.speech, 'hi-IN');
                     }}
                     className={`p-3 rounded-xl border text-center transition-all ${
                       selectedMatraIdx === idx
@@ -4136,7 +4177,7 @@ export const Class1InteractiveLab: React.FC<{
                   type="button"
                   onClick={() => {
                     setSelectedGintiIdx(idx);
-                    awardStar(`${g.num}, ${g.word}`, 'hi-IN');
+                    playStar('h.ginti', `${g.num}, ${g.word}`, 'hi-IN');
                   }}
                   className={`p-3 rounded-xl border text-center transition-all ${
                     selectedGintiIdx === idx
@@ -4184,7 +4225,7 @@ export const Class1InteractiveLab: React.FC<{
                   <button
                     type="button"
                     onClick={() =>
-                      awardStar(SARANGI_POEMS[selectedPoemIdx].lines.join(' '), 'hi-IN')
+                      playStar('h.padhna', SARANGI_POEMS[selectedPoemIdx].lines.join(' '), 'hi-IN')
                     }
                     className="px-3 py-1 rounded-lg bg-violet-500 text-white text-xs font-extrabold"
                   >
@@ -4219,7 +4260,7 @@ export const Class1InteractiveLab: React.FC<{
                   type="button"
                   onClick={() => {
                     setSelectedComputerPartIdx(idx);
-                    awardStar(`${part.name}: ${part.role}`);
+                    playStar('c.parts', `${part.name}: ${part.role}`);
                   }}
                   className={`p-3 rounded-xl border text-left transition-all ${
                     selectedComputerPartIdx === idx
@@ -4349,7 +4390,7 @@ export const Class1InteractiveLab: React.FC<{
                   type="button"
                   onClick={() => {
                     setKeyboardKeyInfo(item.desc);
-                    awardStar(item.desc);
+                    playStar('c.parts', item.desc);
                   }}
                   className="px-3 py-2 rounded-xl bg-[#090D16] hover:bg-amber-500/20 border border-slate-700 hover:border-amber-400 text-xs font-mono font-bold text-amber-200"
                 >
@@ -4378,7 +4419,7 @@ export const Class1InteractiveLab: React.FC<{
                   type="button"
                   onClick={() => {
                     setSelectedSymbolIdx(idx);
-                    awardStar(`${sym.title}. ${sym.fact}`);
+                    playStar('v.india', `${sym.title}. ${sym.fact}`);
                   }}
                   className={`px-3 py-1.5 rounded-xl text-xs font-extrabold ${
                     selectedSymbolIdx === idx
@@ -4415,7 +4456,7 @@ export const Class1InteractiveLab: React.FC<{
                   type="button"
                   onClick={() => {
                     setSelectedMannerIdx(idx);
-                    awardStar(`${m.word}! ${m.sentence}`);
+                    playStar('v.manners', `${m.word}! ${m.sentence}`);
                   }}
                   className={`px-2.5 py-1.5 rounded-xl text-xs font-extrabold ${
                     selectedMannerIdx === idx
@@ -4457,7 +4498,7 @@ export const Class1InteractiveLab: React.FC<{
                   type="button"
                   onClick={() => {
                     setSelectedHelperIdx(idx);
-                    awardStar(`${h.role} works at the ${h.place}. ${h.job}`);
+                    playStar('v.helpers', `${h.role} works at the ${h.place}. ${h.job}`);
                   }}
                   className={`p-2.5 rounded-xl border text-left transition-all ${
                     selectedHelperIdx === idx
@@ -4657,7 +4698,7 @@ export const Class1InteractiveLab: React.FC<{
                   <p className="text-xs text-slate-300">{mix.fact}</p>
                   <button
                     type="button"
-                    onClick={() => awardStar(mix.fact)}
+                    onClick={() => playStar('a.colours', mix.fact)}
                     className="px-3 py-1 rounded-lg bg-pink-500 text-white text-xs font-extrabold"
                   >
                     🔊 Speak Color Rule (+1 ⭐)
@@ -4826,7 +4867,7 @@ export const Class1InteractiveLab: React.FC<{
                           setVertB(preset.b);
                           setVertOp(preset.op);
                           const res = preset.op === 'add' ? preset.a + preset.b : preset.a - preset.b;
-                          awardStar(
+                          playStar(preset.op === 'add' ? 'm.add20' : 'm.sub20',
                             `${preset.a} ${preset.op === 'add' ? 'plus' : 'minus'} ${preset.b} equals ${res}!`
                           );
                         }}
@@ -5005,6 +5046,7 @@ export const Class1InteractiveLab: React.FC<{
                     key={b.cat}
                     type="button"
                     onClick={() => {
+                      recordAnswer('e.nouns', b.cat === NOUN_SORT_ITEMS[activeNounIdx].category, activeNounIdx);
                       if (b.cat === NOUN_SORT_ITEMS[activeNounIdx].category) {
                         setNounFeedback(`✅ Correct! ${NOUN_SORT_ITEMS[activeNounIdx].hint}`);
                         awardStar(NOUN_SORT_ITEMS[activeNounIdx].hint);
@@ -5096,7 +5138,7 @@ export const Class1InteractiveLab: React.FC<{
                   type="button"
                   onClick={() => {
                     setSelectedHouseIdx(idx);
-                    awardStar(`${h.name}. ${h.fact}`);
+                    playStar('v.houses', `${h.name}. ${h.fact}`);
                   }}
                   className={`px-2.5 py-1.5 rounded-xl text-xs font-extrabold border ${
                     selectedHouseIdx === idx
@@ -5211,7 +5253,7 @@ export const Class1InteractiveLab: React.FC<{
                   type="button"
                   onClick={() => {
                     setRaceSelectedOrd(r.pos);
-                    awardStar(`${r.animal} is in ${r.ord} (${r.word}) place!`);
+                    playStar('m.ordinal', `${r.animal} is in ${r.ord} (${r.word}) place!`);
                   }}
                   className={`p-2 rounded-xl border text-center transition-all ${
                     raceSelectedOrd === r.pos
@@ -5308,7 +5350,7 @@ export const Class1InteractiveLab: React.FC<{
                   type="button"
                   onClick={() => {
                     setPizzaSlices(sl.parts);
-                    awardStar(sl.msg);
+                    playStar('m.halves', sl.msg);
                   }}
                   className={`py-2 px-2 rounded-xl text-xs font-extrabold border ${
                     pizzaSlices === sl.parts
@@ -5363,7 +5405,7 @@ export const Class1InteractiveLab: React.FC<{
                   type="button"
                   onClick={() => {
                     setActivePronounIdx(idx);
-                    awardStar(`${p.pronoun}: ${p.sentence}`);
+                    playStar('e.pronouns', `${p.pronoun}: ${p.sentence}`);
                   }}
                   className={`px-3 py-1.5 rounded-xl text-xs font-extrabold border ${
                     activePronounIdx === idx
@@ -5406,7 +5448,7 @@ export const Class1InteractiveLab: React.FC<{
                   type="button"
                   onClick={() => {
                     setActiveAdjIdx(idx);
-                    awardStar(item.sentence);
+                    playStar('e.adjectives', item.sentence);
                   }}
                   className={`p-2.5 rounded-xl border text-left transition-all ${
                     activeAdjIdx === idx
@@ -5488,7 +5530,7 @@ export const Class1InteractiveLab: React.FC<{
                       type="button"
                       onClick={() => {
                         setActiveShabdIdx(idx);
-                        awardStar(`${w.parts.join(' जमा ')} बराबर ${w.word}! ${w.sentence}`, 'hi-IN');
+                        playStar('h.shabd', `${w.parts.join(' जमा ')} बराबर ${w.word}! ${w.sentence}`, 'hi-IN');
                       }}
                       className={`px-3.5 py-2 rounded-xl text-sm font-black border transition-all ${
                         activeShabdIdx === idx
@@ -5599,7 +5641,7 @@ export const Class1InteractiveLab: React.FC<{
                   type="button"
                   onClick={() => {
                     setActiveHabitIdx(idx);
-                    awardStar(`${h.time}: ${h.habit}`);
+                    playStar('v.hygiene', `${h.time}: ${h.habit}`);
                   }}
                   className={`p-3 rounded-xl border text-left transition-all ${
                     activeHabitIdx === idx
@@ -5690,6 +5732,7 @@ export const Class1InteractiveLab: React.FC<{
                               disabled={solved}
                               onClick={() => {
                                 setStoryGuess(choice);
+                                recordAnswer('m.wordproblem', choice === st.ans, storyProblemIdx);
                                 if (choice === st.ans) {
                                   awardStar(`${st.a} ${st.op === '+' ? 'plus' : 'minus'} ${st.b} equals ${st.ans}!`);
                                 } else {
@@ -5790,7 +5833,7 @@ export const Class1InteractiveLab: React.FC<{
                   type="button"
                   onClick={() => {
                     setDigraphIdx(idx);
-                    awardStar(`${d.digraph} makes the ${d.sound} sound! ${d.sentence}`);
+                    playStar('e.digraphs', `${d.digraph} makes the ${d.sound} sound! ${d.sentence}`);
                   }}
                   className={`py-2.5 rounded-xl font-mono text-base font-black border ${
                     digraphIdx === idx
@@ -5872,6 +5915,7 @@ export const Class1InteractiveLab: React.FC<{
                               setBuiltWords(next);
                               if (next.length === js.jumbled.length) {
                                 const attempt = next.map((k) => js.jumbled[k]).join(' ');
+                                recordAnswer('e.sentences', attempt === js.correct, jumbledIdx);
                                 if (attempt === js.correct) {
                                   awardStar(`${js.correct} ${js.rule}`);
                                 } else {
@@ -5985,7 +6029,7 @@ export const Class1InteractiveLab: React.FC<{
                   <button
                     key={v.a}
                     type="button"
-                    onClick={() => awardStar(`${v.a} का उल्टा ${v.b}`, 'hi-IN')}
+                    onClick={() => playStar('h.vilom', `${v.a} का उल्टा ${v.b}`, 'hi-IN')}
                     className="p-2.5 rounded-xl bg-[#090D16] border border-slate-800 hover:border-amber-400 text-xs font-bold text-slate-200 flex items-center justify-between"
                   >
                     <span>{v.a}</span>
@@ -6005,7 +6049,7 @@ export const Class1InteractiveLab: React.FC<{
                   <button
                     key={vc.ek}
                     type="button"
-                    onClick={() => awardStar(`${vc.ek}, ${vc.anek}`, 'hi-IN')}
+                    onClick={() => playStar('h.vachan', `${vc.ek}, ${vc.anek}`, 'hi-IN')}
                     className="w-full p-2.5 rounded-xl bg-[#090D16] border border-slate-800 hover:border-cyan-400 text-xs font-bold text-white flex items-center justify-between"
                   >
                     <span className="text-cyan-300">{vc.ek}</span>
@@ -6033,7 +6077,7 @@ export const Class1InteractiveLab: React.FC<{
                   type="button"
                   onClick={() => {
                     setClothesSeasonIdx(idx);
-                    awardStar(`${c.season}: ${c.items}. ${c.source}`);
+                    playStar('v.seasons', `${c.season}: ${c.items}. ${c.source}`);
                   }}
                   className={`px-3 py-1.5 rounded-xl text-xs font-extrabold border ${
                     clothesSeasonIdx === idx
@@ -6094,7 +6138,7 @@ export const Class1InteractiveLab: React.FC<{
                 <button
                   key={g.name}
                   type="button"
-                  onClick={() => awardStar(`${g.name} is an ${g.type}. ${g.benefit}`)}
+                  onClick={() => playStar('v.games', `${g.name} is an ${g.type}. ${g.benefit}`)}
                   className="p-3.5 rounded-xl bg-[#090D16] border border-slate-800 hover:border-amber-400 text-left space-y-1"
                 >
                   <div className="text-xs font-extrabold text-white">{g.name}</div>
@@ -6121,7 +6165,7 @@ export const Class1InteractiveLab: React.FC<{
                   type="button"
                   onClick={() => {
                     setPaintToolIdx(idx);
-                    awardStar(`${t.name}: ${t.desc}`);
+                    playStar('c.paint', `${t.name}: ${t.desc}`);
                   }}
                   className={`px-3 py-1.5 rounded-xl text-xs font-extrabold border ${
                     paintToolIdx === idx
@@ -6216,6 +6260,7 @@ export const Class1InteractiveLab: React.FC<{
                       key={opt}
                       type="button"
                       onClick={() => {
+                        recordAnswer('a.reasoning', oIdx === pz.correct, olympiadIdx);
                         if (oIdx === pz.correct) {
                           setOlympiadFeedback(`🏆 Brilliant! ${pz.explanation}`);
                           awardStar(pz.explanation);

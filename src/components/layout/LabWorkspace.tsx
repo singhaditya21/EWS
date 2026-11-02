@@ -153,6 +153,7 @@ export const LabWorkspace: React.FC<LabWorkspaceProps> = ({
             key={chapter.id}
             initialMode={chapter.defaultSimulationMode}
             board={activeBoard}
+            chapterId={chapter.id}
             onModeChange={handleClass1ModeChange}
           />
         );

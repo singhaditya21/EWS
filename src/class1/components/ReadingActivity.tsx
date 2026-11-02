@@ -66,6 +66,7 @@ const ReadPanel: React.FC<{ piece: ReadingPiece; set: ReadingSet; onStar: StarFn
       if (id !== run.current) return;
       if (i >= piece.lines.length) {
         setActiveLine(null);
+        progress.recordSkillPlay(set.skillId, set.chapterId);
         onStar(set.lang === 'hi-IN' ? 'बहुत अच्छे! आपने पूरा पाठ सुना।' : 'Well done! You read along.', set.lang, `${piece.id}:read`);
         return;
       }
@@ -246,8 +247,16 @@ export const OrderPanel: React.FC<{ piece: ReadingPiece; set: PanelSet; onStar: 
   );
 };
 
-export const AnswerPanel: React.FC<{ piece: ReadingPiece; set: PanelSet; onStar: StarFn }> = ({ piece, set, onStar }) => {
+export const AnswerPanel: React.FC<{
+  piece: ReadingPiece;
+  set: PanelSet;
+  onStar: StarFn;
+  /** Replaces "try again" on the same questions, for rounds that draw new ones. */
+  onRestart?: () => void;
+}> = ({ piece, set, onStar, onRestart }) => {
   const [idx, setIdx] = useState(0);
+  // Only the first time through counts: repeating known answers shouldn't raise a skill.
+  const [firstPass, setFirstPass] = useState(true);
   const [picked, setPicked] = useState<number | null>(null);
   const [score, setScore] = useState(0);
   const hi = set.lang === 'hi-IN';
@@ -262,9 +271,14 @@ export const AnswerPanel: React.FC<{ piece: ReadingPiece; set: PanelSet; onStar:
         <button
           type="button"
           onClick={() => {
+            if (onRestart) {
+              onRestart();
+              return;
+            }
             setIdx(0);
             setScore(0);
             setPicked(null);
+            setFirstPass(false);
           }}
           className={pillCls(false)}
         >
@@ -304,7 +318,7 @@ export const AnswerPanel: React.FC<{ piece: ReadingPiece; set: PanelSet; onStar:
               onClick={() => {
                 setPicked(i);
                 const ok = i === q.answer;
-                progress.recordSkillResult(set.skillId, ok, set.chapterId);
+                if (firstPass) progress.recordSkillResult(q.skillId ?? set.skillId, ok, set.chapterId);
                 if (ok) {
                   setScore((s) => s + 1);
                   playSuccessChime();

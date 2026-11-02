@@ -5,10 +5,11 @@ import { CLASS1_BOARD_MAP } from './boardMap';
 import { CLASS1_SKILLS, Class1Subject, SKILL_BY_ID } from './skills';
 import { ObservationLevel, ProfileData, SkillRecord } from './progressStore';
 
-export type SkillLevel = 'not-started' | ObservationLevel;
+export type SkillLevel = 'not-started' | 'explored' | ObservationLevel;
 
 export const LEVEL_LABEL: Record<SkillLevel, string> = {
   'not-started': 'Not started',
+  explored: 'Explored',
   beginning: 'Beginning',
   developing: 'Developing',
   proficient: 'Proficient',
@@ -16,13 +17,16 @@ export const LEVEL_LABEL: Record<SkillLevel, string> = {
 
 export const LEVEL_DESCRIPTOR: Record<SkillLevel, string> = {
   'not-started': 'Has not tried this yet',
+  explored: 'Has played with this, not checked yet',
   beginning: 'Needs a grown-up’s help',
   developing: 'Can do it with a little help',
   proficient: 'Can do it on their own',
 };
 
 export const skillLevel = (rec: SkillRecord | undefined): SkillLevel => {
-  if (!rec || rec.attempts === 0) return 'not-started';
+  if (!rec) return 'not-started';
+  // Tapping around a lab isn't evidence of learning: only answers can raise a child above Explored.
+  if (rec.attempts === 0) return rec.played ? 'explored' : 'not-started';
   const acc = rec.correct / rec.attempts;
   if (rec.attempts >= 3 && acc >= 0.8 && rec.box >= 3) return 'proficient';
   if (acc >= 0.5) return 'developing';

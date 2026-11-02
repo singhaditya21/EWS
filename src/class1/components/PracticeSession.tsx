@@ -20,8 +20,12 @@ const reviewSkills = (profile: ReturnType<typeof useActiveProfile>) => {
   const shaky = Object.entries(profile.skills)
     .filter(([, r]) => r.attempts > 0 && r.correct / r.attempts < 0.7)
     .map(([id]) => id);
+  // Explored in the labs but never checked: a good place to find out what stuck.
+  const explored = Object.entries(profile.skills)
+    .filter(([, r]) => r.attempts === 0 && r.played)
+    .map(([id]) => id);
   const fromDone = profile.completedChapterIds.flatMap((id) => CLASS1_BOARD_MAP[id]?.skills ?? []);
-  return [...new Set([...due, ...shaky, ...fromDone])];
+  return [...new Set([...due, ...shaky, ...explored, ...fromDone])];
 };
 
 const buildRound = (skills: string[]): BankQuestion[] => {

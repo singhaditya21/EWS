@@ -20,6 +20,8 @@ export interface ReadingQuestion {
   options: string[];
   answer: number;
   explain: string;
+  /** Overrides the set's skill, for rounds that mix skills. */
+  skillId?: string;
 }
 
 export interface ReadingPiece {

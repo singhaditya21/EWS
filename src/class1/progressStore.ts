@@ -14,11 +14,13 @@ export interface SkillRecord {
   box: number;
   lastSeen: string | null;
   nextDue: string | null;
+  /** Things explored in the labs. Play shows interest, not mastery, so it never changes the box. */
+  played?: number;
 }
 
 export interface ActivityEntry {
   at: string;
-  kind: 'quiz' | 'practice' | 'star' | 'complete';
+  kind: 'quiz' | 'practice' | 'star' | 'complete' | 'play';
   chapterId?: string;
   skillId?: string;
   correct?: boolean;
@@ -254,6 +256,7 @@ export const progress = {
       const prev = p.skills[skillId] ?? { attempts: 0, correct: 0, box: 1, lastSeen: null, nextDue: null };
       const box = correct ? Math.min(5, prev.box + 1) : 1;
       const rec: SkillRecord = {
+        ...prev,
         attempts: prev.attempts + 1,
         correct: prev.correct + (correct ? 1 : 0),
         box,
@@ -264,6 +267,18 @@ export const progress = {
         ...p,
         skills: { ...p.skills, [skillId]: rec },
         activity: logIt ? log(p, { kind: 'practice', chapterId, skillId, correct }) : p.activity,
+      };
+    });
+  },
+
+  /** The child explored something new for this skill. Recorded apart from right and wrong answers. */
+  recordSkillPlay(skillId: string, chapterId?: string) {
+    updateActive((p) => {
+      const prev = p.skills[skillId] ?? { attempts: 0, correct: 0, box: 1, lastSeen: null, nextDue: null };
+      return {
+        ...p,
+        skills: { ...p.skills, [skillId]: { ...prev, played: (prev.played ?? 0) + 1, lastSeen: today() } },
+        activity: log(p, { kind: 'play', chapterId, skillId }),
       };
     });
   },
